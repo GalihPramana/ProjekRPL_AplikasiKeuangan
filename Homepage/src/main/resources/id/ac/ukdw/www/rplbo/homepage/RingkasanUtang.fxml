@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.RingkasanUtangController"
+      spacing="10" style="-fx-padding: 20; -fx-background-color: #f4f4f4;">
+
+    <Label text="Ringkasan Utang" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+    <Label fx:id="labelJumlah" text="Jumlah Utang:" />
+    <Label fx:id="labelSisa" text="Sisa Utang:" />
+    <Label fx:id="labelDibayar" text="Yang Sudah Dibayar:" />
+
+    <TableView fx:id="tableUtang" prefHeight="200">
+        <columns>
+            <TableColumn fx:id="colNama" text="Nama" prefWidth="120"/>
+            <TableColumn fx:id="colTotal" text="Total" prefWidth="100"/>
+            <TableColumn fx:id="colSisa" text="Sisa" prefWidth="100"/>
+            <TableColumn fx:id="colDibayar" text="Dibayar" prefWidth="100"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="10">
+        <Button text="Tambah" onAction="#handleTambah" />
+        <Button text="Edit" onAction="#handleEdit" />
+        <Button text="Hapus" onAction="#handleHapus" />
+    </HBox>
+</VBox>
