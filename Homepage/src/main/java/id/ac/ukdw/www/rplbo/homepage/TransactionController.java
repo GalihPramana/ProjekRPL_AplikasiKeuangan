@@ -5,6 +5,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
+import javafx.util.Callback;
 
 public class TransactionController {
 
@@ -12,16 +14,19 @@ public class TransactionController {
     private TextField idTransaksiField;
 
     @FXML
-    private TextField tanggalField;
+    private TextField sourceNameField;
 
     @FXML
     private TextField jumlahField;
 
     @FXML
-    private Button addButton;
+    private TextField descriptionField;
 
     @FXML
-    private Button updateButton;
+    private TextField tanggalField;
+
+    @FXML
+    private Button submitButton;
 
     @FXML
     private Button deleteButton;
@@ -36,189 +41,169 @@ public class TransactionController {
     private TableColumn<Transaction, String> idColumn;
 
     @FXML
+    private TableColumn<Transaction, String> sourceNameColumn;
+
+    @FXML
+    private TableColumn<Transaction, Integer> jumlahColumn;
+
+    @FXML
+    private TableColumn<Transaction, String> descriptionColumn;
+
+    @FXML
     private TableColumn<Transaction, String> tanggalColumn;
 
     @FXML
-    private TableColumn<Transaction, String> jumlahColumn;
+    private Label totalSaldoLabel;
 
     private final ObservableList<Transaction> transactionList = FXCollections.observableArrayList();
 
     @FXML
-    private void initialize() {
-        // Set cell value factories untuk kolom tabel
+    public void initialize() {
+        // Set cell value factories
         idColumn.setCellValueFactory(new PropertyValueFactory<>("idTransaksi"));
-        tanggalColumn.setCellValueFactory(new PropertyValueFactory<>("tanggal"));
+        sourceNameColumn.setCellValueFactory(new PropertyValueFactory<>("sourceName"));
         jumlahColumn.setCellValueFactory(new PropertyValueFactory<>("jumlah"));
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        tanggalColumn.setCellValueFactory(new PropertyValueFactory<>("tanggal"));
 
-        // Set data ke TableView
-        tableView.setItems(transactionList);
+        // Enable sorting on columns (default enabled, but ensure)
+        tableView.getSortOrder().add(idColumn);
 
-        // Event handler tombol
-        addButton.setOnAction(event -> addTransaction());
-        updateButton.setOnAction(event -> updateTransaction());
-        deleteButton.setOnAction(event -> deleteTransaction());
-        clearButton.setOnAction(event -> clearForm());
-
-        // Saat baris tabel dipilih, tampilkan data di form
-        tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                showTransactionDetails(newSelection);
+        // Set cell factory for jumlahColumn to color text based on value
+        jumlahColumn.setCellFactory(new Callback<TableColumn<Transaction, Integer>, TableCell<Transaction, Integer>>() {
+            @Override
+            public TableCell<Transaction, Integer> call(TableColumn<Transaction, Integer> param) {
+                return new TableCell<Transaction, Integer>() {
+                    @Override
+                    protected void updateItem(Integer item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                            setStyle("");
+                        } else {
+                            setText(String.format("%,d", item).replace(',', '.'));
+                            if (item < 0) {
+                                setTextFill(Color.RED);
+                            } else {
+                                setTextFill(Color.GREEN);
+                            }
+                        }
+                    }
+                };
             }
         });
 
-        // Disable tombol update dan delete saat tidak ada data terpilih
-        updateButton.setDisable(true);
-        deleteButton.setDisable(true);
+        // Set items to table
+        tableView.setItems(transactionList);
+
+        // Button actions
+        submitButton.setOnAction(e -> handleSubmit());
+        deleteButton.setOnAction(e -> handleDelete());
+        clearButton.setOnAction(e -> handleClear());
+
+        // When selecting a row, populate fields
+        tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                populateFields(newSelection);
+            }
+        });
+
+        updateTotalSaldo();
     }
 
-    private void addTransaction() {
-        if (!validateInput()) return;
-
+    private void handleSubmit() {
         String id = idTransaksiField.getText().trim();
+        String sourceName = sourceNameField.getText().trim();
+        String jumlahText = jumlahField.getText().trim();
+        String description = descriptionField.getText().trim();
         String tanggal = tanggalField.getText().trim();
-        String jumlah = jumlahField.getText().trim();
 
-        // Cek apakah ID sudah ada
-        boolean exists = transactionList.stream().anyMatch(t -> t.getIdTransaksi().equals(id));
-        if (exists) {
-            showAlert(Alert.AlertType.ERROR, "ID Transaksi sudah ada!");
+        if (id.isEmpty() || sourceName.isEmpty() || jumlahText.isEmpty() || tanggal.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Input Error", "ID, Kategori, Nominal, dan Tanggal harus diisi.");
             return;
         }
 
-        Transaction newTransaction = new Transaction(id, tanggal, jumlah);
-        transactionList.add(newTransaction);
-        clearForm();
+        int jumlah;
+        try {
+            jumlah = Integer.parseInt(jumlahText);
+        } catch (NumberFormatException ex) {
+            showAlert(Alert.AlertType.ERROR, "Input Error", "Nominal harus berupa angka (boleh negatif).");
+            return;
+        }
+
+        // Cek apakah ID sudah ada (update) atau baru (add)
+        Transaction existing = findTransactionById(id);
+        if (existing != null) {
+            // Update existing
+            existing.setSourceName(sourceName);
+            existing.setJumlah(jumlah);
+            existing.setDescription(description);
+            existing.setTanggal(tanggal);
+            tableView.refresh();
+        } else {
+            // Add new
+            Transaction newTransaction = new Transaction(id, sourceName, jumlah, description, tanggal);
+            transactionList.add(newTransaction);
+        }
+
+        clearFields();
+        updateTotalSaldo();
     }
 
-    private void updateTransaction() {
+    private void handleDelete() {
         Transaction selected = tableView.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert(Alert.AlertType.WARNING, "Pilih data transaksi yang akan diupdate!");
-            return;
+        if (selected != null) {
+            transactionList.remove(selected);
+            clearFields();
+            updateTotalSaldo();
+        } else {
+            showAlert(Alert.AlertType.WARNING, "Delete Error", "Pilih transaksi yang ingin dihapus.");
         }
+    }
 
-        if (!validateInput()) return;
+    private void handleClear() {
+        clearFields();
+        tableView.getSelectionModel().clearSelection();
+    }
 
-        String id = idTransaksiField.getText().trim();
-        String tanggal = tanggalField.getText().trim();
-        String jumlah = jumlahField.getText().trim();
+    private void clearFields() {
+        idTransaksiField.setText("");
+        sourceNameField.setText("");
+        jumlahField.setText("");
+        descriptionField.setText("");
+        tanggalField.setText("");
+    }
 
-        // Jika ID diubah, cek apakah sudah ada ID lain yang sama
-        if (!selected.getIdTransaksi().equals(id)) {
-            boolean exists = transactionList.stream().anyMatch(t -> t.getIdTransaksi().equals(id));
-            if (exists) {
-                showAlert(Alert.AlertType.ERROR, "ID Transaksi sudah ada!");
-                return;
+    private void populateFields(Transaction t) {
+        idTransaksiField.setText(t.getIdTransaksi());
+        sourceNameField.setText(t.getSourceName());
+        jumlahField.setText(String.valueOf(t.getJumlah()));
+        descriptionField.setText(t.getDescription());
+        tanggalField.setText(t.getTanggal());
+    }
+
+    private Transaction findTransactionById(String id) {
+        for (Transaction t : transactionList) {
+            if (t.getIdTransaksi().equals(id)) {
+                return t;
             }
         }
-
-        // Update data
-        selected.setIdTransaksi(id);
-        selected.setTanggal(tanggal);
-        selected.setJumlah(jumlah);
-
-        // Refresh tabel
-        tableView.refresh();
-        clearForm();
+        return null;
     }
 
-    private void deleteTransaction() {
-        Transaction selected = tableView.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert(Alert.AlertType.WARNING, "Pilih data transaksi yang akan dihapus!");
-            return;
+    private void updateTotalSaldo() {
+        int total = 0;
+        for (Transaction t : transactionList) {
+            total += t.getJumlah();
         }
-
-        transactionList.remove(selected);
-        clearForm();
+        totalSaldoLabel.setText(String.format("Total Saldo : ( RP %,d )", total).replace(',', '.'));
     }
 
-    private void clearForm() {
-        idTransaksiField.clear();
-        tanggalField.clear();
-        jumlahField.clear();
-        tableView.getSelectionModel().clearSelection();
-        updateButton.setDisable(true);
-        deleteButton.setDisable(true);
-        addButton.setDisable(false);
-    }
-
-    private void showTransactionDetails(Transaction transaction) {
-        idTransaksiField.setText(transaction.getIdTransaksi());
-        tanggalField.setText(transaction.getTanggal());
-        jumlahField.setText(transaction.getJumlah());
-        updateButton.setDisable(false);
-        deleteButton.setDisable(false);
-        addButton.setDisable(true);
-    }
-
-    private boolean validateInput() {
-        String id = idTransaksiField.getText().trim();
-        String tanggal = tanggalField.getText().trim();
-        String jumlah = jumlahField.getText().trim();
-
-        if (id.isEmpty() || tanggal.isEmpty() || jumlah.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Form input tidak boleh kosong!");
-            return false;
-        }
-
-        if (!tanggal.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            showAlert(Alert.AlertType.ERROR, "Format tanggal harus YYYY-MM-DD");
-            return false;
-        }
-
-        try {
-            Double.parseDouble(jumlah);
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Jumlah harus berupa angka!");
-            return false;
-        }
-
-        return true;
-    }
-
-    private void showAlert(Alert.AlertType alertType, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle("Pemberitahuan");
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    // Model data transaksi dengan properti yang bisa diubah
-    public static class Transaction {
-        private String idTransaksi;
-        private String tanggal;
-        private String jumlah;
-
-        public Transaction(String idTransaksi, String tanggal, String jumlah) {
-            this.idTransaksi = idTransaksi;
-            this.tanggal = tanggal;
-            this.jumlah = jumlah;
-        }
-
-        public String getIdTransaksi() {
-            return idTransaksi;
-        }
-
-        public void setIdTransaksi(String idTransaksi) {
-            this.idTransaksi = idTransaksi;
-        }
-
-        public String getTanggal() {
-            return tanggal;
-        }
-
-        public void setTanggal(String tanggal) {
-            this.tanggal = tanggal;
-        }
-
-        public String getJumlah() {
-            return jumlah;
-        }
-
-        public void setJumlah(String jumlah) {
-            this.jumlah = jumlah;
-        }
     }
 }
