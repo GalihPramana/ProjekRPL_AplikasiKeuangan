@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #e3f2fd;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="id.ac.ukdw.www.rplbo.catatankeuangan.LoginController"> <!-- Light blue background -->
+
+    <center>
+        <VBox alignment="CENTER" prefHeight="600.0" prefWidth="724.0" spacing="18">
+            <padding>
+                <Insets bottom="35" left="35" right="35" top="35" />
+            </padding>
+
+            <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1565c0;" text="Login Aplikasi Keuangan" /> <!-- Darker blue text -->
+
+            <TextField fx:id="usernameField" maxWidth="260" promptText="Username" style="-fx-background-radius: 5; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
+
+            <PasswordField fx:id="passwordField" maxWidth="260" promptText="Password" style="-fx-background-radius: 5; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
+
+            <Button fx:id="loginButton" maxWidth="260" onAction="#handleLogin" style="-fx-background-color: #1976d2; -fx-text-fill: white; -fx-background-radius: 5;" text="Login" />
+
+            <Button fx:id="registerButton" maxWidth="260" onAction="#handleRegister" style="-fx-background-color: #64b5f6; -fx-text-fill: white; -fx-background-radius: 5;" text="Register" />
+
+            <Label fx:id="errorLabel" style="-fx-font-size: 12px;" textFill="red" />
+        </VBox>
+    </center>
+</BorderPane>
