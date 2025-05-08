@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="UtangPiutang.UtangPiutangController">
-    <top>
-        <Label text="Manajemen Utang / Piutang" style="-fx-font-size: 20px; -fx-padding: 10;" />
-    </top>
-    <center>
-        <VBox spacing="10" alignment="CENTER" style="-fx-padding: 20;">
-            <Button text="Tambah Data Utang/Piutang" onAction="#handleTambahData"/>
-            <Button text="Edit Data Utang/Piutang" onAction="#handleEditData"/>
-            <Button text="Hapus Data Utang/Piutang" onAction="#handleHapusData"/>
-            <Button text="Tampilkan Log Riwayat Pengeditan" onAction="#handleTampilkanLog"/>
-        </VBox>
-    </center>
-</BorderPane>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controller.UtangPiutangController"
+      spacing="20" style="-fx-padding: 20; -fx-background-color: #f4f4f4;">
+
+    <Label text="Ringkasan Utang" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <GridPane hgap="15" vgap="10">
+        <Label text="Jumlah Utang:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+        <Label fx:id="labelJumlahUtang" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+        <Label text="Sisa Utang:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+        <Label fx:id="labelSisaUtang" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+        <Label text="Yang Sudah Dibayar:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold;" />
+        <Label fx:id="labelSudahDibayar" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+    </GridPane>
+
+    <TableView fx:id="tableViewUtang" prefHeight="250">
+        <columns>
+            <TableColumn text="Nama" fx:id="colNama" />
+            <TableColumn text="Total" fx:id="colTotal" />
+            <TableColumn text="Sisa" fx:id="colSisa" />
+            <TableColumn text="Dibayar" fx:id="colDibayar" />
+        </columns>
+    </TableView>
+
+</VBox>
