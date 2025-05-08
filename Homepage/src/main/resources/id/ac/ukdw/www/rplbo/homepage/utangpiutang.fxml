@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="UtangPiutang.UtangPiutangController">
+    <top>
+        <Label text="Manajemen Utang / Piutang" style="-fx-font-size: 20px; -fx-padding: 10;" />
+    </top>
+    <center>
+        <VBox spacing="10" alignment="CENTER" style="-fx-padding: 20;">
+            <Button text="Tambah Data Utang/Piutang" onAction="#handleTambahData"/>
+            <Button text="Edit Data Utang/Piutang" onAction="#handleEditData"/>
+            <Button text="Hapus Data Utang/Piutang" onAction="#handleHapusData"/>
+            <Button text="Tampilkan Log Riwayat Pengeditan" onAction="#handleTampilkanLog"/>
+        </VBox>
+    </center>
+</BorderPane>
