@@ -29,7 +29,7 @@ public class RegisterController {
         } else if (UserManager.userExists(username)) {
             messageLabel.setText("Username sudah terdaftar.");
         } else {
-            UserManager.addUser(username, password);  // Simpan pengguna ke file lokal
+            UserManager.addUser(username, password);  // Nyimpen data pengguna ke file lokal
             messageLabel.setText("Registrasi berhasil! Silakan login.");
         }
     }

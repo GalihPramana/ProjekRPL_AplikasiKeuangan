@@ -32,12 +32,4 @@
         </VBox>
     </center>
 
-    <bottom>
-        <HBox alignment="CENTER">
-            <padding>
-                <Insets bottom="15" top="10" />
-            </padding>
-            <Label style="-fx-font-size: 12px; -fx-text-fill: white;" text="© 2025 Aplikasi Keuangan" />
-        </HBox>
-    </bottom>
 </BorderPane>
