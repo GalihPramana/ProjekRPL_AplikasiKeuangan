@@ -2,27 +2,35 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="1024.0" prefWidth="576.0" style="-fx-background-color: #e3f2fd;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="id.ac.ukdw.www.rplbo.catatankeuangan.LoginController">
-
+<BorderPane prefHeight="576.0" prefWidth="1024.0" style="-fx-background-color: #e3f2fd;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="id.ac.ukdw.www.rplbo.catatankeuangan.LoginController">
     <center>
-        <VBox alignment="CENTER" prefHeight="600.0" prefWidth="724.0" spacing="18">
+        <VBox alignment="CENTER" prefHeight="576.0" prefWidth="586.0" spacing="18" style="-fx-background-color: white;">
             <padding>
                 <Insets bottom="35" left="35" right="35" top="35" />
             </padding>
-
-            <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1565c0;" text="Login Aplikasi Keuangan" /> <!-- Darker blue text -->
-
-            <TextField fx:id="usernameField" maxWidth="260" promptText="Username" style="-fx-background-radius: 5; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
-
-            <PasswordField fx:id="passwordField" maxWidth="260" promptText="Password" style="-fx-background-radius: 5; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
-
-            <Button fx:id="loginButton" maxWidth="260" onAction="#handleLogin" style="-fx-background-color: #1976d2; -fx-text-fill: white; -fx-background-radius: 5;" text="Login" />
-
-            <Button fx:id="registerButton" maxWidth="260" onAction="#handleRegister" style="-fx-background-color: #64b5f6; -fx-text-fill: white; -fx-background-radius: 5;" text="Register" />
-
-            <Label fx:id="errorLabel" style="-fx-font-size: 12px;" textFill="red" />
+            <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: black;" text="Login UangKU" />
+            <TextField fx:id="usernameField" maxWidth="260" promptText="Username" style="-fx-background-radius: 5; -fx-border-color: black; -fx-border-radius: 5;" />
+            <PasswordField fx:id="passwordField" maxWidth="260" promptText="Password" style="-fx-background-radius: 5; -fx-border-color: black; -fx-border-radius: 5;" />
+            <Button fx:id="loginButton" maxWidth="260" onAction="#handleLogin" prefHeight="26.0" prefWidth="122.0" style="-fx-background-color: black; -fx-text-fill: white; -fx-background-radius: 5;" text="Login" />
+            <Button fx:id="registerButton" maxWidth="260" onAction="#handleRegister" prefHeight="26.0" prefWidth="92.0" style="-fx-background-color: black; -fx-text-fill: white; -fx-background-radius: 5;" text="Register" />
+            <Label fx:id="errorLabel" style="-fx-font-size: 14px;" textFill="red" />
         </VBox>
     </center>
+   <left>
+      <VBox prefHeight="576.0" prefWidth="462.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="318.0" fitWidth="364.0" pickOnBounds="true" preserveRatio="true">
+               <VBox.margin>
+                  <Insets left="100.0" top="150.0" />
+               </VBox.margin>
+               <image>
+                  <Image url="@Image/Logo_UangKU_noBack.png" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+   </left>
 </BorderPane>
