@@ -81,7 +81,7 @@
                                     <Insets right="5.0" />
                                  </HBox.margin>
                               </Separator>
-                              <Label fx:id="lblWelcome" text="Hello User, Welcome Back!">
+                              <Label fx:id="lblWelcome" text="Halo User, Selamat Datang Kembali!">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
@@ -101,7 +101,7 @@
                         </HBox>
                         <HBox prefHeight="214.0" prefWidth="830.0" style="-fx-background-radius: 0px 0px 15px 15px; -fx-border-radius: 0px 0px 15px 15px; -fx-background-color: ffffff;">
                            <children>
-                              <PieChart fx:id="pieCashflowThisMonth" maxWidth="20.0" style="-fx-font-size: 11px; -fx-font-weight: 600;" title="Cashflow This Month">
+                              <PieChart fx:id="pieCashflowThisMonth" maxWidth="20.0" style="-fx-font-size: 11px; -fx-font-weight: 600;" title="Arus Kas Bulan Ini">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
@@ -114,7 +114,7 @@
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Separator>
-                              <PieChart fx:id="pieIncomeThisMonth" layoutX="10.0" layoutY="10.0" maxWidth="20.0" style="-fx-font-size: 11px;" title=" Income This Month">
+                              <PieChart fx:id="pieIncomeThisMonth" layoutX="10.0" layoutY="10.0" maxWidth="20.0" style="-fx-font-size: 11px;" title="Pendapatan Bulan Ini">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
@@ -124,7 +124,7 @@
                                     <Insets left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Separator>
-                              <PieChart fx:id="pieOutcomeThisMonth" layoutX="210.0" layoutY="10.0" maxWidth="20.0" style="-fx-font-size: 11px;" title="Outcome This Month">
+                              <PieChart fx:id="pieOutcomeThisMonth" layoutX="210.0" layoutY="10.0" maxWidth="20.0" style="-fx-font-size: 11px;" title="Pengeluaran Bulan Ini">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
@@ -136,7 +136,7 @@
                               </Separator>
                               <VBox prefHeight="214.0" prefWidth="198.0">
                                  <children>
-                                    <Label text="Balance">
+                                    <Label text="Saldo">
                                        <font>
                                           <Font name="System Bold" size="16.0" />
                                        </font>
@@ -164,7 +164,7 @@
                            <children>
                               <VBox alignment="CENTER_LEFT" prefHeight="226.0" prefWidth="312.0" style="-fx-border-width: 0.5px; -fx-background-color: white; -fx-background-radius: 30px 30px 30px 30px;">
                                  <children>
-                                    <Label text="Total Debt" textFill="#ff3705">
+                                    <Label text="Total Hutang" textFill="#ff3705">
                                        <font>
                                           <Font name="System Bold" size="16.0" />
                                        </font>
@@ -180,7 +180,7 @@
                                           <Insets bottom="30.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <Label layoutX="25.0" layoutY="25.0" text="Total Receivables" textFill="#17e700">
+                                    <Label layoutX="25.0" layoutY="25.0" text="Total Piutang" textFill="#17e700">
                                        <font>
                                           <Font name="System Bold" size="16.0" />
                                        </font>
@@ -203,7 +203,7 @@
                               </VBox>
                               <VBox layoutX="10.0" layoutY="10.0" prefHeight="226.0" prefWidth="540.0" style="-fx-border-width: 0.5px; -fx-background-radius: 30px 30px 30px 30px; -fx-border-radius: 30px 30px 30px 30px; -fx-background-color: #ffffff;">
                                  <children>
-                                    <Label text="Balance Weekly Report">
+                                    <Label text="Laporan Saldo Mingguan">
                                        <font>
                                           <Font name="System Bold" size="16.0" />
                                        </font>
