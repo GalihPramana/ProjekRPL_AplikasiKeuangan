@@ -4,7 +4,9 @@ module id.ac.ukdw.www.rplbo.homepage {
 
 
     opens id.ac.ukdw.www.rplbo.homepage to javafx.fxml;
-    exports id.ac.ukdw.www.rplbo.homepage;
     exports UtangPiutang;
+
     opens UtangPiutang to javafx.fxml;
+
+
 }
