@@ -2,10 +2,23 @@ package UtangPiutang;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 public class UtangPiutangController {
+    @FXML
+    private Button btnDebt;
+
+    @FXML
+    private Button btnHome;
+
+    @FXML
+    private Button btnLogout;
+
+    @FXML
+    private Button btnTransaction;
+
     @FXML private TextField tfJumlahUtang, tfSisaUtang, tfSudahDibayar, tfFilter;
     @FXML private TableView<UtangPiutang> table;
     @FXML private TableColumn<UtangPiutang, Integer> colJumlah, colSisa, colBayar;
@@ -61,4 +74,25 @@ public class UtangPiutangController {
         tfSisaUtang.clear();
         tfSudahDibayar.clear();
     }
+
+    @FXML
+    void onDebtClick(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onHomeClick(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onLogoutClick(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onTransactionClick(ActionEvent event) {
+
+    }
+
 }

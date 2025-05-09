@@ -12,7 +12,7 @@ public class UtangPiutangApp extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(UtangPiutangApp.class.getResource("/id/ac/ukdw/www/rplbo/homepage/UtangPiutang.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Hello!");
+        stage.setTitle("Financial Application");
         stage.setScene(scene);
         stage.show();
     }
