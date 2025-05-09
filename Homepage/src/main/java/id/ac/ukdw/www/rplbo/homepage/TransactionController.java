@@ -2,6 +2,7 @@ package id.ac.ukdw.www.rplbo.homepage;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -10,168 +11,185 @@ import javafx.util.Callback;
 
 public class TransactionController {
 
-    @FXML
-    private TextField idTransaksiField;
+    @FXML private Button btnDebt;
+    @FXML private Button btnHome;
+    @FXML private Button btnLogout;
+    @FXML private Button btnTransaction;
 
-    @FXML
-    private TextField sourceNameField;
+    @FXML private Button clearButton;
+    @FXML private Button deleteButton;
+    @FXML private Button pemasukkanButton;
+    @FXML private Button pengeluaranButton;
 
-    @FXML
-    private TextField jumlahField;
+    @FXML private Label lblDate;
+    @FXML private Label lblWelcome;
+    @FXML private Label totalSaldoLabel;
 
-    @FXML
-    private TextField descriptionField;
+    @FXML private TextField idTransaksiField;
+    @FXML private TextField sourceNameField;
+    @FXML private TextField jumlahField;
+    @FXML private TextField descriptionField;
+    @FXML private TextField tanggalField;
 
-    @FXML
-    private TextField tanggalField;
+    @FXML private TableView<Transaction> tableView;
+    @FXML private TableColumn<Transaction, String> idColumn;
+    @FXML private TableColumn<Transaction, String> sourceNameColumn;
+    @FXML private TableColumn<Transaction, Integer> jumlahColumn;
+    @FXML private TableColumn<Transaction, String> descriptionColumn;
+    @FXML private TableColumn<Transaction, String> tanggalColumn;
 
-    @FXML
-    private Button submitButton;
-
-    @FXML
-    private Button deleteButton;
-
-    @FXML
-    private Button clearButton;
-
-    @FXML
-    private TableView<Transaction> tableView;
-
-    @FXML
-    private TableColumn<Transaction, String> idColumn;
-
-    @FXML
-    private TableColumn<Transaction, String> sourceNameColumn;
-
-    @FXML
-    private TableColumn<Transaction, Integer> jumlahColumn;
-
-    @FXML
-    private TableColumn<Transaction, String> descriptionColumn;
-
-    @FXML
-    private TableColumn<Transaction, String> tanggalColumn;
-
-    @FXML
-    private Label totalSaldoLabel;
-
+    // daftar in-memory
     private final ObservableList<Transaction> transactionList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        // Set cell value factories
+        // 1) setup kolom
         idColumn.setCellValueFactory(new PropertyValueFactory<>("idTransaksi"));
         sourceNameColumn.setCellValueFactory(new PropertyValueFactory<>("sourceName"));
         jumlahColumn.setCellValueFactory(new PropertyValueFactory<>("jumlah"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         tanggalColumn.setCellValueFactory(new PropertyValueFactory<>("tanggal"));
 
-        // Enable sorting on columns (default enabled, but ensure)
-        tableView.getSortOrder().add(idColumn);
-
-        // Set cell factory for jumlahColumn to color text based on value
-        jumlahColumn.setCellFactory(new Callback<TableColumn<Transaction, Integer>, TableCell<Transaction, Integer>>() {
+        jumlahColumn.setCellFactory(new Callback<>() {
             @Override
             public TableCell<Transaction, Integer> call(TableColumn<Transaction, Integer> param) {
-                return new TableCell<Transaction, Integer>() {
+                return new TableCell<>() {
                     @Override
                     protected void updateItem(Integer item, boolean empty) {
                         super.updateItem(item, empty);
                         if (empty || item == null) {
                             setText(null);
-                            setStyle("");
                         } else {
                             setText(String.format("%,d", item).replace(',', '.'));
-                            if (item < 0) {
-                                setTextFill(Color.RED);
-                            } else {
-                                setTextFill(Color.GREEN);
-                            }
+                            setTextFill(item < 0 ? Color.RED : Color.GREEN);
                         }
                     }
                 };
             }
         });
 
-        // Set items to table
+        // 3) bind list ke tabel
         tableView.setItems(transactionList);
+        tableView.getSortOrder().add(idColumn);
 
-        // Button actions
-        submitButton.setOnAction(e -> handleSubmit());
-        deleteButton.setOnAction(e -> handleDelete());
-        clearButton.setOnAction(e -> handleClear());
-
-        // When selecting a row, populate fields
-        tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                populateFields(newSelection);
-            }
-        });
-
-        updateTotalSaldo();
+        // 4) saat baris dipilih, isi form
+        tableView.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((obs, oldSel, newSel) -> {
+                    if (newSel != null) populateFields(newSel);
+                });
     }
 
-    private void handleSubmit() {
-        String id = idTransaksiField.getText().trim();
-        String sourceName = sourceNameField.getText().trim();
-        String jumlahText = jumlahField.getText().trim();
-        String description = descriptionField.getText().trim();
-        String tanggal = tanggalField.getText().trim();
+    @FXML
+    void onClearClick(ActionEvent event) {
+        handleClear();
+    }
 
-        if (id.isEmpty() || sourceName.isEmpty() || jumlahText.isEmpty() || tanggal.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Input Error", "ID, Kategori, Nominal, dan Tanggal harus diisi.");
+    @FXML
+    void onDeleteClick(ActionEvent event) {
+        handleDelete();
+    }
+
+    @FXML
+    void onPemasukkanClick(ActionEvent event) {
+        handlePemasukan(true);
+    }
+
+    @FXML
+    void onPengeluaranClick(ActionEvent event) {
+        handlePemasukan(false);
+    }
+
+    @FXML
+    void onDebtClick(ActionEvent event) {
+        // TODO: navigasi ke Debt
+    }
+
+    @FXML
+    void onHomeClick(ActionEvent event) {
+        // TODO: navigasi ke Home
+    }
+
+    @FXML
+    void onLogoutClick(ActionEvent event) {
+        // TODO: proses Logout
+    }
+
+    @FXML
+    void onTransactionClick(ActionEvent event) {
+        // TODO: navigasi ke Transaction (halaman ini)
+    }
+
+
+    /**
+     * @param isIncome true = pemasukan, false = pengeluaran
+     */
+    private void handlePemasukan(boolean isIncome) {
+        String id         = idTransaksiField.getText().trim();
+        String sumber     = sourceNameField.getText().trim();
+        String jmlText    = jumlahField.getText().trim();
+        String desc       = descriptionField.getText().trim();
+        String tanggal    = tanggalField.getText().trim();
+
+        // validasi
+        if (id.isEmpty() || sumber.isEmpty() || jmlText.isEmpty() || tanggal.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR,
+                    "Input Error",
+                    "ID, Kategori, Nominal, dan Tanggal harus diisi.");
             return;
         }
 
-        int jumlah;
+        int jml;
         try {
-            jumlah = Integer.parseInt(jumlahText);
+            jml = Integer.parseInt(jmlText);
         } catch (NumberFormatException ex) {
-            showAlert(Alert.AlertType.ERROR, "Input Error", "Nominal harus berupa angka (boleh negatif).");
+            showAlert(Alert.AlertType.ERROR,
+                    "Input Error",
+                    "Nominal harus berupa angka (boleh negatif).");
             return;
         }
 
-        // Cek apakah ID sudah ada (update) atau baru (add)
+        // jika pengeluaran, pakai sign negatif
+        if (!isIncome) {
+            jml = -Math.abs(jml);
+        }
+
+        // update atau tambah baru
         Transaction existing = findTransactionById(id);
         if (existing != null) {
-            // Update existing
-            existing.setSourceName(sourceName);
-            existing.setJumlah(jumlah);
-            existing.setDescription(description);
+            existing.setSourceName(sumber);
+            existing.setJumlah(jml);
+            existing.setDescription(desc);
             existing.setTanggal(tanggal);
             tableView.refresh();
         } else {
-            // Add new
-            Transaction newTransaction = new Transaction(id, sourceName, jumlah, description, tanggal);
-            transactionList.add(newTransaction);
+            transactionList.add(new Transaction(id, sumber, jml, desc, tanggal));
         }
 
-        clearFields();
+        handleClear();
         updateTotalSaldo();
     }
 
     private void handleDelete() {
-        Transaction selected = tableView.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            transactionList.remove(selected);
-            clearFields();
+        Transaction sel = tableView.getSelectionModel().getSelectedItem();
+        if (sel != null) {
+            transactionList.remove(sel);
+            handleClear();
             updateTotalSaldo();
         } else {
-            showAlert(Alert.AlertType.WARNING, "Delete Error", "Pilih transaksi yang ingin dihapus.");
+            showAlert(Alert.AlertType.WARNING,
+                    "Delete Error",
+                    "Pilih transaksi yang ingin dihapus.");
         }
     }
 
     private void handleClear() {
-        clearFields();
+        idTransaksiField.clear();
+        sourceNameField.clear();
+        jumlahField.clear();
+        descriptionField.clear();
+        tanggalField.clear();
         tableView.getSelectionModel().clearSelection();
-    }
-
-    private void clearFields() {
-        idTransaksiField.setText("");
-        sourceNameField.setText("");
-        jumlahField.setText("");
-        descriptionField.setText("");
-        tanggalField.setText("");
     }
 
     private void populateFields(Transaction t) {
@@ -184,19 +202,19 @@ public class TransactionController {
 
     private Transaction findTransactionById(String id) {
         for (Transaction t : transactionList) {
-            if (t.getIdTransaksi().equals(id)) {
-                return t;
-            }
+            if (t.getIdTransaksi().equals(id)) return t;
         }
         return null;
     }
 
     private void updateTotalSaldo() {
-        int total = 0;
-        for (Transaction t : transactionList) {
-            total += t.getJumlah();
-        }
-        totalSaldoLabel.setText(String.format("Total Saldo : ( RP %,d )", total).replace(',', '.'));
+        int total = transactionList.stream()
+                .mapToInt(Transaction::getJumlah)
+                .sum();
+        totalSaldoLabel.setText(
+                String.format("Total Saldo : ( RP %,d )", total)
+                        .replace(',', '.')
+        );
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {
