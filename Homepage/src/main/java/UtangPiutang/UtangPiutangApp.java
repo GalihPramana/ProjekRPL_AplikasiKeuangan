@@ -10,7 +10,6 @@ import java.io.IOException;
 public class UtangPiutangApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        //path mu salah 
         FXMLLoader fxmlLoader = new FXMLLoader(UtangPiutangApp.class.getResource("/id/ac/ukdw/www/rplbo/homepage/UtangPiutang.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Hello!");
