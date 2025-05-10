@@ -147,9 +147,7 @@ public class TransactionController {
 
         // validasi
         if (id.isEmpty() || sumber.isEmpty() || jmlText.isEmpty() || tanggal.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR,
-                    "Input Error",
-                    "ID, Kategori, Nominal, dan Tanggal harus diisi.");
+            showAlert(Alert.AlertType.ERROR, "Input Error", "ID, Kategori, Nominal, dan Tanggal harus diisi.");
             return;
         }
 

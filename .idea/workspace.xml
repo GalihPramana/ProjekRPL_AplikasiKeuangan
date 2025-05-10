@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ac410fbf-944e-410b-89dd-df8f3e817f31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/HomepageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/HomepageController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/TransactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/TransactionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/resources/id/ac/ukdw/www/rplbo/homepage/transaction.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/resources/id/ac/ukdw/www/rplbo/homepage/transaction-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +101,7 @@
       <option name="presentableId" value="Default" />
       <updated>1746799745349</updated>
       <workItem from="1746799747077" duration="4605000" />
-      <workItem from="1746873043030" duration="2542000" />
+      <workItem from="1746873043030" duration="3526000" />
     </task>
     <servers />
   </component>
