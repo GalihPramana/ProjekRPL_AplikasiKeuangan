@@ -45,7 +45,7 @@ public class TransactionController {
     @FXML private TableColumn<Transaction, String> tanggalColumn;
 
     // daftar in-memory
-    private final ObservableList<Transaction> transactionList = FXCollections.observableArrayList();
+    private final ObservableList<Transaction> transactionList = HomepageController.DataProvider.TRANSACTIONS;
 
     @FXML
     public void initialize() {

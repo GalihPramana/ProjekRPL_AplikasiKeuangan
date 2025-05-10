@@ -1,6 +1,8 @@
 package id.ac.ukdw.www.rplbo.homepage;
 
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.collections.ListChangeListener;
 
 import java.io.IOException;
 import java.net.URL;
@@ -59,6 +62,10 @@ public class HomepageController implements Initializable {
     @FXML
     private PieChart pieOutcomeThisMonth;
 
+    public class DataProvider {
+        public static final ObservableList<Transaction> TRANSACTIONS = FXCollections.observableArrayList();
+    }
+
     @FXML
     void onDebtClick(ActionEvent event) {
         try {
@@ -103,8 +110,56 @@ public class HomepageController implements Initializable {
         }
     }
 
+    private void updateDashboard() {
+        var txs = DataProvider.TRANSACTIONS;
+
+        // 1) Total Saldo
+        int totalSaldo = txs.stream()
+                .mapToInt(Transaction::getJumlah)
+                .sum();
+        lblBalance.setText(String.format("Rp %,d", totalSaldo)
+                .replace(',', '.'));
+
+        // 2) Data Pendapatan per kategori
+        var incMap = txs.stream()
+                .filter(t -> t.getJumlah() > 0)
+                .collect(java.util.stream.Collectors.groupingBy(
+                        Transaction::getSourceName,
+                        java.util.stream.Collectors.summingInt(Transaction::getJumlah)
+                ));
+        pieIncomeThisMonth.getData().setAll(
+                incMap.entrySet().stream()
+                        .map(e -> new PieChart.Data(e.getKey(), e.getValue()))
+                        .toList()
+        );
+
+        // 3) Data Pengeluaran per kategori
+        var outMap = txs.stream()
+                .filter(t -> t.getJumlah() < 0)
+                .collect(java.util.stream.Collectors.groupingBy(
+                        Transaction::getSourceName,
+                        java.util.stream.Collectors.summingInt(t -> Math.abs(t.getJumlah()))
+                ));
+        pieOutcomeThisMonth.getData().setAll(
+                outMap.entrySet().stream()
+                        .map(e -> new PieChart.Data(e.getKey(), e.getValue()))
+                        .toList()
+        );
+
+        // 4) Arus Kas: sederhana = pemasukan vs pengeluaran total
+        int totalIn  = incMap.values().stream().mapToInt(i->i).sum();
+        int totalOut = outMap.values().stream().mapToInt(i->i).sum();
+        pieCashflowThisMonth.getData().setAll(
+                java.util.List.of(
+                        new PieChart.Data("Pemasukan", totalIn),
+                        new PieChart.Data("Pengeluaran", totalOut)
+                )
+        );
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        DataProvider.TRANSACTIONS.addListener((ListChangeListener<Transaction>)change -> updateDashboard());
+        updateDashboard();
     }
 }
