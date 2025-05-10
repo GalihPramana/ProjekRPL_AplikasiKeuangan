@@ -1,10 +1,16 @@
-package UtangPiutang;
+package id.ac.ukdw.www.rplbo.homepage;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class UtangPiutangController {
     @FXML
@@ -77,22 +83,46 @@ public class UtangPiutangController {
 
     @FXML
     void onDebtClick(ActionEvent event) {
-
+        //Halaman ini
     }
 
     @FXML
     void onHomeClick(ActionEvent event) {
-
+        try {
+            Parent homeRoot = FXMLLoader.load(getClass().getResource("homepage-view.fxml"));
+            Scene scene = btnHome.getScene();
+            scene.setRoot(homeRoot);
+            Stage stage = (Stage) scene.getWindow();
+            stage.sizeToScene();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void onLogoutClick(ActionEvent event) {
-
+        try {
+            Parent loginRoot = FXMLLoader.load(getClass().getResource("Login.fxml"));
+            Scene scene = btnLogout.getScene();
+            scene.setRoot(loginRoot);
+            Stage stage = (Stage) scene.getWindow();
+            stage.sizeToScene();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void onTransactionClick(ActionEvent event) {
-
+        try {
+            Parent transactionRoot = FXMLLoader.load(getClass().getResource("transaction-view.fxml"));
+            Scene scene = btnTransaction.getScene();
+            scene.setRoot(transactionRoot);
+            Stage stage = (Stage) scene.getWindow();
+            stage.sizeToScene();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

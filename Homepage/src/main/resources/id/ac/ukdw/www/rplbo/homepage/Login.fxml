@@ -27,7 +27,7 @@
                   <Insets left="100.0" top="150.0" />
                </VBox.margin>
                <image>
-                  <Image url="@../../../../../../../../../../CatatanKeuangan/src/main/resources/id/ac/ukdw/www/rplbo/catatankeuangan/Image/Logo_UangKU_noBack.png" />
+                  <Image url="@Image/LogoUangKuBlack.jpg" />
                </image>
             </ImageView>
          </children>

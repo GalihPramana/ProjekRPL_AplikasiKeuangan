@@ -1,4 +1,4 @@
-package UtangPiutang;
+package id.ac.ukdw.www.rplbo.homepage;
 
 public class UtangPiutang {
     private int jumlahUtang;

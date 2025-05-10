@@ -108,7 +108,15 @@ public class TransactionController {
 
     @FXML
     void onDebtClick(ActionEvent event) {
-        // Ke Halaman Debt
+        try {
+            Parent debtRoot = FXMLLoader.load(getClass().getResource("UtangPiutang.fxml"));
+            Scene scene = btnDebt.getScene();
+            scene.setRoot(debtRoot);
+            Stage stage = (Stage) scene.getWindow();
+            stage.sizeToScene();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

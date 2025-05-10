@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="576.0" prefWidth="1024.0" style="-fx-background-color: #e7e9ee;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UtangPiutang.UtangPiutangController">
+<BorderPane prefHeight="576.0" prefWidth="1024.0" style="-fx-background-color: #e7e9ee;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="id.ac.ukdw.www.rplbo.homepage.UtangPiutangController">
 
     <center>
       <AnchorPane>
