@@ -71,7 +71,15 @@ public class HomepageController implements Initializable {
 
     @FXML
     void onLogoutClick(ActionEvent event) {
-
+        try {
+            Parent loginRoot = FXMLLoader.load(getClass().getResource("Login.fxml"));
+            Scene scene = btnLogout.getScene();
+            scene.setRoot(loginRoot);
+            Stage stage = (Stage) scene.getWindow();
+            stage.sizeToScene();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

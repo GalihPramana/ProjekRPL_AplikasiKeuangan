@@ -114,9 +114,9 @@ public class TransactionController {
     @FXML
     void onHomeClick(ActionEvent event) {
         try {
-            Parent transactionRoot = FXMLLoader.load(getClass().getResource("homepage-view.fxml"));
-            Scene scene = btnTransaction.getScene();
-            scene.setRoot(transactionRoot);
+            Parent homeRoot = FXMLLoader.load(getClass().getResource("homepage-view.fxml"));
+            Scene scene = btnHome.getScene();
+            scene.setRoot(homeRoot);
             Stage stage = (Stage) scene.getWindow();
             stage.sizeToScene();
         } catch (IOException e) {
@@ -126,7 +126,15 @@ public class TransactionController {
 
     @FXML
     void onLogoutClick(ActionEvent event) {
-        // Logout
+        try {
+            Parent loginRoot = FXMLLoader.load(getClass().getResource("Login.fxml"));
+            Scene scene = btnLogout.getScene();
+            scene.setRoot(loginRoot);
+            Stage stage = (Stage) scene.getWindow();
+            stage.sizeToScene();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

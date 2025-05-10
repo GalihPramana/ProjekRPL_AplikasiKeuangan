@@ -5,7 +5,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="576" prefWidth="1024" style="-fx-background-color: #e3f2fd;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="id.ac.ukdw.www.rplbo.catatankeuangan.RegisterController">
+<BorderPane prefHeight="576" prefWidth="1024" style="-fx-background-color: #e3f2fd;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="id.ac.ukdw.www.rplbo.homepage.RegisterController">
 
     <center>
         <VBox alignment="CENTER" prefHeight="576.0" prefWidth="532.0" spacing="20" style="-fx-background-color: white;">
@@ -33,7 +33,7 @@
                   <Insets left="100.0" top="150.0" />
                </VBox.margin>
                <image>
-                  <Image url="@Image/Logo_UangKU_noBack.png" />
+                  <Image url="@../../../../../../../../../../CatatanKeuangan/src/main/resources/id/ac/ukdw/www/rplbo/catatankeuangan/Image/Logo_UangKU_noBack.png" />
                </image>
             </ImageView>
          </children>

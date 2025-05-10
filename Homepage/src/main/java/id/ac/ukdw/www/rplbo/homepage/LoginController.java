@@ -1,7 +1,8 @@
-package id.ac.ukdw.www.rplbo.catatankeuangan;
+package id.ac.ukdw.www.rplbo.homepage;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -21,6 +22,13 @@ public class LoginController {
     private Label errorLabel;
 
     @FXML
+    private Button loginButton;
+
+    @FXML
+    private Button registerButton;
+
+
+    @FXML
     private void handleLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -28,13 +36,13 @@ public class LoginController {
         if (UserManager.isValidUser(username, password)) {
             errorLabel.setText("");
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("MainView.fxml"));
-                BorderPane mainView = loader.load();
+                Parent loginRoot = FXMLLoader.load(getClass().getResource("homepage-view.fxml"));
+                Scene scene = loginButton.getScene();
 
-                Stage stage = (Stage) usernameField.getScene().getWindow();
-                Scene scene = new Scene(mainView);
+                scene.setRoot(loginRoot);
+                Stage stage = (Stage) scene.getWindow();
                 stage.setScene(scene);
-                stage.setTitle("Aplikasi Keuangan - Dashboard");
+                stage.setTitle("Aplikasi Keuangan");
 
             } catch (IOException e) {
                 errorLabel.setText("Gagal memuat halaman utama.");

@@ -1,4 +1,4 @@
-package id.ac.ukdw.www.rplbo.catatankeuangan;
+package id.ac.ukdw.www.rplbo.homepage;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
