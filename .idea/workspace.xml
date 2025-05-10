@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ac410fbf-944e-410b-89dd-df8f3e817f31" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Homepage/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/FinancialApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/HelloController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/HomepageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/HomepageController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/TransactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/TransactionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/resources/id/ac/ukdw/www/rplbo/homepage/hello-view.fxml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/resources/id/ac/ukdw/www/rplbo/homepage/transaction.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/resources/id/ac/ukdw/www/rplbo/homepage/transaction.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Homepage/src/main/resources/id/ac/ukdw/www/rplbo/homepage/transaction.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/resources/id/ac/ukdw/www/rplbo/homepage/transaction-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,22 +26,22 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "danieljodan"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;danieljodan&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/GalihPramana/ProjekRPL_AplikasiKeuangan.git",
-    "accountId": "766f7e14-c19f-45c9-936e-8a5af4903f01"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/GalihPramana/ProjekRPL_AplikasiKeuangan.git&quot;,
+    &quot;accountId&quot;: &quot;766f7e14-c19f-45c9-936e-8a5af4903f01&quot;
   }
-}]]></component>
+}</component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\xampp\php\php.exe" />
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2wrVaYarqiVRXqVGsz2hWL47QtM" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -55,7 +53,7 @@
     "Application.HelloApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "#4 on vian__71230972",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -65,6 +63,7 @@
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -105,10 +104,22 @@
       <option name="presentableId" value="Default" />
       <updated>1746799745349</updated>
       <workItem from="1746799747077" duration="4605000" />
+      <workItem from="1746873043030" duration="2542000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

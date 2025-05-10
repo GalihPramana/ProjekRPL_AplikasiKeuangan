@@ -4,10 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Callback;
+
+import java.io.IOException;
 
 public class TransactionController {
 
@@ -102,22 +108,30 @@ public class TransactionController {
 
     @FXML
     void onDebtClick(ActionEvent event) {
-        // TODO: navigasi ke Debt
+        // Ke Halaman Debt
     }
 
     @FXML
     void onHomeClick(ActionEvent event) {
-        // TODO: navigasi ke Home
+        try {
+            Parent transactionRoot = FXMLLoader.load(getClass().getResource("homepage-view.fxml"));
+            Scene scene = btnTransaction.getScene();
+            scene.setRoot(transactionRoot);
+            Stage stage = (Stage) scene.getWindow();
+            stage.sizeToScene();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void onLogoutClick(ActionEvent event) {
-        // TODO: proses Logout
+        // Logout
     }
 
     @FXML
     void onTransactionClick(ActionEvent event) {
-        // TODO: navigasi ke Transaction (halaman ini)
+        // Sudah berada di halaman
     }
 
 
@@ -143,9 +157,12 @@ public class TransactionController {
         try {
             jml = Integer.parseInt(jmlText);
         } catch (NumberFormatException ex) {
-            showAlert(Alert.AlertType.ERROR,
-                    "Input Error",
-                    "Nominal harus berupa angka (boleh negatif).");
+            showAlert(Alert.AlertType.ERROR,"Input Error","Nominal harus berupa angka");
+            return;
+        }
+
+        if (jml <= 0) {
+            showAlert(Alert.AlertType.ERROR,"Input Error","Nominal harus lebih besar dari 0.");
             return;
         }
 
@@ -177,9 +194,7 @@ public class TransactionController {
             handleClear();
             updateTotalSaldo();
         } else {
-            showAlert(Alert.AlertType.WARNING,
-                    "Delete Error",
-                    "Pilih transaksi yang ingin dihapus.");
+            showAlert(Alert.AlertType.WARNING,"Delete Error","Pilih transaksi yang ingin dihapus.");
         }
     }
 
@@ -212,8 +227,7 @@ public class TransactionController {
                 .mapToInt(Transaction::getJumlah)
                 .sum();
         totalSaldoLabel.setText(
-                String.format("Total Saldo : ( RP %,d )", total)
-                        .replace(',', '.')
+                String.format("Total Saldo : ( RP %,d )", total).replace(',', '.')
         );
     }
 
