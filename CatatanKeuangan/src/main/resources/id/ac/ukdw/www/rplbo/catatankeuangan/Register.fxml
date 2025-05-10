@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="576" prefWidth="1024" style="-fx-background-color: #e3f2fd;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="id.ac.ukdw.www.rplbo.catatankeuangan.RegisterController">
+
+    <center>
+        <VBox alignment="CENTER" prefHeight="576.0" prefWidth="532.0" spacing="20" style="-fx-background-color: white;">
+            <padding>
+                <Insets bottom="30" left="50" right="50" top="30" />
+            </padding>
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: black;" text="Daftar Akun" />
+            <TextField fx:id="usernameField" maxWidth="300" promptText="Username" style="-fx-background-color: #ffffff; -fx-border-color: black; -fx-text-fill: #333333;" />
+            <PasswordField fx:id="passwordField" maxWidth="300" promptText="Password" style="-fx-background-color: #ffffff; -fx-border-color: black; -fx-text-fill: #333333;" />
+            <PasswordField fx:id="confirmPasswordField" maxWidth="300" promptText="Konfirmasi Password" style="-fx-background-color: #ffffff; -fx-border-color: black; -fx-text-fill: #333333;" />
+            <Button fx:id="registerButton" maxWidth="300" onAction="#handleRegister" style="-fx-background-color: black; -fx-text-fill: white; -fx-font-weight: bold;" text="Daftar">
+            <VBox.margin>
+               <Insets top="50.0" />
+            </VBox.margin></Button>
+            <Button fx:id="registerButton1" maxWidth="300" onAction="#handleBack" style="-fx-background-color: black; -fx-text-fill: white; -fx-font-weight: bold;" text="Kembali ke Login" />
+            <Label fx:id="messageLabel" style="-fx-font-size: 14px;" textFill="red" />
+
+        </VBox>
+    </center>
+   <left>
+      <VBox prefHeight="576.0" prefWidth="464.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="318.0" fitWidth="364.0" pickOnBounds="true" preserveRatio="true">
+               <VBox.margin>
+                  <Insets left="100.0" top="150.0" />
+               </VBox.margin>
+               <image>
+                  <Image url="@Image/Logo_UangKU_noBack.png" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+   </left>
+
+</BorderPane>
