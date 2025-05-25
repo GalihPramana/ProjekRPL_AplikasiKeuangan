@@ -1,34 +1,26 @@
 package UtangPiutang;
 
 public class UtangPiutang {
+    private String nama;
+    private String tanggal;
     private int jumlahUtang;
     private int sisaUtang;
     private int sudahDibayar;
+    private boolean lunas;
 
-    public UtangPiutang(int jumlahUtang, int sisaUtang, int sudahDibayar) {
+    public UtangPiutang(String nama, String tanggal, int jumlahUtang, int sisaUtang, int sudahDibayar, boolean lunas) {
+        this.nama = nama;
+        this.tanggal = tanggal;
         this.jumlahUtang = jumlahUtang;
         this.sisaUtang = sisaUtang;
         this.sudahDibayar = sudahDibayar;
+        this.lunas = lunas;
     }
 
-    public int getJumlahUtang() {
-        return jumlahUtang;
-    }
-    public void setJumlahUtang(int jumlahUtang) {
-        this.jumlahUtang = jumlahUtang;
-    }
-
-    public int getSisaUtang() {
-        return sisaUtang;
-    }
-    public void setSisaUtang(int sisaUtang) {
-        this.sisaUtang = sisaUtang;
-    }
-
-    public int getSudahDibayar() {
-        return sudahDibayar;
-    }
-    public void setSudahDibayar(int sudahDibayar) {
-        this.sudahDibayar = sudahDibayar;
-    }
+    public String getNama() { return nama; }
+    public String getTanggal() { return tanggal; }
+    public int getJumlahUtang() { return jumlahUtang; }
+    public int getSisaUtang() { return sisaUtang; }
+    public int getSudahDibayar() { return sudahDibayar; }
+    public boolean isLunas() { return lunas; }
 }
