@@ -4,67 +4,72 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UtangPiutang.UtangPiutangController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="UtangPiutang.UtangPiutangController" prefWidth="850" prefHeight="650">
 
     <left>
-        <VBox alignment="TOP_CENTER" prefWidth="150" spacing="20" style="-fx-background-color: #000000;">
-            <Label style="-fx-padding: 20 0 0 0;" text="🏠 Home" textFill="white" />
-            <Label text="🔁 Transaksi" textFill="white" />
-            <Label text="⚖ Utang Piutang" textFill="white" />
-            <Label style="-fx-padding: 300 0 0 0;" text="🔒 Logout" textFill="white" />
+        <VBox alignment="TOP_CENTER" spacing="20" prefWidth="150" style="-fx-background-color: #000000;">
+            <Label text="🏠 Home" textFill="white" style="-fx-padding: 20 0 0 0;"/>
+            <Label text="📁 Transaksi" textFill="white"/>
+            <Label text="📑 Utang-Piutang" textFill="white"/>
+            <Label text="🔒 Logout" textFill="white" style="-fx-padding: 300 0 0 0;"/>
         </VBox>
     </left>
 
     <center>
-        <VBox alignment="TOP_CENTER" spacing="10">
-            <Label style="-fx-font-size: 20px;" text="Form Utang Piutang" />
+        <VBox spacing="12" alignment="TOP_CENTER">
+            <Label text="Form Input Utang/Piutang" style="-fx-font-size: 20px;"/>
 
-            <HBox spacing="10">
+            <HBox spacing="15">
                 <VBox spacing="5">
-                    <Label text="Nama Penghutang:" />
-                    <TextField fx:id="tfNama" />
+                    <Label text="Nama Penghutang:"/>
+                    <TextField fx:id="tfNamaPenghutang"/>
                 </VBox>
                 <VBox spacing="5">
-                    <Label text="Tanggal:" />
-                    <TextField fx:id="tfTanggal" promptText="YYYY-MM-DD" />
+                    <Label text="Kepada Siapa:"/>
+                    <TextField fx:id="tfKepada"/>
                 </VBox>
                 <VBox spacing="5">
-                    <Label text="Lunas:" />
-                    <CheckBox fx:id="cbLunas" />
+                    <Label text="Tanggal:"/>
+                    <DatePicker fx:id="dpTanggal"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="15">
+                <VBox spacing="5">
+                    <Label text="Jumlah Utang:"/>
+                    <TextField fx:id="tfJumlah"/>
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="Sudah Dibayar:"/>
+                    <TextField fx:id="tfDibayar"/>
+                </VBox>
+                <VBox spacing="5">
+                    <Label text="Status:"/>
+                    <ComboBox fx:id="cbStatus"/>
                 </VBox>
             </HBox>
 
             <HBox spacing="10">
-                <VBox spacing="5">
-                    <Label text="Jumlah Utang:" />
-                    <TextField fx:id="tfJumlahUtang" />
-                </VBox>
-                <VBox spacing="5">
-                    <Label text="Sudah Dibayar:" />
-                    <TextField fx:id="tfSudahDibayar" />
-                </VBox>
+                <Button text="Tambah" onAction="#tambahData"/>
+                <Button text="Hapus" onAction="#hapusData"/>
+                <TextField fx:id="tfFilter" promptText="Cari..."/>
+                <Button text="Cari" onAction="#filterData"/>
             </HBox>
 
-            <HBox spacing="10">
-                <Button onAction="#handleTambah" text="Tambah" />
-                <Button onAction="#handleHapus" text="Hapus" />
-                <TextField fx:id="tfFilter" promptText="Filter..." />
-                <Button onAction="#handleFilter" text="Cari" />
-            </HBox>
-
-            <TableView fx:id="table" prefHeight="300">
+            <TableView fx:id="table" prefHeight="320">
                 <columns>
-                    <TableColumn fx:id="colNama" text="Nama" />
-                    <TableColumn fx:id="colTanggal" text="Tanggal" />
-                    <TableColumn fx:id="colJumlah" text="Jumlah Utang" />
-                    <TableColumn fx:id="colBayar" text="Sudah Dibayar" />
-                    <TableColumn fx:id="colSisa" text="Sisa Utang" />
-                    <TableColumn fx:id="colLunas" text="Lunas" />
+                    <TableColumn fx:id="colNama" text="Nama"/>
+                    <TableColumn fx:id="colKepada" text="Kepada"/>
+                    <TableColumn fx:id="colTanggal" text="Tanggal"/>
+                    <TableColumn fx:id="colJumlah" text="Jumlah"/>
+                    <TableColumn fx:id="colDibayar" text="Dibayar"/>
+                    <TableColumn fx:id="colSisa" text="Sisa"/>
+                    <TableColumn fx:id="colStatus" text="Status"/>
                 </columns>
             </TableView>
 
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets top="20" bottom="20" left="20" right="20"/>
             </padding>
         </VBox>
     </center>

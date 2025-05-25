@@ -1,56 +1,59 @@
 package UtangPiutang;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 public class UtangPiutangController {
-    @FXML private TextField tfNama, tfTanggal;
-    @FXML private TextField tfJumlahUtang, tfSudahDibayar, tfFilter;
-    @FXML private CheckBox cbLunas;
+
+    @FXML private TextField tfNamaPenghutang, tfJumlah, tfDibayar, tfKepada;
+    @FXML private DatePicker dpTanggal;
+    @FXML private ComboBox<String> cbStatus;
+    @FXML private TextField tfFilter;
 
     @FXML private TableView<UtangPiutang> table;
-    @FXML private TableColumn<UtangPiutang, String> colNama, colTanggal;
-    @FXML private TableColumn<UtangPiutang, Integer> colJumlah, colSisa, colBayar;
-    @FXML private TableColumn<UtangPiutang, Boolean> colLunas;
+    @FXML private TableColumn<UtangPiutang, String> colNama, colTanggal, colKepada, colStatus;
+    @FXML private TableColumn<UtangPiutang, Integer> colJumlah, colDibayar, colSisa;
 
-    private ObservableList<UtangPiutang> data = FXCollections.observableArrayList();
+    private final ObservableList<UtangPiutang> data = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        colNama.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getNama()));
-        colTanggal.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getTanggal()));
-        colJumlah.setCellValueFactory(cell -> new SimpleIntegerProperty(cell.getValue().getJumlahUtang()).asObject());
-        colBayar.setCellValueFactory(cell -> new SimpleIntegerProperty(cell.getValue().getSudahDibayar()).asObject());
-        colSisa.setCellValueFactory(cell -> new SimpleIntegerProperty(cell.getValue().getSisaUtang()).asObject());
-        colLunas.setCellValueFactory(cell -> new SimpleBooleanProperty(cell.getValue().isLunas()).asObject());
+        cbStatus.setItems(FXCollections.observableArrayList("Belum Lunas", "Sebagian", "Lunas"));
+
+        colNama.setCellValueFactory(val -> new SimpleStringProperty(val.getValue().getNama()));
+        colTanggal.setCellValueFactory(val -> new SimpleStringProperty(val.getValue().getTanggal()));
+        colKepada.setCellValueFactory(val -> new SimpleStringProperty(val.getValue().getKepada()));
+        colStatus.setCellValueFactory(val -> new SimpleStringProperty(val.getValue().getStatus()));
+        colJumlah.setCellValueFactory(val -> new SimpleIntegerProperty(val.getValue().getJumlahUtang()).asObject());
+        colDibayar.setCellValueFactory(val -> new SimpleIntegerProperty(val.getValue().getSudahDibayar()).asObject());
+        colSisa.setCellValueFactory(val -> new SimpleIntegerProperty(val.getValue().getSisaUtang()).asObject());
 
         table.setItems(data);
     }
 
     @FXML
-    public void handleTambah() {
+    public void tambahData() {
         try {
-            String nama = tfNama.getText();
-            String tanggal = tfTanggal.getText();
-            int jumlah = Integer.parseInt(tfJumlahUtang.getText());
-            int bayar = Integer.parseInt(tfSudahDibayar.getText());
-            int sisa = jumlah - bayar;
-            boolean lunas = cbLunas.isSelected();
+            String nama = tfNamaPenghutang.getText().trim();
+            String kepada = tfKepada.getText().trim();
+            String tanggal = dpTanggal.getValue() != null ? dpTanggal.getValue().toString() : "";
+            int jumlah = Integer.parseInt(tfJumlah.getText().trim());
+            int dibayar = Integer.parseInt(tfDibayar.getText().trim());
+            String status = cbStatus.getValue();
 
-            data.add(new UtangPiutang(nama, tanggal, jumlah, sisa, bayar, lunas));
-            bersihkan();
-        } catch (NumberFormatException e) {
-            showAlert("Input tidak valid", "Jumlah dan pembayaran harus berupa angka.");
+            int sisa = jumlah - dibayar;
+            data.add(new UtangPiutang(nama, kepada, tanggal, jumlah, dibayar, sisa, status));
+            clearForm();
+        } catch (Exception e) {
+            showAlert("Input tidak valid", "Pastikan semua kolom terisi dengan benar.");
         }
     }
 
     @FXML
-    public void handleHapus() {
+    public void hapusData() {
         UtangPiutang selected = table.getSelectionModel().getSelectedItem();
         if (selected != null) {
             data.remove(selected);
@@ -58,39 +61,41 @@ public class UtangPiutangController {
     }
 
     @FXML
-    public void handleFilter() {
-        String filterText = tfFilter.getText().toLowerCase();
-        if (filterText.isEmpty()) {
+    public void filterData() {
+        String keyword = tfFilter.getText().toLowerCase();
+        if (keyword.isEmpty()) {
             table.setItems(data);
         } else {
             ObservableList<UtangPiutang> filtered = FXCollections.observableArrayList();
-            for (UtangPiutang u : data) {
-                if (u.getNama().toLowerCase().contains(filterText) ||
-                        u.getTanggal().toLowerCase().contains(filterText) ||
-                        String.valueOf(u.getJumlahUtang()).contains(filterText) ||
-                        String.valueOf(u.getSisaUtang()).contains(filterText) ||
-                        String.valueOf(u.getSudahDibayar()).contains(filterText) ||
-                        (u.isLunas() ? "lunas" : "belum").contains(filterText)) {
-                    filtered.add(u);
+            for (UtangPiutang up : data) {
+                if (up.getNama().toLowerCase().contains(keyword) ||
+                        up.getKepada().toLowerCase().contains(keyword) ||
+                        up.getTanggal().toLowerCase().contains(keyword) ||
+                        up.getStatus().toLowerCase().contains(keyword) ||
+                        String.valueOf(up.getJumlahUtang()).contains(keyword) ||
+                        String.valueOf(up.getSudahDibayar()).contains(keyword) ||
+                        String.valueOf(up.getSisaUtang()).contains(keyword)) {
+                    filtered.add(up);
                 }
             }
             table.setItems(filtered);
         }
     }
 
-    private void bersihkan() {
-        tfNama.clear();
-        tfTanggal.clear();
-        tfJumlahUtang.clear();
-        tfSudahDibayar.clear();
-        cbLunas.setSelected(false);
+    private void clearForm() {
+        tfNamaPenghutang.clear();
+        tfKepada.clear();
+        tfJumlah.clear();
+        tfDibayar.clear();
+        dpTanggal.setValue(null);
+        cbStatus.setValue(null);
     }
 
-    private void showAlert(String title, String content) {
+    private void showAlert(String title, String msg) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(content);
+        alert.setContentText(msg);
         alert.showAndWait();
     }
 }
