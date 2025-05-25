@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1b8a4fcf-da58-4603-a65e-27f544b16382" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/id/ac/ukdw/www/rplbo/catatankeuangan/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/id/ac/ukdw/www/rplbo/catatankeuangan/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/id/ac/ukdw/www/rplbo/catatankeuangan/RegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/id/ac/ukdw/www/rplbo/catatankeuangan/RegisterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/id/ac/ukdw/www/rplbo/catatankeuangan/UserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/id/ac/ukdw/www/rplbo/catatankeuangan/UserManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users.txt" beforeDir="false" afterPath="$PROJECT_DIR$/users.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FxmlFile" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2woEeLpyMkewKhznSL3p1hBBhWi" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Galih__71230976&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Kuliah/Sem 4/RPL BO/ProjekRPL_AplikasiKeuangan/CatatanKeuangan/src/main/resources/id/ac/ukdw/www/rplbo/catatankeuangan/Image&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlite&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Kuliah\Sem 4\RPL BO\ProjekRPL_AplikasiKeuangan\CatatanKeuangan\src\main\resources\id\ac\ukdw\www\rplbo\catatankeuangan\Image" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1b8a4fcf-da58-4603-a65e-27f544b16382" name="Changes" comment="" />
+      <created>1746699622210</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1746699622210</updated>
+      <workItem from="1746699623550" duration="783000" />
+      <workItem from="1746700435993" duration="4739000" />
+      <workItem from="1746707714167" duration="48000" />
+      <workItem from="1746713239157" duration="225000" />
+      <workItem from="1746713482474" duration="3512000" />
+      <workItem from="1746753388631" duration="775000" />
+      <workItem from="1746773073870" duration="3661000" />
+      <workItem from="1746789532398" duration="60000" />
+      <workItem from="1746789611937" duration="1903000" />
+      <workItem from="1746805951476" duration="1530000" />
+      <workItem from="1747129370318" duration="1202000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
