@@ -2,56 +2,74 @@ package id.ac.ukdw.www.rplbo.homepage;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
+import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.io.IOException;
+import java.time.LocalDate;
 
 public class UtangPiutangController {
-    @FXML
-    private Button btnDebt;
 
-    @FXML
-    private Button btnHome;
+    @FXML private TextField tfKepadaSiapa;
+    @FXML private DatePicker dpTanggal;
+    @FXML private TextField tfJumlahUtang;
+    @FXML private TextField tfFilter;
+    @FXML private TableView<Transaksi> table;
+    @FXML private TableColumn<Transaksi, String> colKepadaSiapa;
+    @FXML private TableColumn<Transaksi, LocalDate> colTanggal;
+    @FXML private TableColumn<Transaksi, Double> colJumlahUtang;
 
-    @FXML
-    private Button btnLogout;
-
-    @FXML
-    private Button btnTransaction;
-
-    @FXML private TextField tfJumlahUtang, tfSisaUtang, tfSudahDibayar, tfFilter;
-    @FXML private TableView<UtangPiutang> table;
-    @FXML private TableColumn<UtangPiutang, Integer> colJumlah, colSisa, colBayar;
-
-    private ObservableList<UtangPiutang> data = FXCollections.observableArrayList();
+    private ObservableList<Transaksi> data = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        colJumlah.setCellValueFactory(cell -> new javafx.beans.property.SimpleIntegerProperty(cell.getValue().getJumlahUtang()).asObject());
-        colSisa.setCellValueFactory(cell -> new javafx.beans.property.SimpleIntegerProperty(cell.getValue().getSisaUtang()).asObject());
-        colBayar.setCellValueFactory(cell -> new javafx.beans.property.SimpleIntegerProperty(cell.getValue().getSudahDibayar()).asObject());
+        colKepadaSiapa.setCellValueFactory(new PropertyValueFactory<>("kepadaSiapa"));
+        colTanggal.setCellValueFactory(new PropertyValueFactory<>("tanggal"));
+        colJumlahUtang.setCellValueFactory(new PropertyValueFactory<>("jumlah"));
 
         table.setItems(data);
     }
 
     @FXML
-    public void handleTambah() {
-        int jumlah = Integer.parseInt(tfJumlahUtang.getText());
-        int sisa = Integer.parseInt(tfSisaUtang.getText());
-        int bayar = Integer.parseInt(tfSudahDibayar.getText());
-        data.add(new UtangPiutang(jumlah, sisa, bayar));
-        bersihkan();
+    public void handleTambahHutang() {
+        tambahTransaksi("Hutang");
+    }
+
+    @FXML
+    public void handleTambahPiutang() {
+        tambahTransaksi("Piutang");
+    }
+
+    private void tambahTransaksi(String jenis) {
+        String kepada = tfKepadaSiapa.getText();
+        LocalDate tanggal = dpTanggal.getValue();
+        double jumlah;
+
+        try {
+            jumlah = Double.parseDouble(tfJumlahUtang.getText());
+        } catch (NumberFormatException e) {
+            showAlert("Jumlah tidak valid");
+            return;
+        }
+
+        if (kepada.isEmpty() || tanggal == null) {
+            showAlert("Lengkapi semua data");
+            return;
+        }
+
+        if (jenis.equals("Hutang")) {
+            jumlah = -Math.abs(jumlah); // negatif untuk hutang
+        } else {
+            jumlah = Math.abs(jumlah);  // positif untuk piutang
+        }
+
+        data.add(new Transaksi(kepada, tanggal, jumlah));
+        clearForm();
     }
 
     @FXML
     public void handleHapus() {
-        UtangPiutang selected = table.getSelectionModel().getSelectedItem();
+        Transaksi selected = table.getSelectionModel().getSelectedItem();
         if (selected != null) {
             data.remove(selected);
         }
@@ -59,70 +77,57 @@ public class UtangPiutangController {
 
     @FXML
     public void handleFilter() {
-        String filterText = tfFilter.getText();
-        if (filterText.isEmpty()) {
+        String filter = tfFilter.getText().toLowerCase();
+        if (filter.isEmpty()) {
             table.setItems(data);
-        } else {
-            ObservableList<UtangPiutang> filtered = FXCollections.observableArrayList();
-            for (UtangPiutang u : data) {
-                if (String.valueOf(u.getJumlahUtang()).contains(filterText) ||
-                        String.valueOf(u.getSisaUtang()).contains(filterText) ||
-                        String.valueOf(u.getSudahDibayar()).contains(filterText)) {
-                    filtered.add(u);
-                }
+            return;
+        }
+
+        ObservableList<Transaksi> filtered = FXCollections.observableArrayList();
+        for (Transaksi t : data) {
+            if (t.getKepadaSiapa().toLowerCase().contains(filter)) {
+                filtered.add(t);
             }
-            table.setItems(filtered);
         }
+        table.setItems(filtered);
     }
 
-    private void bersihkan() {
+    private void clearForm() {
+        tfKepadaSiapa.clear();
         tfJumlahUtang.clear();
-        tfSisaUtang.clear();
-        tfSudahDibayar.clear();
+        dpTanggal.setValue(null);
     }
 
-    @FXML
-    void onDebtClick(ActionEvent event) {
-        //Halaman ini
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Peringatan");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
-    @FXML
-    void onHomeClick(ActionEvent event) {
-        try {
-            Parent homeRoot = FXMLLoader.load(getClass().getResource("homepage-view.fxml"));
-            Scene scene = btnHome.getScene();
-            scene.setRoot(homeRoot);
-            Stage stage = (Stage) scene.getWindow();
-            stage.sizeToScene();
-        } catch (IOException e) {
-            e.printStackTrace();
+    // Inner class untuk model data
+    public static class Transaksi {
+        private final String kepadaSiapa;
+        private final LocalDate tanggal;
+        private final double jumlah;
+
+        public Transaksi(String kepadaSiapa, LocalDate tanggal, double jumlah) {
+            this.kepadaSiapa = kepadaSiapa;
+            this.tanggal = tanggal;
+            this.jumlah = jumlah;
+        }
+
+        public String getKepadaSiapa() {
+            return kepadaSiapa;
+        }
+
+        public LocalDate getTanggal() {
+            return tanggal;
+        }
+
+        public double getJumlah() {
+            return jumlah;
         }
     }
-
-    @FXML
-    void onLogoutClick(ActionEvent event) {
-        try {
-            Parent loginRoot = FXMLLoader.load(getClass().getResource("Login.fxml"));
-            Scene scene = btnLogout.getScene();
-            scene.setRoot(loginRoot);
-            Stage stage = (Stage) scene.getWindow();
-            stage.sizeToScene();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void onTransactionClick(ActionEvent event) {
-        try {
-            Parent transactionRoot = FXMLLoader.load(getClass().getResource("transaction-view.fxml"));
-            Scene scene = btnTransaction.getScene();
-            scene.setRoot(transactionRoot);
-            Stage stage = (Stage) scene.getWindow();
-            stage.sizeToScene();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

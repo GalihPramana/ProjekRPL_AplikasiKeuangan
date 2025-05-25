@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="ac410fbf-944e-410b-89dd-df8f3e817f31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/HomepageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/HomepageController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/TransactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/TransactionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/UtangPiutang.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/UtangPiutang.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/UtangPiutangController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/UtangPiutangController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Homepage/src/main/resources/id/ac/ukdw/www/rplbo/homepage/UtangPiutang.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/resources/id/ac/ukdw/www/rplbo/homepage/UtangPiutang.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +35,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/GalihPramana/ProjekRPL_AplikasiKeuangan.git&quot;,
-    &quot;accountId&quot;: &quot;766f7e14-c19f-45c9-936e-8a5af4903f01&quot;
+    &quot;accountId&quot;: &quot;adffb4f3-f3d3-4a69-8d76-208c7236cc7b&quot;
   }
 }</component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\xampp\php\php.exe" />
@@ -52,7 +53,8 @@
     &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;71230971__MarvinPerbaikan&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -114,6 +116,8 @@
       <workItem from="1746879072386" duration="95000" />
       <workItem from="1746879183658" duration="1280000" />
       <workItem from="1746880473788" duration="2207000" />
+      <workItem from="1748184388684" duration="701000" />
+      <workItem from="1748185121410" duration="1344000" />
     </task>
     <servers />
   </component>
