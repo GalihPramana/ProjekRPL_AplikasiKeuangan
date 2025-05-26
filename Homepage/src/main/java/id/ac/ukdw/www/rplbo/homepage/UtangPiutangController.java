@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.time.LocalDate;
@@ -14,19 +15,29 @@ public class UtangPiutangController {
     @FXML private DatePicker dpTanggal;
     @FXML private TextField tfJumlahUtang;
     @FXML private TextField tfFilter;
-    @FXML private TableView<Transaksi> table;
-    @FXML private TableColumn<Transaksi, String> colKepadaSiapa;
-    @FXML private TableColumn<Transaksi, LocalDate> colTanggal;
-    @FXML private TableColumn<Transaksi, Double> colJumlahUtang;
 
-    private ObservableList<Transaksi> data = FXCollections.observableArrayList();
+    @FXML private TableView<UtangPiutang> table;
+    @FXML private TableColumn<UtangPiutang, String> colKepadaSiapa;
+    @FXML private TableColumn<UtangPiutang, String> colTanggal;
+    @FXML private TableColumn<UtangPiutang, Integer> colJumlahUtang;
+    @FXML private TableColumn<UtangPiutang, String> colStatus;
+
+    private ObservableList<UtangPiutang> data = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
         colKepadaSiapa.setCellValueFactory(new PropertyValueFactory<>("kepadaSiapa"));
         colTanggal.setCellValueFactory(new PropertyValueFactory<>("tanggal"));
-        colJumlahUtang.setCellValueFactory(new PropertyValueFactory<>("jumlah"));
+        colJumlahUtang.setCellValueFactory(new PropertyValueFactory<>("jumlahUtang"));
+        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
+        colStatus.setCellFactory(ComboBoxTableCell.forTableColumn("Belum Lunas", "Lunas"));
+        colStatus.setOnEditCommit(event -> {
+            UtangPiutang transaksi = event.getRowValue();
+            transaksi.setStatus(event.getNewValue());
+        });
+
+        table.setEditable(true);
         table.setItems(data);
     }
 
@@ -43,10 +54,10 @@ public class UtangPiutangController {
     private void tambahTransaksi(String jenis) {
         String kepada = tfKepadaSiapa.getText();
         LocalDate tanggal = dpTanggal.getValue();
-        double jumlah;
+        int jumlah;
 
         try {
-            jumlah = Double.parseDouble(tfJumlahUtang.getText());
+            jumlah = Integer.parseInt(tfJumlahUtang.getText());
         } catch (NumberFormatException e) {
             showAlert("Jumlah tidak valid");
             return;
@@ -63,13 +74,13 @@ public class UtangPiutangController {
             jumlah = Math.abs(jumlah);  // positif untuk piutang
         }
 
-        data.add(new Transaksi(kepada, tanggal, jumlah));
+        data.add(new UtangPiutang("User", kepada, tanggal.toString(), jumlah, "Belum Lunas"));
         clearForm();
     }
 
     @FXML
     public void handleHapus() {
-        Transaksi selected = table.getSelectionModel().getSelectedItem();
+        UtangPiutang selected = table.getSelectionModel().getSelectedItem();
         if (selected != null) {
             data.remove(selected);
         }
@@ -83,8 +94,8 @@ public class UtangPiutangController {
             return;
         }
 
-        ObservableList<Transaksi> filtered = FXCollections.observableArrayList();
-        for (Transaksi t : data) {
+        ObservableList<UtangPiutang> filtered = FXCollections.observableArrayList();
+        for (UtangPiutang t : data) {
             if (t.getKepadaSiapa().toLowerCase().contains(filter)) {
                 filtered.add(t);
             }
@@ -104,30 +115,5 @@ public class UtangPiutangController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    // Inner class untuk model data
-    public static class Transaksi {
-        private final String kepadaSiapa;
-        private final LocalDate tanggal;
-        private final double jumlah;
-
-        public Transaksi(String kepadaSiapa, LocalDate tanggal, double jumlah) {
-            this.kepadaSiapa = kepadaSiapa;
-            this.tanggal = tanggal;
-            this.jumlah = jumlah;
-        }
-
-        public String getKepadaSiapa() {
-            return kepadaSiapa;
-        }
-
-        public LocalDate getTanggal() {
-            return tanggal;
-        }
-
-        public double getJumlah() {
-            return jumlah;
-        }
     }
 }

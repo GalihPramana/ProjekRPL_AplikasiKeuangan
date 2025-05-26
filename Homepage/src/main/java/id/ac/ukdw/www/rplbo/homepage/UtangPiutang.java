@@ -15,9 +15,6 @@ public class UtangPiutang {
         this.status = status;
     }
 
-    public UtangPiutang(String kepada, String tanggal, int jumlah, String s) {
-    }
-
     public String getNama() {
         return nama;
     }
@@ -36,5 +33,9 @@ public class UtangPiutang {
 
     public String getStatus() {
         return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

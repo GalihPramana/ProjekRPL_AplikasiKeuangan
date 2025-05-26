@@ -15,7 +15,9 @@
         <AnchorPane>
             <children>
                 <Label layoutX="420.0" layoutY="20.0" text="Form Utang/Piutang">
-                    <font><Font size="20.0"/></font>
+                    <font>
+                        <Font size="20.0"/>
+                    </font>
                 </Label>
 
                 <Label layoutX="50.0" layoutY="70.0" text="Kepada Siapa:" />
@@ -27,9 +29,10 @@
                 <Label layoutX="650.0" layoutY="70.0" text="Jumlah:" />
                 <TextField fx:id="tfJumlahUtang" layoutX="710.0" layoutY="65.0" prefWidth="150.0" />
 
-                <!-- Tombol Hutang & Piutang -->
-                <Button layoutX="50.0" layoutY="120.0" text="🔴 Hutang" onAction="#handleTambahHutang" style="-fx-background-color: #ff4d4d; -fx-text-fill: white;"/>
-                <Button layoutX="140.0" layoutY="120.0" text="🟢 Piutang" onAction="#handleTambahPiutang" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                <Button layoutX="50.0" layoutY="120.0" text="🔴 Hutang" onAction="#handleTambahHutang"
+                        style="-fx-background-color: #ff4d4d; -fx-text-fill: white;"/>
+                <Button layoutX="140.0" layoutY="120.0" text="🟢 Piutang" onAction="#handleTambahPiutang"
+                        style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
 
                 <Button layoutX="240.0" layoutY="120.0" text="Hapus" onAction="#handleHapus"/>
                 <TextField fx:id="tfFilter" layoutX="320.0" layoutY="120.0" promptText="Cari..."/>
@@ -40,6 +43,7 @@
                         <TableColumn fx:id="colKepadaSiapa" text="Kepada" prefWidth="200.0"/>
                         <TableColumn fx:id="colTanggal" text="Tanggal" prefWidth="200.0"/>
                         <TableColumn fx:id="colJumlahUtang" text="Jumlah" prefWidth="200.0"/>
+                        <TableColumn fx:id="colStatus" text="Status" prefWidth="200.0"/>
                     </columns>
                 </TableView>
             </children>
