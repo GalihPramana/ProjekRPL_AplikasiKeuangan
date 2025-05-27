@@ -62,11 +62,11 @@ public class UtangPiutangController {
         colJumlahUtang.setCellValueFactory(new PropertyValueFactory<>("jumlahUtang"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-        colStatus.setCellFactory(ComboBoxTableCell.forTableColumn("Belum Lunas", "Lunas"));
-        colStatus.setOnEditCommit(event -> {
-            UtangPiutang transaksi = event.getRowValue();
-            transaksi.setStatus(event.getNewValue());
-        });
+//        colStatus.setCellFactory(ComboBoxTableCell.forTableColumn("Belum Lunas", "Lunas"));
+//        colStatus.setOnEditCommit(event -> {
+//            UtangPiutang transaksi = event.getRowValue();
+//            transaksi.setStatus(event.getNewValue());
+//        });
 
         table.setEditable(true);
         table.setItems(data);
