@@ -1,52 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import de.jensd.fx.glyphs.materialdesignicons.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.text.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="id.ac.ukdw.www.rplbo.homepage.UtangPiutangController"
-            prefWidth="1024.0" prefHeight="576.0"
-            style="-fx-background-color: #e7e9ee;">
+<BorderPane prefHeight="576.0" prefWidth="1024.0" style="-fx-background-color: #e7e9ee;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="id.ac.ukdw.www.rplbo.homepage.UtangPiutangController">
 
     <center>
         <AnchorPane>
-            <children>
-                <Label layoutX="420.0" layoutY="20.0" text="Form Utang/Piutang">
+            <Label layoutX="477.0" layoutY="20.0" text="Form Utang/Piutang">
+                <font>
+                    <Font size="20.0" />
+                </font>
+            </Label>
+
+            <AnchorPane prefHeight="576.0" prefWidth="88.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+                <Button fx:id="btnHome" contentDisplay="TOP" layoutX="23.0" layoutY="32.0" mnemonicParsing="false" onAction="#onHomeClick" style="-fx-background-color: transparent;" text="Home" textFill="WHITE">
+                    <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="HOME" selectionStart="25" size="25" text="">
+                            <font>
+                                <Font size="11.0" />
+                            </font>
+                        </FontAwesomeIconView>
+                    </graphic>
                     <font>
-                        <Font size="20.0"/>
+                        <Font name="System Bold" size="10.0" />
                     </font>
-                </Label>
+                </Button>
+                <Button fx:id="btnTransaction" contentDisplay="TOP" layoutX="10.0" layoutY="91.0" mnemonicParsing="false" onAction="#onTransactionClick" style="-fx-background-color: transparent;" text="Transaction" textFill="WHITE">
+                    <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="EXCHANGE" size="25" />
+                    </graphic>
+                    <font>
+                        <Font name="System Bold" size="10.0" />
+                    </font>
+                </Button>
+                <Button fx:id="btnDebt" contentDisplay="TOP" layoutX="25.0" layoutY="153.0" mnemonicParsing="false" onAction="#onDebtClick" style="-fx-background-color: transparent;" text="Debt" textFill="WHITE">
+                    <graphic>
+                        <MaterialDesignIconView fill="WHITE" glyphName="SCALE_BALANCE" size="25" />
+                    </graphic>
+                    <font>
+                        <Font name="System Bold" size="10.0" />
+                    </font>
+                </Button>
+                <Button fx:id="btnLogout" contentDisplay="TOP" layoutX="20.0" layoutY="497.0" mnemonicParsing="false" onAction="#onLogoutClick" style="-fx-background-color: transparent;" text="Logout" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="10.0" />
+                    </font>
+                    <graphic>
+                        <MaterialDesignIconView fill="WHITE" glyphName="EXIT_TO_APP" size="25" />
+                    </graphic>
+                </Button>
+            </AnchorPane>
 
-                <Label layoutX="50.0" layoutY="70.0" text="Kepada Siapa:" />
-                <TextField fx:id="tfKepadaSiapa" layoutX="180.0" layoutY="65.0" prefWidth="200.0" />
 
-                <Label layoutX="410.0" layoutY="70.0" text="Tanggal:" />
-                <DatePicker fx:id="dpTanggal" layoutX="470.0" layoutY="65.0" prefWidth="150.0" />
+            <Label layoutX="107.0" layoutY="70.0" text="Kepada Siapa:" />
+            <TextField fx:id="tfKepadaSiapa" layoutX="237.0" layoutY="65.0" prefWidth="200.0" />
 
-                <Label layoutX="650.0" layoutY="70.0" text="Jumlah:" />
-                <TextField fx:id="tfJumlahUtang" layoutX="710.0" layoutY="65.0" prefWidth="150.0" />
+            <Label layoutX="467.0" layoutY="70.0" text="Tanggal:" />
+            <DatePicker fx:id="dpTanggal" layoutX="527.0" layoutY="65.0" prefWidth="150.0" />
 
-                <Button layoutX="50.0" layoutY="120.0" text="🔴 Hutang" onAction="#handleTambahHutang"
-                        style="-fx-background-color: #ff4d4d; -fx-text-fill: white;"/>
-                <Button layoutX="140.0" layoutY="120.0" text="🟢 Piutang" onAction="#handleTambahPiutang"
-                        style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+            <Label layoutX="707.0" layoutY="70.0" text="Jumlah:" />
+            <TextField fx:id="tfJumlahUtang" layoutX="767.0" layoutY="65.0" prefWidth="150.0" />
 
-                <Button layoutX="240.0" layoutY="120.0" text="Hapus" onAction="#handleHapus"/>
-                <TextField fx:id="tfFilter" layoutX="320.0" layoutY="120.0" promptText="Cari..."/>
-                <Button layoutX="500.0" layoutY="120.0" text="Cari" onAction="#handleFilter"/>
+            <Button layoutX="107.0" layoutY="120.0" onAction="#handleTambahHutang" style="-fx-background-color: #ff4d4d; -fx-text-fill: white;" text="🔴 Hutang" />
+            <Button layoutX="197.0" layoutY="120.0" onAction="#handleTambahPiutang" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="🟢 Piutang" />
 
-                <TableView fx:id="table" layoutX="50.0" layoutY="170.0" prefWidth="900.0" prefHeight="350.0">
-                    <columns>
-                        <TableColumn fx:id="colKepadaSiapa" text="Kepada" prefWidth="200.0"/>
-                        <TableColumn fx:id="colTanggal" text="Tanggal" prefWidth="200.0"/>
-                        <TableColumn fx:id="colJumlahUtang" text="Jumlah" prefWidth="200.0"/>
-                        <TableColumn fx:id="colStatus" text="Status" prefWidth="200.0"/>
-                    </columns>
-                </TableView>
-            </children>
+            <Button layoutX="297.0" layoutY="120.0" onAction="#handleHapus" text="Hapus" />
+            <TextField fx:id="tfFilter" layoutX="377.0" layoutY="120.0" promptText="Cari..." />
+            <Button layoutX="557.0" layoutY="120.0" onAction="#handleFilter" text="Cari" />
+
+            <TableView fx:id="table" layoutX="107.0" layoutY="170.0" prefHeight="350.0" prefWidth="900.0">
+                <columns>
+                    <TableColumn fx:id="colKepadaSiapa" prefWidth="200.0" text="Kepada" />
+                    <TableColumn fx:id="colTanggal" prefWidth="200.0" text="Tanggal" />
+                    <TableColumn fx:id="colJumlahUtang" prefWidth="200.0" text="Jumlah" />
+                    <TableColumn fx:id="colStatus" prefWidth="200.0" text="Status" />
+                </columns>
+            </TableView>
+         <ChoiceBox fx:id="cbStatus" layoutX="652.0" layoutY="120.0" prefWidth="150.0" />
         </AnchorPane>
     </center>
 </BorderPane>

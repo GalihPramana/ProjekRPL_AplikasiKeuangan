@@ -80,6 +80,19 @@ public class HomepageController implements Initializable {
     }
 
     @FXML
+    void onTransactionClick(ActionEvent event) {
+        try {
+            Parent transactionRoot = FXMLLoader.load(getClass().getResource("transaction-view.fxml"));
+            Scene scene = btnTransaction.getScene();
+            scene.setRoot(transactionRoot);
+            Stage stage = (Stage) scene.getWindow();
+            stage.sizeToScene();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     void onHomeClick(ActionEvent event) {
         // Sudah berada di halaman ini
     }
@@ -90,19 +103,6 @@ public class HomepageController implements Initializable {
             Parent loginRoot = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene scene = btnLogout.getScene();
             scene.setRoot(loginRoot);
-            Stage stage = (Stage) scene.getWindow();
-            stage.sizeToScene();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void onTransactionClick(ActionEvent event) {
-        try {
-            Parent transactionRoot = FXMLLoader.load(getClass().getResource("transaction-view.fxml"));
-            Scene scene = btnTransaction.getScene();
-            scene.setRoot(transactionRoot);
             Stage stage = (Stage) scene.getWindow();
             stage.sizeToScene();
         } catch (IOException e) {
