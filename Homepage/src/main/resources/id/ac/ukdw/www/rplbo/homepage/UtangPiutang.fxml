@@ -57,13 +57,13 @@
 
 
             <Label layoutX="107.0" layoutY="70.0" text="Kepada Siapa:" />
-            <TextField fx:id="tfKepadaSiapa" layoutX="237.0" layoutY="65.0" prefWidth="200.0" />
+            <TextField fx:id="tfKepadaSiapa" layoutX="189.0" layoutY="65.0" prefWidth="200.0" />
 
-            <Label layoutX="467.0" layoutY="70.0" text="Tanggal:" />
-            <DatePicker fx:id="dpTanggal" layoutX="527.0" layoutY="65.0" prefWidth="150.0" />
+            <Label layoutX="406.0" layoutY="69.0" text="Tanggal:" />
+            <DatePicker fx:id="dpTanggal" layoutX="459.0" layoutY="66.0" prefWidth="150.0" />
 
-            <Label layoutX="707.0" layoutY="70.0" text="Jumlah:" />
-            <TextField fx:id="tfJumlahUtang" layoutX="767.0" layoutY="65.0" prefWidth="150.0" />
+            <Label layoutX="627.0" layoutY="68.0" text="Jumlah:" />
+            <TextField fx:id="tfJumlahUtang" layoutX="674.0" layoutY="66.0" prefWidth="150.0" />
 
             <Button layoutX="107.0" layoutY="120.0" onAction="#handleTambahHutang" style="-fx-background-color: #ff4d4d; -fx-text-fill: white;" text="🔴 Hutang" />
             <Button layoutX="197.0" layoutY="120.0" onAction="#handleTambahPiutang" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="🟢 Piutang" />
@@ -80,7 +80,7 @@
                     <TableColumn fx:id="colStatus" prefWidth="200.0" text="Status" />
                 </columns>
             </TableView>
-         <ChoiceBox fx:id="cbStatus" layoutX="652.0" layoutY="120.0" prefWidth="150.0" />
+         <ChoiceBox fx:id="cbStatus" layoutX="857.0" layoutY="64.0" prefHeight="26.0" prefWidth="84.0" />
         </AnchorPane>
     </center>
 </BorderPane>
