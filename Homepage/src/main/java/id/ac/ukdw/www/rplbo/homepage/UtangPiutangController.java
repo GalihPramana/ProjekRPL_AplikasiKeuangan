@@ -32,7 +32,6 @@ public class UtangPiutangController {
     @FXML
     private Button btnTransaction;
 
-
     @FXML
     private TextField tfKepadaSiapa;
     @FXML
@@ -150,6 +149,7 @@ public class UtangPiutangController {
         alert.showAndWait();
     }
 
+    @FXML
     public void onHomeClick(ActionEvent actionEvent) {
         try {
             Parent homeRoot = FXMLLoader.load(getClass().getResource("homepage-view.fxml"));
@@ -162,6 +162,7 @@ public class UtangPiutangController {
         }
     }
 
+    @FXML
     public void onTransactionClick(ActionEvent actionEvent) {
         try {
             Parent transactionRoot = FXMLLoader.load(getClass().getResource("transaction-view.fxml"));
@@ -174,9 +175,25 @@ public class UtangPiutangController {
         }
     }
 
+    @FXML
     public void onDebtClick(ActionEvent actionEvent) {
+        //Sudah berada di halaman ini
     }
 
+    @FXML
+    void onKategoriClick(ActionEvent event) {
+        try {
+            Parent transactionRoot = FXMLLoader.load(getClass().getResource("kategori-view.fxml"));
+            Scene scene = btnTransaction.getScene();
+            scene.setRoot(transactionRoot);
+            Stage stage = (Stage) scene.getWindow();
+            stage.sizeToScene();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     public void onLogoutClick(ActionEvent actionEvent) {
         try {
             Parent loginRoot = FXMLLoader.load(getClass().getResource("Login.fxml"));

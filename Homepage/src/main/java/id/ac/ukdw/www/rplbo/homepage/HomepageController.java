@@ -98,6 +98,19 @@ public class HomepageController implements Initializable {
     }
 
     @FXML
+    void onKategoriClick(ActionEvent event) {
+        try {
+            Parent kategoriRoot = FXMLLoader.load(getClass().getResource("kategori-view.fxml"));
+            Scene scene = btnTransaction.getScene();
+            scene.setRoot(kategoriRoot);
+            Stage stage = (Stage) scene.getWindow();
+            stage.sizeToScene();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     void onLogoutClick(ActionEvent event) {
         try {
             Parent loginRoot = FXMLLoader.load(getClass().getResource("Login.fxml"));

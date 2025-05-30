@@ -86,6 +86,18 @@ public class TransactionController {
     @FXML void onUpdateClick(ActionEvent event) { handleUpdate(); }
     @FXML void onDebtClick(ActionEvent event) { changeScene("UtangPiutang.fxml", btnDebt); }
     @FXML void onHomeClick(ActionEvent event) { changeScene("homepage-view.fxml", btnHome); }
+    @FXML
+    void onKategoriClick(ActionEvent event) {
+        try {
+            Parent kategoriRoot = FXMLLoader.load(getClass().getResource("kategori-view.fxml"));
+            Scene scene = btnTransaction.getScene();
+            scene.setRoot(kategoriRoot);
+            Stage stage = (Stage) scene.getWindow();
+            stage.sizeToScene();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @FXML void onLogoutClick(ActionEvent event) { changeScene("Login.fxml", btnLogout); }
     @FXML void onTransactionClick(ActionEvent event) { }
 

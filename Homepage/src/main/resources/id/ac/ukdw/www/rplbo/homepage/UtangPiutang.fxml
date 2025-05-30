@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.*?>
-<?import de.jensd.fx.glyphs.materialdesignicons.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="576.0" prefWidth="1024.0" style="-fx-background-color: #e7e9ee;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="id.ac.ukdw.www.rplbo.homepage.UtangPiutangController">
+<BorderPane prefHeight="576.0" prefWidth="1024.0" style="-fx-background-color: #e7e9ee;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="id.ac.ukdw.www.rplbo.homepage.UtangPiutangController">
 
     <center>
         <AnchorPane>
@@ -15,45 +24,6 @@
                     <Font size="20.0" />
                 </font>
             </Label>
-
-            <AnchorPane prefHeight="576.0" prefWidth="88.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
-                <Button fx:id="btnHome" contentDisplay="TOP" layoutX="23.0" layoutY="32.0" mnemonicParsing="false" onAction="#onHomeClick" style="-fx-background-color: transparent;" text="Home" textFill="WHITE">
-                    <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="HOME" selectionStart="25" size="25" text="">
-                            <font>
-                                <Font size="11.0" />
-                            </font>
-                        </FontAwesomeIconView>
-                    </graphic>
-                    <font>
-                        <Font name="System Bold" size="10.0" />
-                    </font>
-                </Button>
-                <Button fx:id="btnTransaction" contentDisplay="TOP" layoutX="10.0" layoutY="91.0" mnemonicParsing="false" onAction="#onTransactionClick" style="-fx-background-color: transparent;" text="Transaction" textFill="WHITE">
-                    <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="EXCHANGE" size="25" />
-                    </graphic>
-                    <font>
-                        <Font name="System Bold" size="10.0" />
-                    </font>
-                </Button>
-                <Button fx:id="btnDebt" contentDisplay="TOP" layoutX="25.0" layoutY="153.0" mnemonicParsing="false" onAction="#onDebtClick" style="-fx-background-color: transparent;" text="Debt" textFill="WHITE">
-                    <graphic>
-                        <MaterialDesignIconView fill="WHITE" glyphName="SCALE_BALANCE" size="25" />
-                    </graphic>
-                    <font>
-                        <Font name="System Bold" size="10.0" />
-                    </font>
-                </Button>
-                <Button fx:id="btnLogout" contentDisplay="TOP" layoutX="20.0" layoutY="497.0" mnemonicParsing="false" onAction="#onLogoutClick" style="-fx-background-color: transparent;" text="Logout" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="10.0" />
-                    </font>
-                    <graphic>
-                        <MaterialDesignIconView fill="WHITE" glyphName="EXIT_TO_APP" size="25" />
-                    </graphic>
-                </Button>
-            </AnchorPane>
 
 
             <Label layoutX="107.0" layoutY="70.0" text="Kepada Siapa:" />
@@ -83,4 +53,64 @@
          <ChoiceBox fx:id="cbStatus" layoutX="857.0" layoutY="64.0" prefHeight="26.0" prefWidth="84.0" />
         </AnchorPane>
     </center>
+   <left>
+      <AnchorPane prefHeight="576.0" prefWidth="42.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="576.0" prefWidth="90.0" spacing="10.0">
+               <children>
+                  <Button fx:id="btnHome" contentDisplay="TOP" onAction="#onHomeClick" style="-fx-background-color: transparent;" text="Home" textFill="WHITE">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="25" />
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="10.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnTransaction" contentDisplay="TOP" onAction="#onTransactionClick" style="-fx-background-color: transparent;" text="Transaction" textFill="WHITE">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="EXCHANGE" size="25" />
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="10.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnDebt" contentDisplay="TOP" onAction="#onDebtClick" style="-fx-background-color: transparent;" text="Debt" textFill="WHITE">
+                     <graphic>
+                        <MaterialDesignIconView fill="WHITE" glyphName="SCALE_BALANCE" size="25" />
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="10.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnKategori" contentDisplay="TOP" onAction="#onKategoriClick" style="-fx-background-color: transparent;" text="Kategori" textFill="WHITE">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="LIST_ALT" size="25" />
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="10.0" />
+                     </font>
+                  </Button>
+                  <VBox alignment="BOTTOM_CENTER" prefHeight="344.0" prefWidth="100.0">
+                     <children>
+                        <Button fx:id="btnLogout" contentDisplay="TOP" onAction="#onLogoutClick" style="-fx-background-color: transparent;" text="Logout" textFill="WHITE">
+                           <graphic>
+                              <MaterialDesignIconView fill="WHITE" glyphName="EXIT_TO_APP" size="25" />
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="25.0" top="30.0" />
+               </padding>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </left>
 </BorderPane>
