@@ -8,11 +8,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class UtangPiutangController {
+
+    @FXML
+    public ChoiceBox cbStatus;
+
     @FXML
     private Button btnDebt;
 
@@ -25,28 +32,83 @@ public class UtangPiutangController {
     @FXML
     private Button btnTransaction;
 
-    @FXML private TextField tfJumlahUtang, tfSisaUtang, tfSudahDibayar, tfFilter;
-    @FXML private TableView<UtangPiutang> table;
-    @FXML private TableColumn<UtangPiutang, Integer> colJumlah, colSisa, colBayar;
+
+    @FXML
+    private TextField tfKepadaSiapa;
+    @FXML
+    private DatePicker dpTanggal;
+    @FXML
+    private TextField tfJumlahUtang;
+    @FXML
+    private TextField tfFilter;
+
+    @FXML
+    private TableView<UtangPiutang> table;
+    @FXML
+    private TableColumn<UtangPiutang, String> colKepadaSiapa;
+    @FXML
+    private TableColumn<UtangPiutang, String> colTanggal;
+    @FXML
+    private TableColumn<UtangPiutang, Integer> colJumlahUtang;
+    @FXML
+    private TableColumn<UtangPiutang, String> colStatus;
 
     private ObservableList<UtangPiutang> data = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        colJumlah.setCellValueFactory(cell -> new javafx.beans.property.SimpleIntegerProperty(cell.getValue().getJumlahUtang()).asObject());
-        colSisa.setCellValueFactory(cell -> new javafx.beans.property.SimpleIntegerProperty(cell.getValue().getSisaUtang()).asObject());
-        colBayar.setCellValueFactory(cell -> new javafx.beans.property.SimpleIntegerProperty(cell.getValue().getSudahDibayar()).asObject());
+        colKepadaSiapa.setCellValueFactory(new PropertyValueFactory<>("kepadaSiapa"));
+        colTanggal.setCellValueFactory(new PropertyValueFactory<>("tanggal"));
+        colJumlahUtang.setCellValueFactory(new PropertyValueFactory<>("jumlahUtang"));
+        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
+//        colStatus.setCellFactory(ComboBoxTableCell.forTableColumn("Belum Lunas", "Lunas"));
+//        colStatus.setOnEditCommit(event -> {
+//            UtangPiutang transaksi = event.getRowValue();
+//            transaksi.setStatus(event.getNewValue());
+//        });
+
+        table.setEditable(true);
         table.setItems(data);
+
+        cbStatus.getItems().addAll("Lunas", "Belum Lunas");
     }
 
     @FXML
-    public void handleTambah() {
-        int jumlah = Integer.parseInt(tfJumlahUtang.getText());
-        int sisa = Integer.parseInt(tfSisaUtang.getText());
-        int bayar = Integer.parseInt(tfSudahDibayar.getText());
-        data.add(new UtangPiutang(jumlah, sisa, bayar));
-        bersihkan();
+    public void handleTambahHutang() {
+        tambahTransaksi("Hutang");
+    }
+
+    @FXML
+    public void handleTambahPiutang() {
+        tambahTransaksi("Piutang");
+    }
+
+    private void tambahTransaksi(String jenis) {
+        String kepada = tfKepadaSiapa.getText();
+        LocalDate tanggal = dpTanggal.getValue();
+        int jumlah;
+
+        try {
+            jumlah = Integer.parseInt(tfJumlahUtang.getText());
+        } catch (NumberFormatException e) {
+            showAlert("Jumlah tidak valid");
+            return;
+        }
+
+        if (kepada.isEmpty() || tanggal == null) {
+            showAlert("Lengkapi semua data");
+            return;
+        }
+
+        if (jenis.equals("Hutang")) {
+            jumlah = -Math.abs(jumlah); // negatif untuk hutang
+        } else {
+            jumlah = Math.abs(jumlah);  // positif untuk piutang
+        }
+
+        data.add(new UtangPiutang("User", kepada, tanggal.toString(), jumlah, "Belum Lunas"));
+        clearForm();
     }
 
     @FXML
@@ -59,35 +121,36 @@ public class UtangPiutangController {
 
     @FXML
     public void handleFilter() {
-        String filterText = tfFilter.getText();
-        if (filterText.isEmpty()) {
+        String filter = tfFilter.getText().toLowerCase();
+        if (filter.isEmpty()) {
             table.setItems(data);
-        } else {
-            ObservableList<UtangPiutang> filtered = FXCollections.observableArrayList();
-            for (UtangPiutang u : data) {
-                if (String.valueOf(u.getJumlahUtang()).contains(filterText) ||
-                        String.valueOf(u.getSisaUtang()).contains(filterText) ||
-                        String.valueOf(u.getSudahDibayar()).contains(filterText)) {
-                    filtered.add(u);
-                }
-            }
-            table.setItems(filtered);
+            return;
         }
+
+        ObservableList<UtangPiutang> filtered = FXCollections.observableArrayList();
+        for (UtangPiutang t : data) {
+            if (t.getKepadaSiapa().toLowerCase().contains(filter)) {
+                filtered.add(t);
+            }
+        }
+        table.setItems(filtered);
     }
 
-    private void bersihkan() {
+    private void clearForm() {
+        tfKepadaSiapa.clear();
         tfJumlahUtang.clear();
-        tfSisaUtang.clear();
-        tfSudahDibayar.clear();
+        dpTanggal.setValue(null);
     }
 
-    @FXML
-    void onDebtClick(ActionEvent event) {
-        //Halaman ini
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Peringatan");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
-    @FXML
-    void onHomeClick(ActionEvent event) {
+    public void onHomeClick(ActionEvent actionEvent) {
         try {
             Parent homeRoot = FXMLLoader.load(getClass().getResource("homepage-view.fxml"));
             Scene scene = btnHome.getScene();
@@ -99,21 +162,7 @@ public class UtangPiutangController {
         }
     }
 
-    @FXML
-    void onLogoutClick(ActionEvent event) {
-        try {
-            Parent loginRoot = FXMLLoader.load(getClass().getResource("Login.fxml"));
-            Scene scene = btnLogout.getScene();
-            scene.setRoot(loginRoot);
-            Stage stage = (Stage) scene.getWindow();
-            stage.sizeToScene();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void onTransactionClick(ActionEvent event) {
+    public void onTransactionClick(ActionEvent actionEvent) {
         try {
             Parent transactionRoot = FXMLLoader.load(getClass().getResource("transaction-view.fxml"));
             Scene scene = btnTransaction.getScene();
@@ -125,4 +174,18 @@ public class UtangPiutangController {
         }
     }
 
+    public void onDebtClick(ActionEvent actionEvent) {
+    }
+
+    public void onLogoutClick(ActionEvent actionEvent) {
+        try {
+            Parent loginRoot = FXMLLoader.load(getClass().getResource("Login.fxml"));
+            Scene scene = btnLogout.getScene();
+            scene.setRoot(loginRoot);
+            Stage stage = (Stage) scene.getWindow();
+            stage.sizeToScene();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
