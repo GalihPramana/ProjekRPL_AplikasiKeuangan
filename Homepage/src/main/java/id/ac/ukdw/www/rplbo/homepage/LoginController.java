@@ -27,6 +27,27 @@ public class LoginController {
     @FXML
     private Button registerButton;
 
+    @FXML
+    private TextField passwordVisibleField;
+
+    @FXML
+    private CheckBox showPasswordCheckBox;
+
+    @FXML
+    public void initialize() {
+        // Sinkronisasi isi password
+        passwordVisibleField.setManaged(false);
+        passwordVisibleField.setVisible(false);
+        passwordVisibleField.textProperty().bindBidirectional(passwordField.textProperty());
+        showPasswordCheckBox.setOnAction(event -> {
+            boolean show = showPasswordCheckBox.isSelected();
+            passwordField.setVisible(!show);
+            passwordField.setManaged(!show);
+            passwordVisibleField.setVisible(show);
+            passwordVisibleField.setManaged(show);
+        });
+    }
+
 
     @FXML
     private void handleLogin() {

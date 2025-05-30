@@ -15,6 +15,33 @@ public class RegisterController {
     @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
     @FXML private Label messageLabel;
+    @FXML private TextField passwordVisibleField;
+    @FXML private TextField confirmPasswordVisibleField;
+    @FXML private CheckBox showPasswordCheckbox;
+
+
+    @FXML
+    public void initialize() {
+        // Sinkronisasi isi password
+        passwordVisibleField.textProperty().bindBidirectional(passwordField.textProperty());
+        confirmPasswordVisibleField.textProperty().bindBidirectional(confirmPasswordField.textProperty());
+
+        showPasswordCheckbox.setOnAction(e -> {
+            boolean show = showPasswordCheckbox.isSelected();
+
+            //menampilkan password yang baru dibuat
+            passwordVisibleField.setVisible(show);
+            passwordVisibleField.setManaged(show);
+            passwordField.setVisible(!show);
+            passwordField.setManaged(!show);
+
+            // menampilkan konfirmasi password
+            confirmPasswordVisibleField.setVisible(show);
+            confirmPasswordVisibleField.setManaged(show);
+            confirmPasswordField.setVisible(!show);
+            confirmPasswordField.setManaged(!show);
+        });
+    }
 
     @FXML
     private void handleRegister() {
