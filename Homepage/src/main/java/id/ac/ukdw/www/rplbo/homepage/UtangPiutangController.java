@@ -1,4 +1,3 @@
-// Perbaikan lengkap untuk UtangPiutangController
 package id.ac.ukdw.www.rplbo.homepage;
 
 import id.ac.ukdw.www.rplbo.homepage.config.DBConnection;
