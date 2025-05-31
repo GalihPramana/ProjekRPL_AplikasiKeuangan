@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 
 public class TransactionController {
 
-    @FXML private Button btnDebt, btnHome, btnLogout, btnTransaction;
+    @FXML private Button btnDebt, btnHome, btnLogout, btnTransaction, btnKategori, logButton;
     @FXML private Button clearButton, deleteButton, pemasukkanButton, pengeluaranButton, updateButton;
     @FXML private Label lblDate, lblWelcome, totalSaldoLabel;
     @FXML private ComboBox<String> kategoriComboBox, filterKategoriComboBox;
@@ -30,7 +30,6 @@ public class TransactionController {
     @FXML private TableView<Transaction> tableView;
     @FXML private TableColumn<Transaction, String> idColumn, sourceNameColumn, descriptionColumn, tanggalColumn;
     @FXML private TableColumn<Transaction, Integer> jumlahColumn;
-    @FXML private Button logButton;
 
     private final ObservableList<Transaction> transactionList = HomepageController.DataProvider.TRANSACTIONS;
     private final FilteredList<Transaction> filteredTransactionList = new FilteredList<>(transactionList, p -> true);
@@ -91,7 +90,7 @@ public class TransactionController {
     void onKategoriClick(ActionEvent event) {
         try {
             Parent kategoriRoot = FXMLLoader.load(getClass().getResource("kategori-view.fxml"));
-            Scene scene = btnTransaction.getScene();
+            Scene scene = btnKategori.getScene();
             scene.setRoot(kategoriRoot);
             Stage stage = (Stage) scene.getWindow();
             stage.sizeToScene();

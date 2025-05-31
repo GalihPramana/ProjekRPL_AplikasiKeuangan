@@ -26,6 +26,9 @@ public class UtangPiutangController {
     private Button btnHome;
 
     @FXML
+    private Button btnKategori;
+
+    @FXML
     private Button btnLogout;
 
     @FXML
@@ -178,7 +181,7 @@ public class UtangPiutangController {
     void onKategoriClick(ActionEvent event) {
         try {
             Parent transactionRoot = FXMLLoader.load(getClass().getResource("kategori-view.fxml"));
-            Scene scene = btnTransaction.getScene();
+            Scene scene = btnKategori.getScene();
             scene.setRoot(transactionRoot);
             Stage stage = (Stage) scene.getWindow();
             stage.sizeToScene();

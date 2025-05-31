@@ -40,9 +40,9 @@
                         <TableColumn fx:id="colId" prefWidth="50.0" text="ID" />
                         <TableColumn fx:id="colUsername" prefWidth="100.0" text="Username" />
                         <TableColumn fx:id="colAksi" prefWidth="100.0" text="Aksi" />
-                        <TableColumn fx:id="colKategori" prefWidth="100.0" text="Kategori" />
-                        <TableColumn fx:id="colNominal" prefWidth="100.0" text="Nominal" />
-                        <TableColumn fx:id="colDeskripsi" prefWidth="150.0" text="Deskripsi" />
+                        <TableColumn fx:id="colKategori" prefWidth="111.0" text="Kategori" />
+                        <TableColumn fx:id="colNominal" prefWidth="113.0" text="Nominal" />
+                        <TableColumn fx:id="colDeskripsi" prefWidth="126.39996337890625" text="Deskripsi" />
                         <TableColumn fx:id="colTanggalTransaksi" prefWidth="100.0" text="Tanggal Transaksi" />
                         <TableColumn fx:id="colWaktuLog" prefWidth="150.0" text="Waktu Log" />
                     </columns>

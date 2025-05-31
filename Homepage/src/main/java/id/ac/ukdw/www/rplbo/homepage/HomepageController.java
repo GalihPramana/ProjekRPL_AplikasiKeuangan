@@ -32,6 +32,9 @@ public class HomepageController implements Initializable {
     private Button btnHome;
 
     @FXML
+    private Button btnKategori;
+
+    @FXML
     private Button btnLogout;
 
     @FXML
@@ -124,7 +127,7 @@ public class HomepageController implements Initializable {
     void onKategoriClick(ActionEvent event) {
         try {
             Parent kategoriRoot = FXMLLoader.load(getClass().getResource("kategori-view.fxml"));
-            Scene scene = btnTransaction.getScene();
+            Scene scene = btnKategori.getScene();
             scene.setRoot(kategoriRoot);
             Stage stage = (Stage) scene.getWindow();
             stage.sizeToScene();
