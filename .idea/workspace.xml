@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ac410fbf-944e-410b-89dd-df8f3e817f31" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/config/DatabaseConnection.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/RegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/RegisterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users.txt" beforeDir="false" afterPath="$PROJECT_DIR$/users.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/config/DatabaseConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/config/DBConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/databaseAplikasiKeuangan.db" beforeDir="false" afterPath="$PROJECT_DIR$/databaseAplikasiKeuangan.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,33 +55,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.FinancialApplication.executor": "Run",
-    "Application.HelloApplication.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "71230976__Galih__Perbaikan",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Kuliah/Sem 4/ProjekRPL_AplikasiKeuangan",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.FinancialApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;71230976__Galih__Perbaikan&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Kuliah/Sem 4/ProjekRPL_AplikasiKeuangan&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.repository.indices&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Kuliah\Sem 4\ProjekRPL_AplikasiKeuangan\Homepage\src\main\resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Kuliah\Sem 4\ProjekRPL_AplikasiKeuangan" />
       <recent name="D:\Kuliah\Sem 4\ProjekRPL_AplikasiKeuangan\Homepage\target" />
       <recent name="D:\UKDW\Semester4_2025\PULLINGRPLBO\PULLINGMUMET\ProjekRPL_AplikasiKeuangan\Homepage\src\main\resources\id\ac\ukdw\www\rplbo\homepage\Image" />
       <recent name="D:\UKDW\Semester4_2025\PULLINGRPLBO\PULLINGMUMET\ProjekRPL_AplikasiKeuangan\Homepage\src\main\resources\id\ac\ukdw\www\rplbo\homepage" />
@@ -137,6 +136,8 @@
       <workItem from="1748671346793" duration="230000" />
       <workItem from="1748680417586" duration="1601000" />
       <workItem from="1748682080373" duration="27000" />
+      <workItem from="1748682113817" duration="2507000" />
+      <workItem from="1748688690218" duration="330000" />
     </task>
     <servers />
   </component>

@@ -1,6 +1,6 @@
 package id.ac.ukdw.www.rplbo.homepage;
 
-import id.ac.ukdw.www.rplbo.homepage.config.DatabaseConnection;
+import id.ac.ukdw.www.rplbo.homepage.config.DBConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -54,10 +54,10 @@ public class RegisterController {
         String confirm = confirmPasswordField.getText();
 
         if (username.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
-            messageLabel.setText("Field tidak boleh kosong.");
+            messageLabel.setText("Username tidak boleh kosong.");
         } else if (!password.equals(confirm)) {
             messageLabel.setText("Password tidak cocok.");
-        } else if (UserManager.userExists(username)) {
+        } else if (usernameExists(username)) {
             messageLabel.setText("Username sudah terdaftar.");
         } else {
             registerUser(username, password);
@@ -75,20 +75,8 @@ public class RegisterController {
     }
 
     public void registerUser(String username, String password) {
-        Connection conn = DatabaseConnection.connect();
+        Connection conn = DBConnection.connect();
         try {
-            // Cek apakah username sudah ada
-            String checkSql = "SELECT username FROM users WHERE username = ?";
-            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
-            checkStmt.setString(1, username);
-            ResultSet rs = checkStmt.executeQuery();
-
-            if (rs.next()) {
-                messageLabel.setText("Username sudah terdaftar.");
-                return;
-            }
-
-            // Insert user baru
             String insertSql = "INSERT INTO users(username, password) VALUES(?, ?)";
             PreparedStatement insertStmt = conn.prepareStatement(insertSql);
             insertStmt.setString(1, username);
@@ -100,4 +88,19 @@ public class RegisterController {
             messageLabel.setText("Terjadi kesalahan saat registrasi.");
         }
     }
+
+    private boolean usernameExists(String username) {
+        Connection conn = DBConnection.connect();
+        try {
+            String checkSql = "SELECT username FROM users WHERE username = ?";
+            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
+            checkStmt.setString(1, username);
+            ResultSet rs = checkStmt.executeQuery();
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

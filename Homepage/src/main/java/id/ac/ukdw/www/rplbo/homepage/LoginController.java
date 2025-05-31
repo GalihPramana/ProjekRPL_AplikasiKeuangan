@@ -1,6 +1,6 @@
 package id.ac.ukdw.www.rplbo.homepage;
 
-import id.ac.ukdw.www.rplbo.homepage.config.DatabaseConnection;
+import id.ac.ukdw.www.rplbo.homepage.config.DBConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -93,7 +93,7 @@ public class LoginController {
     }
 
     public boolean loginUser(String username, String password) {
-        Connection conn = DatabaseConnection.connect();
+        Connection conn = DBConnection.connect();
         try {
             String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
