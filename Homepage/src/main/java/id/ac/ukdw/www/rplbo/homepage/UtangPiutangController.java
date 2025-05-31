@@ -113,7 +113,7 @@ public class UtangPiutangController {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, "User"); // Gantilah ini jika ingin dinamis
+            pstmt.setString(1, "User");
             pstmt.setString(2, kepada);
             pstmt.setString(3, tanggal.toString());
             pstmt.setInt(4, jumlah);
@@ -236,7 +236,6 @@ public class UtangPiutangController {
 
     @FXML
     public void onDebtClick(ActionEvent actionEvent) {
-        // Sudah berada di halaman ini
     }
 
     @FXML
