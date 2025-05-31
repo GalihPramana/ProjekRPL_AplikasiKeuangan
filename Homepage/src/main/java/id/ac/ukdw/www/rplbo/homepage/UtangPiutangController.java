@@ -8,7 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -31,7 +30,6 @@ public class UtangPiutangController {
 
     @FXML
     private Button btnTransaction;
-
 
     @FXML
     private TextField tfKepadaSiapa;
@@ -61,13 +59,6 @@ public class UtangPiutangController {
         colTanggal.setCellValueFactory(new PropertyValueFactory<>("tanggal"));
         colJumlahUtang.setCellValueFactory(new PropertyValueFactory<>("jumlahUtang"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-
-//        colStatus.setCellFactory(ComboBoxTableCell.forTableColumn("Belum Lunas", "Lunas"));
-//        colStatus.setOnEditCommit(event -> {
-//            UtangPiutang transaksi = event.getRowValue();
-//            transaksi.setStatus(event.getNewValue());
-//        });
-
         table.setEditable(true);
         table.setItems(data);
 
@@ -96,18 +87,19 @@ public class UtangPiutangController {
             return;
         }
 
-        if (kepada.isEmpty() || tanggal == null) {
+        String status = (String) cbStatus.getValue();
+        if (kepada.isEmpty() || tanggal == null || status == null || status.isEmpty()) {
             showAlert("Lengkapi semua data");
             return;
         }
 
         if (jenis.equals("Hutang")) {
-            jumlah = -Math.abs(jumlah); // negatif untuk hutang
+            jumlah = -Math.abs(jumlah);
         } else {
-            jumlah = Math.abs(jumlah);  // positif untuk piutang
+            jumlah = Math.abs(jumlah);
         }
 
-        data.add(new UtangPiutang("User", kepada, tanggal.toString(), jumlah, "Belum Lunas"));
+        data.add(new UtangPiutang("User", kepada, tanggal.toString(), jumlah, status));
         clearForm();
     }
 
@@ -140,6 +132,7 @@ public class UtangPiutangController {
         tfKepadaSiapa.clear();
         tfJumlahUtang.clear();
         dpTanggal.setValue(null);
+        cbStatus.setValue(null);
     }
 
     private void showAlert(String message) {
