@@ -1,6 +1,7 @@
-// TransactionController.java
 package id.ac.ukdw.www.rplbo.homepage;
 
+import id.ac.ukdw.www.rplbo.homepage.TransactionDAO;
+import id.ac.ukdw.www.rplbo.homepage.util.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -13,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -28,10 +28,10 @@ public class TransactionController {
     @FXML private TextField jumlahField, descriptionField, batasBulananField;
     @FXML private DatePicker tanggalPicker;
     @FXML private TableView<Transaction> tableView;
-    @FXML private TableColumn<Transaction, String> idColumn, sourceNameColumn, descriptionColumn, tanggalColumn;
+    @FXML private TableColumn<Transaction, String> sourceNameColumn, descriptionColumn, tanggalColumn;
     @FXML private TableColumn<Transaction, Integer> jumlahColumn;
 
-    private final ObservableList<Transaction> transactionList = HomepageController.DataProvider.TRANSACTIONS;
+    private final ObservableList<Transaction> transactionList = FXCollections.observableArrayList();
     private final FilteredList<Transaction> filteredTransactionList = new FilteredList<>(transactionList, p -> true);
     private Transaction selectedTransaction;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -40,6 +40,9 @@ public class TransactionController {
 
     @FXML
     public void initialize() {
+        String username = (String) SessionManager.get("user");
+        lblWelcome.setText(username != null ? "Selamat datang, " + username + "!" : "Selamat datang!");
+
         ObservableList<String> kategoriOptions = FXCollections.observableArrayList("Makan", "Transportasi", "Gaji", "Belanja", "Lainnya");
         kategoriComboBox.setItems(kategoriOptions);
 
@@ -74,6 +77,7 @@ public class TransactionController {
             toggleUpdateButtonState(newSel != null);
         });
 
+        transactionList.setAll(TransactionDAO.getInstance().getAllByUsername(username));
         toggleUpdateButtonState(false);
         updateTotalSaldo();
         lblDate.setText(LocalDate.now().format(displayDateFormatter));
@@ -86,20 +90,10 @@ public class TransactionController {
     @FXML void onUpdateClick(ActionEvent event) { handleUpdate(); }
     @FXML void onDebtClick(ActionEvent event) { changeScene("UtangPiutang.fxml", btnDebt); }
     @FXML void onHomeClick(ActionEvent event) { changeScene("homepage-view.fxml", btnHome); }
-    @FXML
-    void onKategoriClick(ActionEvent event) {
-        try {
-            Parent kategoriRoot = FXMLLoader.load(getClass().getResource("kategori-view.fxml"));
-            Scene scene = btnKategori.getScene();
-            scene.setRoot(kategoriRoot);
-            Stage stage = (Stage) scene.getWindow();
-            stage.sizeToScene();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    @FXML void onKategoriClick(ActionEvent event) { changeScene("kategori-view.fxml", btnKategori); }
     @FXML void onLogoutClick(ActionEvent event) { changeScene("Login.fxml", btnLogout); }
-    @FXML void onTransactionClick(ActionEvent event) { }
+    @FXML void onTransactionClick(ActionEvent event) {}
+    @FXML void onlogClick(ActionEvent actionEvent) { changeScene("Log.fxml", logButton); }
 
     @FXML
     void handleFilterKategori(ActionEvent event) {
@@ -113,6 +107,7 @@ public class TransactionController {
     }
 
     private void handlePemasukan(boolean isIncome) {
+        String username = (String) SessionManager.get("user");
         String sumber = kategoriComboBox.getValue();
         String jmlText = jumlahField.getText().trim();
         String desc = descriptionField.getText().trim();
@@ -140,9 +135,9 @@ public class TransactionController {
             jml = -Math.abs(jml);
         }
 
-        String newId = "TRX" + (transactionList.size() + 1);
-        Transaction newTransaction = new Transaction(newId, sumber, jml, desc, tanggal.format(formatter));
-        transactionList.add(newTransaction);
+        Transaction newTransaction = new Transaction("0", sumber, jml, desc, tanggal.format(formatter));
+        TransactionDAO.getInstance().insert(newTransaction, username);
+        transactionList.setAll(TransactionDAO.getInstance().getAllByUsername(username));
 
         handleClear();
         updateTotalSaldo();
@@ -184,10 +179,8 @@ public class TransactionController {
         selectedTransaction.setDescription(desc);
         selectedTransaction.setTanggal(tanggal.format(formatter));
 
-        int selectedIndex = transactionList.indexOf(selectedTransaction);
-        if (selectedIndex >= 0) {
-            transactionList.set(selectedIndex, selectedTransaction);
-        }
+        TransactionDAO.getInstance().update(selectedTransaction);
+        transactionList.setAll(TransactionDAO.getInstance().getAllByUsername((String) SessionManager.get("user")));
 
         handleClear();
         updateTotalSaldo();
@@ -196,9 +189,9 @@ public class TransactionController {
     }
 
     private void handleDelete() {
-        Transaction sel = tableView.getSelectionModel().getSelectedItem();
-        if (sel != null) {
-            transactionList.remove(sel);
+        if (selectedTransaction != null) {
+            TransactionDAO.getInstance().delete(selectedTransaction.getIdTransaksi());
+            transactionList.setAll(TransactionDAO.getInstance().getAllByUsername((String) SessionManager.get("user")));
             handleClear();
             updateTotalSaldo();
         } else {
@@ -279,19 +272,6 @@ public class TransactionController {
     private void toggleUpdateButtonState(boolean enable) {
         if (updateButton != null) {
             updateButton.setDisable(!enable);
-        }
-    }
-
-    @FXML
-    public void onlogClick(ActionEvent actionEvent) {
-        try {
-            Parent loginRoot = FXMLLoader.load(getClass().getResource("Log.fxml"));
-            Scene scene = logButton.getScene();
-            scene.setRoot(loginRoot);
-            Stage stage = (Stage) scene.getWindow();
-            stage.sizeToScene();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
