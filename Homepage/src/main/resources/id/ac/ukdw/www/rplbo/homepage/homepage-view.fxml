@@ -22,42 +22,60 @@
          <left>
             <AnchorPane prefHeight="576.0" prefWidth="88.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="btnHome" contentDisplay="TOP" layoutX="23.0" layoutY="32.0" mnemonicParsing="false" onAction="#onHomeClick" style="-fx-background-color: transparent;" text="Home" textFill="WHITE">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="HOME" selectionStart="25" size="25" text="">
+                  <VBox alignment="TOP_CENTER" prefHeight="576.0" prefWidth="90.0" spacing="10.0">
+                     <children>
+                        <Button fx:id="btnHome" contentDisplay="TOP" onAction="#onHomeClick" style="-fx-background-color: transparent;" text="Home" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="25" />
+                           </graphic>
                            <font>
-                              <Font size="11.0" />
+                              <Font name="System Bold" size="10.0" />
                            </font>
-                        </FontAwesomeIconView>
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnTransaction" contentDisplay="TOP" layoutX="10.0" layoutY="91.0" mnemonicParsing="false" onAction="#onTransactionClick" style="-fx-background-color: transparent;" text="Transaction" textFill="WHITE">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="EXCHANGE" size="25" />
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnDebt" contentDisplay="TOP" layoutX="25.0" layoutY="153.0" mnemonicParsing="false" onAction="#onDebtClick" style="-fx-background-color: transparent;" text="Debt" textFill="WHITE">
-                     <graphic>
-                        <MaterialDesignIconView fill="WHITE" glyphName="SCALE_BALANCE" size="25" />
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnLogout" contentDisplay="TOP" layoutX="20.0" layoutY="497.0" mnemonicParsing="false" onAction="#onLogoutClick" style="-fx-background-color: transparent;" text="Logout" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                     <graphic>
-                        <MaterialDesignIconView fill="WHITE" glyphName="EXIT_TO_APP" size="25" />
-                     </graphic>
-                  </Button>
+                        </Button>
+                        <Button fx:id="btnTransaction" contentDisplay="TOP" onAction="#onTransactionClick" style="-fx-background-color: transparent;" text="Transaction" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="EXCHANGE" size="25" />
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnDebt" contentDisplay="TOP" onAction="#onDebtClick" style="-fx-background-color: transparent;" text="Debt" textFill="WHITE">
+                           <graphic>
+                              <MaterialDesignIconView fill="WHITE" glyphName="SCALE_BALANCE" size="25" />
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnKategori" contentDisplay="TOP" onAction="#onKategoriClick" style="-fx-background-color: transparent;" text="Kategori" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="LIST_ALT" size="25" />
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Button>
+                        <VBox alignment="BOTTOM_CENTER" prefHeight="344.0" prefWidth="100.0">
+                           <children>
+                              <Button fx:id="btnLogout" contentDisplay="TOP" onAction="#onLogoutClick" style="-fx-background-color: transparent;" text="Logout" textFill="WHITE">
+                                 <graphic>
+                                    <MaterialDesignIconView fill="WHITE" glyphName="EXIT_TO_APP" size="25" />
+                                 </graphic>
+                                 <font>
+                                    <Font name="System Bold" size="10.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="25.0" top="30.0" />
+                     </padding>
+                  </VBox>
                </children>
             </AnchorPane>
          </left>
@@ -70,7 +88,7 @@
                            <children>
                               <Label text="Dashboard">
                                  <font>
-                                    <Font name="System Bold" size="18.0" />
+                                    <Font name="System Bold" size="22.0" />
                                  </font>
                                  <HBox.margin>
                                     <Insets right="5.0" />
@@ -83,7 +101,7 @@
                               </Separator>
                               <Label fx:id="lblWelcome" text="Halo User, Selamat Datang Kembali!">
                                  <font>
-                                    <Font name="System Bold" size="18.0" />
+                                    <Font name="System Bold" size="22.0" />
                                  </font>
                               </Label>
                               <Label fx:id="lblDate" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" text="8 May 2025" textFill="#848484" HBox.hgrow="ALWAYS">
@@ -96,7 +114,7 @@
                               <Insets />
                            </opaqueInsets>
                            <padding>
-                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </padding>
                         </HBox>
                         <HBox prefHeight="214.0" prefWidth="830.0" style="-fx-background-radius: 0px 0px 15px 15px; -fx-border-radius: 0px 0px 15px 15px; -fx-background-color: ffffff;">

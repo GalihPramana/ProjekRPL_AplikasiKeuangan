@@ -1,34 +1,41 @@
 package id.ac.ukdw.www.rplbo.homepage;
 
 public class UtangPiutang {
+    private String nama;
+    private String kepadaSiapa;
+    private String tanggal;
     private int jumlahUtang;
-    private int sisaUtang;
-    private int sudahDibayar;
+    private String status;
 
-    public UtangPiutang(int jumlahUtang, int sisaUtang, int sudahDibayar) {
+    public UtangPiutang(String nama, String kepadaSiapa, String tanggal, int jumlahUtang, String status) {
+        this.nama = nama;
+        this.kepadaSiapa = kepadaSiapa;
+        this.tanggal = tanggal;
         this.jumlahUtang = jumlahUtang;
-        this.sisaUtang = sisaUtang;
-        this.sudahDibayar = sudahDibayar;
+        this.status = status;
+    }
+
+    public String getNama() {
+        return nama;
+    }
+
+    public String getKepadaSiapa() {
+        return kepadaSiapa;
+    }
+
+    public String getTanggal() {
+        return tanggal;
     }
 
     public int getJumlahUtang() {
         return jumlahUtang;
     }
-    public void setJumlahUtang(int jumlahUtang) {
-        this.jumlahUtang = jumlahUtang;
+
+    public String getStatus() {
+        return status;
     }
 
-    public int getSisaUtang() {
-        return sisaUtang;
-    }
-    public void setSisaUtang(int sisaUtang) {
-        this.sisaUtang = sisaUtang;
-    }
-
-    public int getSudahDibayar() {
-        return sudahDibayar;
-    }
-    public void setSudahDibayar(int sudahDibayar) {
-        this.sudahDibayar = sudahDibayar;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

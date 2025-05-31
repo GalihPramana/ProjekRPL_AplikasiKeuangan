@@ -80,16 +80,11 @@ public class HomepageController implements Initializable {
     }
 
     @FXML
-    void onHomeClick(ActionEvent event) {
-        // Sudah berada di halaman ini
-    }
-
-    @FXML
-    void onLogoutClick(ActionEvent event) {
+    void onTransactionClick(ActionEvent event) {
         try {
-            Parent loginRoot = FXMLLoader.load(getClass().getResource("Login.fxml"));
-            Scene scene = btnLogout.getScene();
-            scene.setRoot(loginRoot);
+            Parent transactionRoot = FXMLLoader.load(getClass().getResource("transaction-view.fxml"));
+            Scene scene = btnTransaction.getScene();
+            scene.setRoot(transactionRoot);
             Stage stage = (Stage) scene.getWindow();
             stage.sizeToScene();
         } catch (IOException e) {
@@ -98,11 +93,29 @@ public class HomepageController implements Initializable {
     }
 
     @FXML
-    void onTransactionClick(ActionEvent event) {
+    void onHomeClick(ActionEvent event) {
+        // Sudah berada di halaman ini
+    }
+
+    @FXML
+    void onKategoriClick(ActionEvent event) {
         try {
-            Parent transactionRoot = FXMLLoader.load(getClass().getResource("transaction-view.fxml"));
+            Parent kategoriRoot = FXMLLoader.load(getClass().getResource("kategori-view.fxml"));
             Scene scene = btnTransaction.getScene();
-            scene.setRoot(transactionRoot);
+            scene.setRoot(kategoriRoot);
+            Stage stage = (Stage) scene.getWindow();
+            stage.sizeToScene();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void onLogoutClick(ActionEvent event) {
+        try {
+            Parent loginRoot = FXMLLoader.load(getClass().getResource("Login.fxml"));
+            Scene scene = btnLogout.getScene();
+            scene.setRoot(loginRoot);
             Stage stage = (Stage) scene.getWindow();
             stage.sizeToScene();
         } catch (IOException e) {

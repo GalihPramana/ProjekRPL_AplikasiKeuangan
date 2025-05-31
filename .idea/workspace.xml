@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ac410fbf-944e-410b-89dd-df8f3e817f31" name="Changes" comment="" />
+
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,7 +37,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/GalihPramana/ProjekRPL_AplikasiKeuangan.git&quot;,
-    &quot;accountId&quot;: &quot;766f7e14-c19f-45c9-936e-8a5af4903f01&quot;
+    &quot;accountId&quot;: &quot;adffb4f3-f3d3-4a69-8d76-208c7236cc7b&quot;
   }
 }</component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\xampp\php\php.exe" />
@@ -55,10 +55,7 @@
     &quot;Application.HelloApplication.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;71230976__Galih__Perbaikan&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Kuliah/Sem 4/ProjekRPL_AplikasiKeuangan&quot;,
+
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -124,14 +121,7 @@
       <workItem from="1746879072386" duration="95000" />
       <workItem from="1746879183658" duration="1280000" />
       <workItem from="1746880473788" duration="2207000" />
-      <workItem from="1748184766270" duration="1523000" />
-      <workItem from="1748339458873" duration="83000" />
-      <workItem from="1748492807154" duration="765000" />
-      <workItem from="1748671346793" duration="230000" />
-      <workItem from="1748680417586" duration="1601000" />
-      <workItem from="1748682080373" duration="27000" />
-      <workItem from="1748682113817" duration="2507000" />
-      <workItem from="1748688690218" duration="661000" />
+
     </task>
     <servers />
   </component>

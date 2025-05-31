@@ -4,6 +4,8 @@
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
@@ -15,8 +17,8 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <AnchorPane prefHeight="576.0" prefWidth="1024.0" style="-fx-background-color: #e7e9ee;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="id.ac.ukdw.www.rplbo.homepage.TransactionController">
    <children>
@@ -24,11 +26,10 @@
          <center>
             <AnchorPane prefHeight="576.0" prefWidth="842.0">
                <children>
-            
-                              <GridPane hgap="10" layoutX="39.0" layoutY="105.0" prefHeight="434.0" prefWidth="870.0" style="-fx-background-color: #ffffff; -fx-border-radius: 25px 25px 25px 25px; -fx-background-radius: 25px 25px 25px 25px;" vgap="10">
+                  <GridPane hgap="10" layoutX="39.0" layoutY="104.0" prefHeight="434.0" prefWidth="860.0" style="-fx-background-color: #ffffff; -fx-border-radius: 25px 25px 25px 25px; -fx-background-radius: 25px 25px 25px 25px;" vgap="10">
                      <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="442.3999816894531" minWidth="10.0" prefWidth="265.6000244140625" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="349.8000122070312" minWidth="10.0" prefWidth="312.19997558593747" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                      </columnConstraints>
                      <rowConstraints>
@@ -37,83 +38,87 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="200.0" vgrow="ALWAYS" />
+                        <RowConstraints maxHeight="49.20001220703125" minHeight="10.0" prefHeight="41.20001220703125" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="176.39999389648435" minHeight="10.0" prefHeight="129.7999755859375" vgrow="ALWAYS" />
+                        <RowConstraints maxHeight="35.60001220703123" minHeight="10.0" prefHeight="34.80002441406248" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
-            
-                                    <!-- Label dan TextField untuk ID Transaksi -->
-                     <Label text="ID Transaksi:" GridPane.rowIndex="0" />
-                     <TextField fx:id="idTransaksiField" prefHeight="63.0" prefWidth="303.0" promptText="ID Transaksi" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="0" />
-            
-                                    <!-- Label dan TextField untuk Source Name -->
-                     <Label text="Kategori Transaksi:" GridPane.rowIndex="1" />
-                     <TextField fx:id="sourceNameField" promptText="Masukkan kategori transaksi, misal: Baju, Makanan, Kendaraan" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-            
-                                    <!-- Label dan TextField untuk Jumlah -->
-                     <Label text="Nominal (IDR):" GridPane.rowIndex="2" />
-                     <TextField fx:id="jumlahField" promptText="Masukkan jumlah transaksi dalam Rupiah" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-            
-                                    <!-- Label dan TextField untuk Description -->
-                     <Label text="Deskripsi:" GridPane.rowIndex="3" />
-                     <TextField fx:id="descriptionField" promptText="Isi deskripsi bebas" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-            
-                                    <!-- Label dan TextField untuk Tanggal -->
-                     <Label text="Tanggal (YYYY-MM-DD):" GridPane.rowIndex="4" />
-                     <TextField fx:id="tanggalField" promptText="YYYY-MM-DD" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
-            
-                                    <!-- Tombol Delete -->
-                     <Button fx:id="deleteButton" alignment="CENTER" maxWidth="Infinity" onAction="#onDeleteClick" text="Delete" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                        <graphic>
-                           <FontAwesomeIconView glyphName="TRASH" size="14" />
-                        </graphic>
-                     </Button>
-            
-                                    <!-- Tombol Clear -->
-                     <Button fx:id="clearButton" maxWidth="Infinity" onAction="#onClearClick" text="Clear" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-            
-                                    <!-- TableView untuk menampilkan data transaksi -->
-                     <TableView fx:id="tableView" prefHeight="214.0" prefWidth="571.0" GridPane.columnSpan="3" GridPane.rowIndex="6">
-                        <columns>
-                           <TableColumn fx:id="idColumn" prefWidth="35.199949622154236" text="ID" />
-                           <TableColumn fx:id="sourceNameColumn" prefWidth="123.19993591308594" text="Kategori" />
-                           <TableColumn fx:id="jumlahColumn" prefWidth="208.0" text="Nominal " />
-                           <TableColumn fx:id="descriptionColumn" prefWidth="305.5999755859375" text="Deskripsi" />
-                           <TableColumn fx:id="tanggalColumn" prefWidth="166.4000244140625" text="Tanggal" />
-                        </columns>
-                     </TableView>
-            
-                                    <!-- Label Total Saldo -->
-                     <Label fx:id="totalSaldoLabel" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Total Saldo : ( RP 0 )" GridPane.columnSpan="3" GridPane.rowIndex="7" />
+                     <Label text="Kategori Transaksi:">
+                        <font>
+                           <Font size="14.0" />
+                        </font></Label>
+                     <ComboBox fx:id="kategoriComboBox" prefHeight="26.0" prefWidth="571.0" promptText="Pilih kategori transaksi" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+                     <Label text="Nominal (IDR):" GridPane.rowIndex="1">
+                        <font>
+                           <Font size="14.0" />
+                        </font></Label>
+                     <TextField fx:id="jumlahField" promptText="Masukkan jumlah transaksi dalam Rupiah" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                     <Label text="Deskripsi:" GridPane.rowIndex="2">
+                        <font>
+                           <Font size="14.0" />
+                        </font></Label>
+                     <TextField fx:id="descriptionField" promptText="Isi deskripsi bebas" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                     <Label text="Tanggal:" GridPane.rowIndex="3">
+                        <font>
+                           <Font size="14.0" />
+                        </font></Label>
+                     <DatePicker fx:id="tanggalPicker" prefHeight="26.0" prefWidth="567.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                     <Label text="Filter Kategori:" GridPane.rowIndex="4">
+                        <font>
+                           <Font size="14.0" />
+                        </font></Label>
+                     <ComboBox fx:id="filterKategoriComboBox" prefHeight="26.0" prefWidth="578.0" promptText="Semua" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
                      <HBox alignment="CENTER" prefHeight="35.0" prefWidth="250.0" GridPane.rowIndex="5">
                         <children>
-                           <Button fx:id="pemasukkanButton" alignment="CENTER" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onPemasukkanClick" prefHeight="26.0" prefWidth="105.0" text="Pemasukan">
-                              <HBox.margin>
-                                 <Insets right="10.0" />
-                              </HBox.margin>
+                           <Button fx:id="pemasukkanButton" alignment="CENTER" maxWidth="Infinity" onAction="#onPemasukkanClick" prefHeight="26.0" prefWidth="105.0" text="Pemasukan">
                               <graphic>
                                  <FontAwesomeIconView fill="#17e700" glyphName="PLUS_CIRCLE" size="14" />
                               </graphic>
                            </Button>
-                           <Button fx:id="pengeluaranButton" alignment="CENTER" mnemonicParsing="false" onAction="#onPengeluaranClick" prefHeight="26.0" prefWidth="106.0" text="Pengeluaran">
-                              <HBox.margin>
-                                 <Insets left="10.0" />
-                              </HBox.margin>
+                           <Button fx:id="pengeluaranButton" alignment="CENTER" onAction="#onPengeluaranClick" prefHeight="26.0" prefWidth="106.0" text="Pengeluaran">
                               <graphic>
                                  <FontAwesomeIconView fill="#ff3705" glyphName="MINUS_CIRCLE" size="14" />
                               </graphic>
                            </Button>
+                           <Button fx:id="updateButton" alignment="CENTER" onAction="#onUpdateClick" prefHeight="26.0" prefWidth="100.0" text="Update">
+                              <graphic>
+                                 <FontAwesomeIconView glyphName="PENCIL" size="14" />
+                              </graphic>
+                           </Button>
                         </children>
                      </HBox>
+                     <Button fx:id="deleteButton" alignment="CENTER" onAction="#onDeleteClick" prefHeight="26.0" prefWidth="106.0" text="Delete" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                        <graphic>
+                           <FontAwesomeIconView glyphName="TRASH" size="14" />
+                        </graphic>
+                     </Button>
+                     <Button fx:id="clearButton" onAction="#onClearClick" text="Clear" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                     <TableView fx:id="tableView" prefHeight="214.0" prefWidth="571.0" GridPane.columnSpan="3" GridPane.rowIndex="6">
+                        <columns>
+                           <TableColumn fx:id="sourceNameColumn" prefWidth="123.0" text="Kategori" />
+                           <TableColumn fx:id="jumlahColumn" prefWidth="208.0" text="Nominal " />
+                           <TableColumn fx:id="descriptionColumn" prefWidth="305.0" text="Deskripsi" />
+                           <TableColumn fx:id="tanggalColumn" prefWidth="166.0" text="Tanggal" />
+                        </columns>
+                     </TableView>
+                     <Label fx:id="totalSaldoLabel" style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Total Saldo : ( RP 0 )" GridPane.columnSpan="2" GridPane.rowIndex="7">
+                        <font>
+                           <Font size="14.0" />
+                        </font></Label>
+                     <Label text="Batas Pengeluaran Bulanan (Rp):" GridPane.rowIndex="8">
+                        <font>
+                           <Font size="14.0" />
+                        </font></Label>
+                     <TextField fx:id="batasBulananField" promptText="Contoh: 3000000" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="8" />
                      <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                        <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
                      </padding>
                   </GridPane>
-                  <HBox alignment="CENTER_LEFT" layoutX="38.0" prefHeight="72.0" prefWidth="870.0" style="-fx-background-color: #ffffff; -fx-background-radius: 0px  0px  25px  25px; -fx-border-radius: 0px  0px  25px  25px;">
+                  <HBox alignment="CENTER_LEFT" layoutX="39.0" prefHeight="86.0" prefWidth="860.0" style="-fx-background-color: #ffffff; -fx-border-radius: 0 0 25px 25px; -fx-background-radius: 0 0  25px 25px;">
                      <children>
                         <Label text="Transaksi">
                            <font>
-                              <Font name="System Bold" size="18.0" />
+                              <Font name="System Bold" size="22.0" />
                            </font>
                            <HBox.margin>
                               <Insets right="5.0" />
@@ -126,7 +131,7 @@
                         </Separator>
                         <Label fx:id="lblWelcome" text="Selamat Datang di Halaman Transaksi!">
                            <font>
-                              <Font name="System Bold" size="18.0" />
+                              <Font name="System Bold" size="22.0" />
                            </font>
                         </Label>
                         <Label fx:id="lblDate" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" text="8 May 2025" textFill="#848484" HBox.hgrow="ALWAYS">
@@ -139,51 +144,69 @@
                         <Insets />
                      </opaqueInsets>
                      <padding>
-                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                      </padding>
                   </HBox>
                </children>
             </AnchorPane>
          </center>
          <left>
-            <AnchorPane prefHeight="576.0" prefWidth="88.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="576.0" prefWidth="88.0" style="-fx-background-color: black;">
                <children>
-                  <Button fx:id="btnHome" contentDisplay="TOP" layoutX="23.0" layoutY="32.0" mnemonicParsing="false" onAction="#onHomeClick" style="-fx-background-color: transparent;" text="Home" textFill="WHITE">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="HOME" selectionStart="25" size="25" text="">
+                  <VBox alignment="TOP_CENTER" prefHeight="576.0" prefWidth="90.0" spacing="10.0">
+                     <children>
+                        <Button fx:id="btnHome" contentDisplay="TOP" onAction="#onHomeClick" style="-fx-background-color: transparent;" text="Home" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="25" />
+                           </graphic>
                            <font>
-                              <Font size="11.0" />
+                              <Font name="System Bold" size="10.0" />
                            </font>
-                        </FontAwesomeIconView>
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnTransaction" contentDisplay="TOP" layoutX="10.0" layoutY="91.0" mnemonicParsing="false" onAction="#onTransactionClick" style="-fx-background-color: transparent;" text="Transaction" textFill="WHITE">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="EXCHANGE" size="25" />
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnDebt" contentDisplay="TOP" layoutX="25.0" layoutY="153.0" mnemonicParsing="false" onAction="#onDebtClick" style="-fx-background-color: transparent;" text="Debt" textFill="WHITE">
-                     <graphic>
-                        <MaterialDesignIconView fill="WHITE" glyphName="SCALE_BALANCE" size="25" />
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnLogout" contentDisplay="TOP" layoutX="20.0" layoutY="497.0" mnemonicParsing="false" onAction="#onLogoutClick" style="-fx-background-color: transparent;" text="Logout" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                     <graphic>
-                        <MaterialDesignIconView fill="WHITE" glyphName="EXIT_TO_APP" size="25" />
-                     </graphic>
-                  </Button>
+                        </Button>
+                        <Button fx:id="btnTransaction" contentDisplay="TOP" onAction="#onTransactionClick" style="-fx-background-color: transparent;" text="Transaction" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="EXCHANGE" size="25" />
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnDebt" contentDisplay="TOP" onAction="#onDebtClick" style="-fx-background-color: transparent;" text="Debt" textFill="WHITE">
+                           <graphic>
+                              <MaterialDesignIconView fill="WHITE" glyphName="SCALE_BALANCE" size="25" />
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnKategori" contentDisplay="TOP" onAction="#onKategoriClick" style="-fx-background-color: transparent;" text="Kategori" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="LIST_ALT" size="25" />
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Button>
+                        <VBox alignment="BOTTOM_CENTER" prefHeight="344.0" prefWidth="100.0">
+                           <children>
+                              <Button fx:id="btnLogout" contentDisplay="TOP" onAction="#onLogoutClick" style="-fx-background-color: transparent;" text="Logout" textFill="WHITE">
+                                 <graphic>
+                                    <MaterialDesignIconView fill="WHITE" glyphName="EXIT_TO_APP" size="25" />
+                                 </graphic>
+                                 <font>
+                                    <Font name="System Bold" size="10.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="25.0" top="30.0" />
+                     </padding>
+                  </VBox>
                </children>
             </AnchorPane>
          </left>
