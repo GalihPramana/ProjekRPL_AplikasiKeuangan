@@ -1,32 +1,30 @@
+// Transaction.java
 package id.ac.ukdw.www.rplbo.homepage;
-
 
 import javafx.beans.property.*;
 
 public class Transaction {
-    private final StringProperty idTransaksi;
+    private final IntegerProperty idTransaksi;
     private final StringProperty sourceName;
     private final IntegerProperty jumlah;
-    private final StringProperty description;
     private final StringProperty tanggal;
 
-    public Transaction(String idTransaksi, String sourceName, int jumlah, String description, String tanggal) {
-        this.idTransaksi = new SimpleStringProperty(idTransaksi);
+    public Transaction(int idTransaksi, String sourceName, int jumlah, String tanggal) {
+        this.idTransaksi = new SimpleIntegerProperty(idTransaksi);
         this.sourceName = new SimpleStringProperty(sourceName);
         this.jumlah = new SimpleIntegerProperty(jumlah);
-        this.description = new SimpleStringProperty(description);
         this.tanggal = new SimpleStringProperty(tanggal);
     }
 
-    public String getIdTransaksi() {
+    public int getIdTransaksi() {
         return idTransaksi.get();
     }
 
-    public void setIdTransaksi(String id) {
+    public void setIdTransaksi(int id) {
         this.idTransaksi.set(id);
     }
 
-    public StringProperty idTransaksiProperty() {
+    public IntegerProperty idTransaksiProperty() {
         return idTransaksi;
     }
 
@@ -52,18 +50,6 @@ public class Transaction {
 
     public IntegerProperty jumlahProperty() {
         return jumlah;
-    }
-
-    public String getDescription() {
-        return description.get();
-    }
-
-    public void setDescription(String description) {
-        this.description.set(description);
-    }
-
-    public StringProperty descriptionProperty() {
-        return description;
     }
 
     public String getTanggal() {

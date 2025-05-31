@@ -1,6 +1,6 @@
-// TransactionController.java
 package id.ac.ukdw.www.rplbo.homepage;
 
+import id.ac.ukdw.www.rplbo.homepage.config.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -13,9 +13,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.IOException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -25,19 +25,20 @@ public class TransactionController {
     @FXML private Button clearButton, deleteButton, pemasukkanButton, pengeluaranButton, updateButton;
     @FXML private Label lblDate, lblWelcome, totalSaldoLabel;
     @FXML private ComboBox<String> kategoriComboBox, filterKategoriComboBox;
-    @FXML private TextField jumlahField, descriptionField, batasBulananField;
+    @FXML private TextField jumlahField, batasBulananField;
     @FXML private DatePicker tanggalPicker;
     @FXML private TableView<Transaction> tableView;
-    @FXML private TableColumn<Transaction, String> idColumn, sourceNameColumn, descriptionColumn, tanggalColumn;
-    @FXML private TableColumn<Transaction, Integer> jumlahColumn;
+    @FXML private TableColumn<Transaction, Integer> idColumn, jumlahColumn;
+    @FXML private TableColumn<Transaction, String> sourceNameColumn, tanggalColumn;
     @FXML private Button logButton;
 
-    private final ObservableList<Transaction> transactionList = HomepageController.DataProvider.TRANSACTIONS;
+    private final ObservableList<Transaction> transactionList = FXCollections.observableArrayList();
     private final FilteredList<Transaction> filteredTransactionList = new FilteredList<>(transactionList, p -> true);
     private Transaction selectedTransaction;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private final DateTimeFormatter displayDateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
     private int batasBulanan = 0;
+    private final String currentUsername = "admin"; // Ubah sesuai user yang login
 
     @FXML
     public void initialize() {
@@ -52,7 +53,6 @@ public class TransactionController {
 
         sourceNameColumn.setCellValueFactory(new PropertyValueFactory<>("sourceName"));
         jumlahColumn.setCellValueFactory(new PropertyValueFactory<>("jumlah"));
-        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         tanggalColumn.setCellValueFactory(new PropertyValueFactory<>("tanggal"));
 
         jumlahColumn.setCellFactory(col -> new TableCell<>() {
@@ -68,6 +68,8 @@ public class TransactionController {
             }
         });
 
+        loadTransactionsFromDB();
+
         tableView.setItems(filteredTransactionList);
         tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, newSel) -> {
             selectedTransaction = newSel;
@@ -80,6 +82,27 @@ public class TransactionController {
         lblDate.setText(LocalDate.now().format(displayDateFormatter));
     }
 
+    private void loadTransactionsFromDB() {
+        transactionList.clear();
+        String sql = "SELECT transaksi_id, kategori, nominal, tanggal FROM transaksi WHERE username = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, currentUsername);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                transactionList.add(new Transaction(
+                        rs.getInt("transaksi_id"),
+                        rs.getString("kategori"),
+                        rs.getInt("nominal"),
+                        rs.getString("tanggal")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML void onClearClick(ActionEvent event) { handleClear(); }
     @FXML void onDeleteClick(ActionEvent event) { handleDelete(); }
     @FXML void onPemasukkanClick(ActionEvent event) { handlePemasukan(true); }
@@ -87,20 +110,9 @@ public class TransactionController {
     @FXML void onUpdateClick(ActionEvent event) { handleUpdate(); }
     @FXML void onDebtClick(ActionEvent event) { changeScene("UtangPiutang.fxml", btnDebt); }
     @FXML void onHomeClick(ActionEvent event) { changeScene("homepage-view.fxml", btnHome); }
-    @FXML
-    void onKategoriClick(ActionEvent event) {
-        try {
-            Parent kategoriRoot = FXMLLoader.load(getClass().getResource("kategori-view.fxml"));
-            Scene scene = btnTransaction.getScene();
-            scene.setRoot(kategoriRoot);
-            Stage stage = (Stage) scene.getWindow();
-            stage.sizeToScene();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    @FXML void onLogoutClick(ActionEvent event) { changeScene("Login.fxml", btnLogout); }
     @FXML void onTransactionClick(ActionEvent event) { }
+    @FXML void onLogoutClick(ActionEvent event) { changeScene("Login.fxml", btnLogout); }
+    @FXML void onKategoriClick(ActionEvent event) { changeScene("kategori-view.fxml", btnTransaction); }
 
     @FXML
     void handleFilterKategori(ActionEvent event) {
@@ -116,7 +128,6 @@ public class TransactionController {
     private void handlePemasukan(boolean isIncome) {
         String sumber = kategoriComboBox.getValue();
         String jmlText = jumlahField.getText().trim();
-        String desc = descriptionField.getText().trim();
         LocalDate tanggal = tanggalPicker.getValue();
 
         if (sumber == null || jmlText.isEmpty() || tanggal == null) {
@@ -132,19 +143,23 @@ public class TransactionController {
             return;
         }
 
-        if (jml <= 0) {
-            showAlert(Alert.AlertType.ERROR, "Input Error", "Nominal harus lebih besar dari 0.");
-            return;
-        }
-
         if (!isIncome) {
             jml = -Math.abs(jml);
         }
 
-        String newId = "TRX" + (transactionList.size() + 1);
-        Transaction newTransaction = new Transaction(newId, sumber, jml, desc, tanggal.format(formatter));
-        transactionList.add(newTransaction);
+        String sql = "INSERT INTO transaksi(username, kategori, nominal, tanggal) VALUES(?,?,?,?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, currentUsername);
+            pstmt.setString(2, sumber);
+            pstmt.setInt(3, jml);
+            pstmt.setString(4, tanggal.format(formatter));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
+        loadTransactionsFromDB();
         handleClear();
         updateTotalSaldo();
         updateBatasBulanan();
@@ -159,7 +174,6 @@ public class TransactionController {
 
         String sumber = kategoriComboBox.getValue();
         String jmlText = jumlahField.getText().trim();
-        String desc = descriptionField.getText().trim();
         LocalDate tanggal = tanggalPicker.getValue();
 
         if (sumber == null || jmlText.isEmpty() || tanggal == null) {
@@ -175,21 +189,19 @@ public class TransactionController {
             return;
         }
 
-        if (jml == 0) {
-            showAlert(Alert.AlertType.ERROR, "Input Error", "Nominal tidak boleh 0.");
-            return;
+        String sql = "UPDATE transaksi SET kategori = ?, nominal = ?, tanggal = ? WHERE transaksi_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, sumber);
+            pstmt.setInt(2, jml);
+            pstmt.setString(3, tanggal.format(formatter));
+            pstmt.setInt(4, selectedTransaction.getIdTransaksi());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        selectedTransaction.setSourceName(sumber);
-        selectedTransaction.setJumlah(jml);
-        selectedTransaction.setDescription(desc);
-        selectedTransaction.setTanggal(tanggal.format(formatter));
-
-        int selectedIndex = transactionList.indexOf(selectedTransaction);
-        if (selectedIndex >= 0) {
-            transactionList.set(selectedIndex, selectedTransaction);
-        }
-
+        loadTransactionsFromDB();
         handleClear();
         updateTotalSaldo();
         updateBatasBulanan();
@@ -199,7 +211,15 @@ public class TransactionController {
     private void handleDelete() {
         Transaction sel = tableView.getSelectionModel().getSelectedItem();
         if (sel != null) {
-            transactionList.remove(sel);
+            String sql = "DELETE FROM transaksi WHERE transaksi_id = ?";
+            try (Connection conn = DBConnection.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setInt(1, sel.getIdTransaksi());
+                pstmt.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            loadTransactionsFromDB();
             handleClear();
             updateTotalSaldo();
         } else {
@@ -210,7 +230,6 @@ public class TransactionController {
     private void handleClear() {
         kategoriComboBox.getSelectionModel().clearSelection();
         jumlahField.clear();
-        descriptionField.clear();
         tanggalPicker.setValue(null);
         tableView.getSelectionModel().clearSelection();
         selectedTransaction = null;
@@ -220,7 +239,6 @@ public class TransactionController {
     private void populateFields(Transaction t) {
         kategoriComboBox.setValue(t.getSourceName());
         jumlahField.setText(String.valueOf(t.getJumlah()));
-        descriptionField.setText(t.getDescription());
         tanggalPicker.setValue(LocalDate.parse(t.getTanggal(), formatter));
     }
 

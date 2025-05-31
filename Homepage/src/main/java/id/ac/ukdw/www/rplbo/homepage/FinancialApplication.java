@@ -18,7 +18,7 @@ public class FinancialApplication extends Application {
         if(SessionManager.isLoggedIn()){
         loader = new FXMLLoader(getClass().getResource("homepage-view.fxml"));
         }else {
-            loader = new FXMLLoader(getClass().getResource("login.fxml"));
+            loader = new FXMLLoader(getClass().getResource("Login.fxml"));
         }
         Parent root = loader.load();
         Scene scene = new Scene(root);
