@@ -38,4 +38,8 @@ public class UtangPiutang {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getUsername() {
+        return nama;
+    }
 }

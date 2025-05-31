@@ -1,5 +1,6 @@
 package id.ac.ukdw.www.rplbo.homepage;
 
+import id.ac.ukdw.www.rplbo.homepage.config.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,12 +13,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.*;
 import java.time.LocalDate;
 
 public class UtangPiutangController {
 
     @FXML
-    public ChoiceBox cbStatus;
+    private ChoiceBox<String> cbStatus;
 
     @FXML
     private Button btnDebt;
@@ -33,21 +35,28 @@ public class UtangPiutangController {
 
     @FXML
     private TextField tfKepadaSiapa;
+
     @FXML
     private DatePicker dpTanggal;
+
     @FXML
     private TextField tfJumlahUtang;
+
     @FXML
     private TextField tfFilter;
 
     @FXML
     private TableView<UtangPiutang> table;
+
     @FXML
     private TableColumn<UtangPiutang, String> colKepadaSiapa;
+
     @FXML
     private TableColumn<UtangPiutang, String> colTanggal;
+
     @FXML
     private TableColumn<UtangPiutang, Integer> colJumlahUtang;
+
     @FXML
     private TableColumn<UtangPiutang, String> colStatus;
 
@@ -60,9 +69,9 @@ public class UtangPiutangController {
         colJumlahUtang.setCellValueFactory(new PropertyValueFactory<>("jumlahUtang"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         table.setEditable(true);
-        table.setItems(data);
-
         cbStatus.getItems().addAll("Lunas", "Belum Lunas");
+
+        loadDataFromDatabase();
     }
 
     @FXML
@@ -87,7 +96,7 @@ public class UtangPiutangController {
             return;
         }
 
-        String status = (String) cbStatus.getValue();
+        String status = cbStatus.getValue();
         if (kepada.isEmpty() || tanggal == null || status == null || status.isEmpty()) {
             showAlert("Lengkapi semua data");
             return;
@@ -99,15 +108,48 @@ public class UtangPiutangController {
             jumlah = Math.abs(jumlah);
         }
 
-        data.add(new UtangPiutang("User", kepada, tanggal.toString(), jumlah, status));
-        clearForm();
+        String sql = "INSERT INTO utang_piutang (username, kepada, tanggal, nominal, status) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, "User"); // Gantilah ini jika ingin dinamis
+            pstmt.setString(2, kepada);
+            pstmt.setString(3, tanggal.toString());
+            pstmt.setInt(4, jumlah);
+            pstmt.setString(5, status);
+            pstmt.executeUpdate();
+
+            data.add(new UtangPiutang("User", kepada, tanggal.toString(), jumlah, status));
+            clearForm();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Gagal menyimpan ke database: " + e.getMessage());
+        }
     }
 
     @FXML
     public void handleHapus() {
         UtangPiutang selected = table.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            data.remove(selected);
+            String sql = "DELETE FROM utang_piutang WHERE username = ? AND kepada = ? AND tanggal = ? AND nominal = ? AND status = ?";
+
+            try (Connection conn = DBConnection.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+                pstmt.setString(1, selected.getUsername());
+                pstmt.setString(2, selected.getKepadaSiapa());
+                pstmt.setString(3, selected.getTanggal());
+                pstmt.setInt(4, selected.getJumlahUtang());
+                pstmt.setString(5, selected.getStatus());
+
+                pstmt.executeUpdate();
+                data.remove(selected);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showAlert("Gagal menghapus data.");
+            }
         }
     }
 
@@ -143,6 +185,29 @@ public class UtangPiutangController {
         alert.showAndWait();
     }
 
+    private void loadDataFromDatabase() {
+        data.clear();
+        String sql = "SELECT * FROM utang_piutang";
+
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                data.add(new UtangPiutang(
+                        rs.getString("username"),
+                        rs.getString("kepada"),
+                        rs.getString("tanggal"),
+                        rs.getInt("nominal"),
+                        rs.getString("status")
+                ));
+            }
+            table.setItems(data);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     public void onHomeClick(ActionEvent actionEvent) {
         try {
@@ -171,15 +236,15 @@ public class UtangPiutangController {
 
     @FXML
     public void onDebtClick(ActionEvent actionEvent) {
-        //Sudah berada di halaman ini
+        // Sudah berada di halaman ini
     }
 
     @FXML
-    void onKategoriClick(ActionEvent event) {
+    public void onKategoriClick(ActionEvent event) {
         try {
-            Parent transactionRoot = FXMLLoader.load(getClass().getResource("kategori-view.fxml"));
+            Parent kategoriRoot = FXMLLoader.load(getClass().getResource("kategori-view.fxml"));
             Scene scene = btnTransaction.getScene();
-            scene.setRoot(transactionRoot);
+            scene.setRoot(kategoriRoot);
             Stage stage = (Stage) scene.getWindow();
             stage.sizeToScene();
         } catch (IOException e) {
