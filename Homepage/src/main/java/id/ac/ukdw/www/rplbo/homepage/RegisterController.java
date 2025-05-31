@@ -75,7 +75,7 @@ public class RegisterController {
     }
 
     public void registerUser(String username, String password) {
-        Connection conn = DBConnection.connect();
+        Connection conn = DBConnection.getConnection();
         try {
             String insertSql = "INSERT INTO users(username, password) VALUES(?, ?)";
             PreparedStatement insertStmt = conn.prepareStatement(insertSql);
@@ -90,7 +90,7 @@ public class RegisterController {
     }
 
     private boolean usernameExists(String username) {
-        Connection conn = DBConnection.connect();
+        Connection conn = DBConnection.getConnection();
         try {
             String checkSql = "SELECT username FROM users WHERE username = ?";
             PreparedStatement checkStmt = conn.prepareStatement(checkSql);

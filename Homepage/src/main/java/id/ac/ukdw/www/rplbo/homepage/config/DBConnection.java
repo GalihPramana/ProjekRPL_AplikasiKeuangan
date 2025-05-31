@@ -5,19 +5,40 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-    public static Connection connect() {
-        Connection conn = null;
+    private static final String DB_URL = "jdbc:sqlite:databaseAplikasiKeuanganRev1.db";
+    private static Connection connection = null;
+
+    // Private constructor untuk mencegah instansiasi
+    private DBConnection() {
+    }
+
+    public static Connection getConnection() {
         try {
-            Class.forName("org.sqlite.JDBC");  // WAJIB agar JDBC bisa digunakan
-            String url = "jdbc:sqlite:databaseAplikasiKeuanganRev1.db";
-            conn = DriverManager.getConnection(url);
-            System.out.println("Koneksi berhasil.");
+            if (connection == null || connection.isClosed()) {
+                // Memastikan driver tersedia
+                Class.forName("org.sqlite.JDBC");
+                connection = DriverManager.getConnection(DB_URL);
+                System.out.println("Koneksi berhasil.");
+            }
         } catch (ClassNotFoundException e) {
             System.out.println("Driver tidak ditemukan.");
             e.printStackTrace();
         } catch (SQLException e) {
             System.out.println("Koneksi gagal: " + e.getMessage());
+            e.printStackTrace();
         }
-        return conn;
+        return connection;
+    }
+
+    public static void closeConnection() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+                System.out.println("Koneksi ditutup.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Gagal menutup koneksi.");
+            e.printStackTrace();
+        }
     }
 }

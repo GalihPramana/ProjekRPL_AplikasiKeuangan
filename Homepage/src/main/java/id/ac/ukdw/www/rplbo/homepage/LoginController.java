@@ -1,6 +1,7 @@
 package id.ac.ukdw.www.rplbo.homepage;
 
 import id.ac.ukdw.www.rplbo.homepage.config.DBConnection;
+import id.ac.ukdw.www.rplbo.homepage.util.SessionManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -53,13 +54,14 @@ public class LoginController {
     }
 
 
+
     @FXML
     private void handleLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
         if (loginUser(username, password)) {
-            errorLabel.setText("");
+            SessionManager.set("user", username);
             try {
                 Parent loginRoot = FXMLLoader.load(getClass().getResource("homepage-view.fxml"));
                 Scene scene = loginButton.getScene();
@@ -93,7 +95,7 @@ public class LoginController {
     }
 
     public boolean loginUser(String username, String password) {
-        Connection conn = DBConnection.connect();
+        Connection conn = DBConnection.getConnection();
         try {
             String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);

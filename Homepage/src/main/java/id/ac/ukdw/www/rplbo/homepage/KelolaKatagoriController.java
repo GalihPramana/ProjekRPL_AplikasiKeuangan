@@ -72,6 +72,10 @@ public class KelolaKatagoriController {
         kategoriColumn.setCellValueFactory(new PropertyValueFactory<>("kategori"));
         tableViewKategori.setEditable(true);
         tableViewKategori.setItems(dataKategori);
+
+        java.time.format.DateTimeFormatter displayDateFormatter =
+                java.time.format.DateTimeFormatter.ofPattern("d MMMM yyyy");
+        lblDate.setText(java.time.LocalDate.now().format(displayDateFormatter));
     }
 
     @FXML

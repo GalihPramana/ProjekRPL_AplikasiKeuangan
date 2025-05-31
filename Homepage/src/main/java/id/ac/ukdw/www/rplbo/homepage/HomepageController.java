@@ -20,6 +20,8 @@ import javafx.collections.ListChangeListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import id.ac.ukdw.www.rplbo.homepage.util.SessionManager;
+
 
 public class HomepageController implements Initializable {
 
@@ -66,6 +68,25 @@ public class HomepageController implements Initializable {
         public static final ObservableList<Transaction> TRANSACTIONS = FXCollections.observableArrayList();
     }
 
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        String username = (String) SessionManager.get("user");
+
+        if (username != null) {
+            lblWelcome.setText("Selamat datang, " + username + "!");
+        } else {
+            lblWelcome.setText("Selamat datang!");
+        }
+        DataProvider.TRANSACTIONS.addListener((ListChangeListener<Transaction>) change -> updateDashboard());
+        updateDashboard();
+
+        java.time.format.DateTimeFormatter displayDateFormatter =
+                java.time.format.DateTimeFormatter.ofPattern("d MMMM yyyy");
+        lblDate.setText(java.time.LocalDate.now().format(displayDateFormatter));
+    }
+
+
     @FXML
     void onDebtClick(ActionEvent event) {
         try {
@@ -78,6 +99,8 @@ public class HomepageController implements Initializable {
             e.printStackTrace();
         }
     }
+
+
 
     @FXML
     void onTransactionClick(ActionEvent event) {
@@ -113,6 +136,8 @@ public class HomepageController implements Initializable {
     @FXML
     void onLogoutClick(ActionEvent event) {
         try {
+            SessionManager.clear();
+
             Parent loginRoot = FXMLLoader.load(getClass().getResource("Login.fxml"));
             Scene scene = btnLogout.getScene();
             scene.setRoot(loginRoot);
@@ -170,9 +195,5 @@ public class HomepageController implements Initializable {
         );
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        DataProvider.TRANSACTIONS.addListener((ListChangeListener<Transaction>)change -> updateDashboard());
-        updateDashboard();
-    }
+
 }
