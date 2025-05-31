@@ -50,7 +50,7 @@
                     <TableColumn fx:id="colStatus" prefWidth="200.0" text="Status" />
                 </columns>
             </TableView>
-         <ChoiceBox fx:id="cbStatus" layoutX="857.0" layoutY="64.0" prefHeight="26.0" prefWidth="84.0" />
+            <ChoiceBox fx:id="cbStatus" layoutX="857.0" layoutY="64.0" prefHeight="26.0" prefWidth="84.0" />
         </AnchorPane>
     </center>
    <left>
