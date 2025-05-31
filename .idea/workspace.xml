@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ac410fbf-944e-410b-89dd-df8f3e817f31" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/RegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/RegisterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/config/DatabaseConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/config/DBConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/databaseAplikasiKeuangan.db" beforeDir="false" afterPath="$PROJECT_DIR$/databaseAplikasiKeuangan.db" afterDir="false" />
-    </list>
+    <list default="true" id="ac410fbf-944e-410b-89dd-df8f3e817f31" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -137,7 +131,7 @@
       <workItem from="1748680417586" duration="1601000" />
       <workItem from="1748682080373" duration="27000" />
       <workItem from="1748682113817" duration="2507000" />
-      <workItem from="1748688690218" duration="330000" />
+      <workItem from="1748688690218" duration="661000" />
     </task>
     <servers />
   </component>

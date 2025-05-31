@@ -54,7 +54,7 @@ public class RegisterController {
         String confirm = confirmPasswordField.getText();
 
         if (username.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
-            messageLabel.setText("Username tidak boleh kosong.");
+            messageLabel.setText("Field tidak boleh kosong.");
         } else if (!password.equals(confirm)) {
             messageLabel.setText("Password tidak cocok.");
         } else if (usernameExists(username)) {
