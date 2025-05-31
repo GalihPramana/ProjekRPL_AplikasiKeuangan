@@ -9,7 +9,7 @@ public class DBConnection {
         Connection conn = null;
         try {
             Class.forName("org.sqlite.JDBC");  // WAJIB agar JDBC bisa digunakan
-            String url = "jdbc:sqlite:databaseAplikasiKeuangan.db";
+            String url = "jdbc:sqlite:databaseAplikasiKeuanganRev1.db";
             conn = DriverManager.getConnection(url);
             System.out.println("Koneksi berhasil.");
         } catch (ClassNotFoundException e) {

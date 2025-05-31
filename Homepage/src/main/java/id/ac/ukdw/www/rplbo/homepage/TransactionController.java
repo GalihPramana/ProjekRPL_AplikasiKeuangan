@@ -30,6 +30,7 @@ public class TransactionController {
     @FXML private TableView<Transaction> tableView;
     @FXML private TableColumn<Transaction, String> idColumn, sourceNameColumn, descriptionColumn, tanggalColumn;
     @FXML private TableColumn<Transaction, Integer> jumlahColumn;
+    @FXML private Button logButton;
 
     private final ObservableList<Transaction> transactionList = HomepageController.DataProvider.TRANSACTIONS;
     private final FilteredList<Transaction> filteredTransactionList = new FilteredList<>(transactionList, p -> true);
@@ -279,6 +280,19 @@ public class TransactionController {
     private void toggleUpdateButtonState(boolean enable) {
         if (updateButton != null) {
             updateButton.setDisable(!enable);
+        }
+    }
+
+    @FXML
+    public void onlogClick(ActionEvent actionEvent) {
+        try {
+            Parent loginRoot = FXMLLoader.load(getClass().getResource("Log.fxml"));
+            Scene scene = logButton.getScene();
+            scene.setRoot(loginRoot);
+            Stage stage = (Stage) scene.getWindow();
+            stage.sizeToScene();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

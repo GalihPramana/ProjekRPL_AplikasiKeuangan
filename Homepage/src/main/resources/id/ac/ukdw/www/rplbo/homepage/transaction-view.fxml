@@ -92,7 +92,11 @@
                            <FontAwesomeIconView glyphName="TRASH" size="14" />
                         </graphic>
                      </Button>
-                     <Button fx:id="clearButton" onAction="#onClearClick" text="Clear" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                     <HBox spacing="10.0" alignment="CENTER_RIGHT" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                        <Button fx:id="clearButton" onAction="#onClearClick" text="Clear" prefHeight="26.0" prefWidth="100.0" />
+                        <Button fx:id="logButton" onAction="#onlogClick" text="Log" prefHeight="26.0" prefWidth="100.0" />
+                     </HBox>
+
                      <TableView fx:id="tableView" prefHeight="214.0" prefWidth="571.0" GridPane.columnSpan="3" GridPane.rowIndex="6">
                         <columns>
                            <TableColumn fx:id="sourceNameColumn" prefWidth="123.0" text="Kategori" />

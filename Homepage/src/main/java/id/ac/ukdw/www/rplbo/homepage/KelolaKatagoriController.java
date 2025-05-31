@@ -63,6 +63,9 @@ public class KelolaKatagoriController {
     @FXML
     private Button updateButton;
 
+    @FXML
+    private Button logbutton;
+
     private ObservableList<KelolaKategori> dataKategori = FXCollections.observableArrayList();
 
     public void initialize() {
@@ -172,5 +175,7 @@ public class KelolaKatagoriController {
             e.printStackTrace();
         }
     }
+
+
 }
 
