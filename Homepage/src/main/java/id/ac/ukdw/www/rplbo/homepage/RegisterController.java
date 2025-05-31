@@ -1,5 +1,6 @@
 package id.ac.ukdw.www.rplbo.homepage;
 
+import id.ac.ukdw.www.rplbo.homepage.config.DatabaseConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -8,6 +9,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class RegisterController {
     public Button registerButton;
@@ -56,7 +60,7 @@ public class RegisterController {
         } else if (UserManager.userExists(username)) {
             messageLabel.setText("Username sudah terdaftar.");
         } else {
-            UserManager.addUser(username, password);  // Nyimpen data pengguna ke file lokal
+            registerUser(username, password);
             messageLabel.setText("Registrasi berhasil! Silakan login.");
         }
     }
@@ -70,5 +74,30 @@ public class RegisterController {
         stage.setTitle("Login Aplikasi Keuangan");
     }
 
+    public void registerUser(String username, String password) {
+        Connection conn = DatabaseConnection.connect();
+        try {
+            // Cek apakah username sudah ada
+            String checkSql = "SELECT username FROM users WHERE username = ?";
+            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
+            checkStmt.setString(1, username);
+            ResultSet rs = checkStmt.executeQuery();
 
+            if (rs.next()) {
+                messageLabel.setText("Username sudah terdaftar.");
+                return;
+            }
+
+            // Insert user baru
+            String insertSql = "INSERT INTO users(username, password) VALUES(?, ?)";
+            PreparedStatement insertStmt = conn.prepareStatement(insertSql);
+            insertStmt.setString(1, username);
+            insertStmt.setString(2, password);
+            insertStmt.executeUpdate();
+            System.out.println("Registrasi berhasil.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            messageLabel.setText("Terjadi kesalahan saat registrasi.");
+        }
+    }
 }

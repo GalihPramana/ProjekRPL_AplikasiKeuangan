@@ -1,5 +1,6 @@
 package id.ac.ukdw.www.rplbo.homepage;
 
+import id.ac.ukdw.www.rplbo.homepage.config.DatabaseConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +10,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class LoginController {
 
@@ -54,7 +58,7 @@ public class LoginController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        if (UserManager.isValidUser(username, password)) {
+        if (loginUser(username, password)) {
             errorLabel.setText("");
             try {
                 Parent loginRoot = FXMLLoader.load(getClass().getResource("homepage-view.fxml"));
@@ -85,6 +89,27 @@ public class LoginController {
         } catch (IOException e) {
             errorLabel.setText("Gagal membuka halaman register.");
             e.printStackTrace();
+        }
+    }
+
+    public boolean loginUser(String username, String password) {
+        Connection conn = DatabaseConnection.connect();
+        try {
+            String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                System.out.println("Login berhasil.");
+                return true;
+            } else {
+                System.out.println("Login gagal: user tidak ditemukan.");
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
