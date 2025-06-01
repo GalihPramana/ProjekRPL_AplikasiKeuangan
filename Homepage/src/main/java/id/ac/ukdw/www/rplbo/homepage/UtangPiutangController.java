@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.sql.*;
@@ -20,7 +21,7 @@ import java.time.LocalDate;
 public class UtangPiutangController {
 
     @FXML private ChoiceBox<String> cbStatus;
-    @FXML private Button btnDebt, btnHome, btnLogout, btnTransaction, btnKategori;
+    @FXML private Button btnDebt, btnHome, btnLogout, btnTransaction, btnKategori, btnEdit;
     @FXML private TextField tfKepadaSiapa, tfJumlahUtang, tfFilter;
     @FXML private DatePicker dpTanggal;
     @FXML private TableView<UtangPiutang> table;
@@ -28,6 +29,7 @@ public class UtangPiutangController {
     @FXML private TableColumn<UtangPiutang, Integer> colJumlahUtang;
 
     private final ObservableList<UtangPiutang> data = FXCollections.observableArrayList();
+    private UtangPiutang selectedForEdit = null;
 
     @FXML
     public void initialize() {
@@ -37,6 +39,17 @@ public class UtangPiutangController {
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         cbStatus.getItems().addAll("Lunas", "Belum Lunas");
         loadDataFromDatabase();
+
+        table.setOnMouseClicked((MouseEvent event) -> {
+            UtangPiutang selected = table.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                tfKepadaSiapa.setText(selected.getKepadaSiapa());
+                tfJumlahUtang.setText(String.valueOf(Math.abs(selected.getJumlahUtang())));
+                dpTanggal.setValue(LocalDate.parse(selected.getTanggal()));
+                cbStatus.setValue(selected.getStatus());
+                selectedForEdit = selected;
+            }
+        });
     }
 
     @FXML
@@ -90,6 +103,65 @@ public class UtangPiutangController {
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Gagal menyimpan ke database: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void handleEdit() {
+        if (selectedForEdit == null) {
+            showAlert("Pilih data yang ingin diedit.");
+            return;
+        }
+
+        String kepada = tfKepadaSiapa.getText().trim();
+        LocalDate tanggal = dpTanggal.getValue();
+        String status = cbStatus.getValue();
+
+        if (kepada.isEmpty() || tanggal == null || status == null || status.isEmpty()) {
+            showAlert("Lengkapi semua data terlebih dahulu.");
+            return;
+        }
+
+        int jumlah;
+        try {
+            jumlah = Integer.parseInt(tfJumlahUtang.getText().trim());
+        } catch (NumberFormatException e) {
+            showAlert("Jumlah harus berupa angka.");
+            return;
+        }
+
+        int nominalBaru = selectedForEdit.getJumlahUtang() < 0 ? -Math.abs(jumlah) : Math.abs(jumlah);
+        String username = (String) SessionManager.get("user");
+
+        String sql = "UPDATE utang_piutang SET kepada = ?, tanggal = ?, nominal = ?, status = ? " +
+                "WHERE username = ? AND kepada = ? AND tanggal = ? AND nominal = ? AND status = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, kepada);
+            pstmt.setString(2, tanggal.toString());
+            pstmt.setInt(3, nominalBaru);
+            pstmt.setString(4, status);
+
+            pstmt.setString(5, selectedForEdit.getNama());
+            pstmt.setString(6, selectedForEdit.getKepadaSiapa());
+            pstmt.setString(7, selectedForEdit.getTanggal());
+            pstmt.setInt(8, selectedForEdit.getJumlahUtang());
+            pstmt.setString(9, selectedForEdit.getStatus());
+
+            int rowsUpdated = pstmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                showAlert("Data berhasil diperbarui.");
+                loadDataFromDatabase();
+                clearForm();
+                selectedForEdit = null;
+            } else {
+                showAlert("Gagal memperbarui data.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Gagal mengupdate data: " + e.getMessage());
         }
     }
 
@@ -177,16 +249,11 @@ public class UtangPiutangController {
         }
     }
 
-    @FXML
-    public void onHomeClick(ActionEvent event) { changeScene("homepage-view.fxml", btnHome); }
-    @FXML
-    public void onTransactionClick(ActionEvent event) { changeScene("transaction-view.fxml", btnTransaction); }
-    @FXML
-    public void onDebtClick(ActionEvent event) {}
-    @FXML
-    public void onKategoriClick(ActionEvent event) { changeScene("kategori-view.fxml", btnKategori); }
-    @FXML
-    public void onLogoutClick(ActionEvent event) { changeScene("Login.fxml", btnLogout); }
+    @FXML public void onHomeClick(ActionEvent event) { changeScene("homepage-view.fxml", btnHome); }
+    @FXML public void onTransactionClick(ActionEvent event) { changeScene("transaction-view.fxml", btnTransaction); }
+    @FXML public void onDebtClick(ActionEvent event) {}
+    @FXML public void onKategoriClick(ActionEvent event) { changeScene("kategori-view.fxml", btnKategori); }
+    @FXML public void onLogoutClick(ActionEvent event) { changeScene("Login.fxml", btnLogout); }
 
     private void changeScene(String fxml, Button button) {
         try {
