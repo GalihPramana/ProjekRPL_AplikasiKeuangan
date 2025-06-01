@@ -11,25 +11,28 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class UtangPiutangController {
 
     @FXML private ChoiceBox<String> cbStatus;
-    @FXML private Button btnDebt, btnHome, btnLogout, btnTransaction, btnKategori, btnEdit;
+    @FXML private Button btnDebt, btnHome, btnLogout, btnTransaction, btnKategori, btnEdit, btnClear;
     @FXML private TextField tfKepadaSiapa, tfJumlahUtang, tfFilter;
     @FXML private DatePicker dpTanggal;
     @FXML private TableView<UtangPiutang> table;
     @FXML private TableColumn<UtangPiutang, String> colKepadaSiapa, colTanggal, colStatus;
     @FXML private TableColumn<UtangPiutang, Integer> colJumlahUtang;
+    @FXML private Label lblDate; // Tambahkan label untuk tanggal
 
     private final ObservableList<UtangPiutang> data = FXCollections.observableArrayList();
     private UtangPiutang selectedForEdit = null;
+    private final DateTimeFormatter displayDateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
 
     @FXML
     public void initialize() {
@@ -38,6 +41,12 @@ public class UtangPiutangController {
         colJumlahUtang.setCellValueFactory(new PropertyValueFactory<>("jumlahUtang"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         cbStatus.getItems().addAll("Lunas", "Belum Lunas");
+
+        // Set tanggal real-time
+        if (lblDate != null) {
+            lblDate.setText(LocalDate.now().format(displayDateFormatter));
+        }
+
         loadDataFromDatabase();
 
         table.setOnMouseClicked((MouseEvent event) -> {
@@ -52,15 +61,8 @@ public class UtangPiutangController {
         });
     }
 
-    @FXML
-    public void handleTambahHutang() {
-        tambahTransaksi(false);
-    }
-
-    @FXML
-    public void handleTambahPiutang() {
-        tambahTransaksi(true);
-    }
+    @FXML public void handleTambahHutang() { tambahTransaksi(false); }
+    @FXML public void handleTambahPiutang() { tambahTransaksi(true); }
 
     private void tambahTransaksi(boolean isPiutang) {
         String username = (String) SessionManager.get("user");
@@ -143,7 +145,6 @@ public class UtangPiutangController {
             pstmt.setString(2, tanggal.toString());
             pstmt.setInt(3, nominalBaru);
             pstmt.setString(4, status);
-
             pstmt.setString(5, selectedForEdit.getNama());
             pstmt.setString(6, selectedForEdit.getKepadaSiapa());
             pstmt.setString(7, selectedForEdit.getTanggal());
@@ -207,6 +208,14 @@ public class UtangPiutangController {
         table.setItems(filtered);
     }
 
+    @FXML
+    public void handleClear() {
+        clearForm();
+        selectedForEdit = null;
+        tfFilter.clear();
+        loadDataFromDatabase();
+    }
+
     private void clearForm() {
         tfKepadaSiapa.clear();
         tfJumlahUtang.clear();
@@ -251,7 +260,7 @@ public class UtangPiutangController {
 
     @FXML public void onHomeClick(ActionEvent event) { changeScene("homepage-view.fxml", btnHome); }
     @FXML public void onTransactionClick(ActionEvent event) { changeScene("transaction-view.fxml", btnTransaction); }
-    @FXML public void onDebtClick(ActionEvent event) {}
+    @FXML public void onDebtClick(ActionEvent event) { changeScene("utang-piutang.fxml", btnDebt); }
     @FXML public void onKategoriClick(ActionEvent event) { changeScene("kategori-view.fxml", btnKategori); }
     @FXML public void onLogoutClick(ActionEvent event) { changeScene("Login.fxml", btnLogout); }
 
@@ -264,7 +273,7 @@ public class UtangPiutangController {
             stage.sizeToScene();
         } catch (IOException e) {
             e.printStackTrace();
+            showAlert("Gagal berpindah halaman: " + e.getMessage());
         }
     }
 }
-
