@@ -1,6 +1,7 @@
 package id.ac.ukdw.www.rplbo.homepage;
 
 import id.ac.ukdw.www.rplbo.homepage.config.DBConnection;
+import id.ac.ukdw.www.rplbo.homepage.util.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -14,104 +15,46 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.function.Predicate;
 
 public class KelolaKategoriController {
-    @FXML
-    private Button btnDebt;
 
-    @FXML
-    private Button btnHome;
+    @FXML private Button btnDebt, btnHome, btnLogout, btnTransaction, btnKategori;
+    @FXML private Button btnTambahKategori, clearButton, deleteButton, updateButton;
+    @FXML private TableColumn<KelolaKategori, String> kategoriColumn;
+    @FXML private Label lblDate, lblTotalKategori, lblWelcome;
+    @FXML private TableView<KelolaKategori> tableViewKategori;
+    @FXML private TextField txtFilter, txtNamaKategori;
 
-    @FXML
-    private Button btnKategori;
-
-    @FXML
-    private Button btnLogout;
-
-    @FXML
-    private Button btnTambahKategori;
-
-    @FXML
-    private Button btnTransaction;
-
-    @FXML
-    private Button clearButton;
-
-    @FXML
-    private Button deleteButton;
-
-    @FXML
-    private TableColumn<KelolaKategori, String> kategoriColumn;
-
-    @FXML
-    private Label lblDate;
-
-    @FXML
-    private Label lblTotalKategori;
-
-    @FXML
-    private Label lblWelcome;
-
-    @FXML
-    private TableView<KelolaKategori> tableViewKategori;
-
-    @FXML
-    private TextField txtFilter;
-
-    @FXML
-    private TextField txtNamaKategori;
-
-    @FXML
-    private Button updateButton;
-
-
-    // Tempat data dan filtering data
-    private ObservableList<KelolaKategori> dataKategori = FXCollections.observableArrayList();
+    private final ObservableList<KelolaKategori> dataKategori = FXCollections.observableArrayList();
     private FilteredList<KelolaKategori> filteredKategoriList;
-
-    //Koneksi ke DB
     private Connection connection;
 
     public void initialize() {
-        //Setup kolom tabel
         kategoriColumn.setCellValueFactory(new PropertyValueFactory<>("kategori"));
-
-        // Bungkus dataKategori dengan FilteredList agar bisa di filter
         filteredKategoriList = new FilteredList<>(dataKategori, p -> true);
         tableViewKategori.setItems(filteredKategoriList);
 
-        // Menggunakan listener pada txtFilter
-        txtFilter.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredKategoriList.setPredicate(createPredicate(newValue));
+        txtFilter.textProperty().addListener((obs, oldVal, newVal) -> {
+            filteredKategoriList.setPredicate(createPredicate(newVal));
         });
 
-        // Menampilkan tanggal di lblDate
-        java.time.format.DateTimeFormatter displayDateFormatter =
-                java.time.format.DateTimeFormatter.ofPattern("d MMMM yyyy");
-        lblDate.setText(java.time.LocalDate.now().format(displayDateFormatter));
+        java.time.format.DateTimeFormatter displayDateFormatter = java.time.format.DateTimeFormatter.ofPattern("d MMMM yyyy");
+        lblDate.setText(LocalDate.now().format(displayDateFormatter));
 
-        // Inisiasi koneksi ke tabel database
         getConnection();
         loadAllKategori();
-
-        // Menampilkan jumlah total kategori yang pernah dibuat
         lblTotalKategori.setText("Total: " + dataKategori.size());
 
-        // Saat baris tabel dipilih menampilkan txtNamaKategori dengan nilai yang dipilih
-        tableViewKategori.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                txtNamaKategori.setText(newValue.getNamaKategori());
+        tableViewKategori.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                txtNamaKategori.setText(newVal.getNamaKategori());
             }
         });
-
     }
 
-    //Method koneksi database
     private Connection getConnection() {
         if (connection == null) {
             connection = DBConnection.getConnection();
@@ -119,196 +62,152 @@ public class KelolaKategoriController {
         return connection;
     }
 
-    //Method close koneksi database
-    private void closeConnection() {
-        DBConnection.closeConnection();
-    }
-
-    // Mengambil data dari DB ke list dataKategori
     private void loadAllKategori() {
         dataKategori.clear();
-        String query = "SELECT nama_kategori FROM kategori";
+        String username = (String) SessionManager.get("user");
+        if (username == null || username.isEmpty()) return;
+
+        String query = "SELECT nama_kategori FROM kategori WHERE username = ?";
+
         try (PreparedStatement ps = getConnection().prepareStatement(query)) {
+            ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                String namaKategori = rs.getString("nama_kategori");
-                dataKategori.add(new KelolaKategori(namaKategori));
+                dataKategori.add(new KelolaKategori(rs.getString("nama_kategori")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        tableViewKategori.setItems(filteredKategoriList);
+        tableViewKategori.refresh();
         lblTotalKategori.setText("Total: " + dataKategori.size());
     }
 
-    // Predicate untuk filter dataKategori
     private Predicate<KelolaKategori> createPredicate(String searchText) {
-        return kategori -> {
-            if (searchText == null || searchText.isEmpty()) return true;
-            return kategori.getNamaKategori().toLowerCase().contains(searchText.toLowerCase());
-        };
+        return kategori -> searchText == null || searchText.isEmpty() || kategori.getNamaKategori().toLowerCase().contains(searchText.toLowerCase());
     }
 
-    // Event and Button
-    @FXML
-    void onClearClick(ActionEvent event) {
+    @FXML void onClearClick(ActionEvent event) {
         tableViewKategori.getSelectionModel().clearSelection();
         txtFilter.clear();
         txtNamaKategori.clear();
         txtNamaKategori.requestFocus();
     }
 
-    @FXML
-    void onDeleteClick(ActionEvent event) {
+    @FXML void onDeleteClick(ActionEvent event) {
         KelolaKategori selected = tableViewKategori.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            if (deleteKategori(selected.getNamaKategori())) {
-                dataKategori.remove(selected);
-                lblTotalKategori.setText("Total: " + dataKategori.size());
-            }
+        if (selected != null && deleteKategori(selected.getNamaKategori())) {
+            dataKategori.remove(selected);
+            lblTotalKategori.setText("Total: " + dataKategori.size());
+            tableViewKategori.refresh();
         } else {
             showAlert("Gagal menghapus kategori!");
         }
     }
 
-    @FXML
-    void onTambahkanClick(ActionEvent event) {
-        String txtKategori = txtNamaKategori.getText().trim();
-        if (txtKategori.isEmpty()) {
+    @FXML void onTambahkanClick(ActionEvent event) {
+        String nama = txtNamaKategori.getText().trim();
+        String username = (String) SessionManager.get("user");
+        if (nama.isEmpty()) {
             showAlert("Nama kategori tidak boleh kosong!");
+            return;
+        }
+        if (username == null || username.isEmpty()) {
+            showAlert("User belum login!");
+            return;
+        }
+
+        if (addKategori(nama)) {
+            dataKategori.add(new KelolaKategori(nama));
+            tableViewKategori.setItems(filteredKategoriList);
+            tableViewKategori.scrollTo(dataKategori.size() - 1);
+            tableViewKategori.refresh();
+            lblTotalKategori.setText("Total: " + dataKategori.size());
+            txtFilter.clear();
+            txtNamaKategori.clear();
+            txtNamaKategori.requestFocus();
         } else {
-            if (addKategori(txtKategori)){
-                dataKategori.add(new KelolaKategori(txtKategori));
-                lblTotalKategori.setText("Total: " + dataKategori.size());
-                txtNamaKategori.clear();
-                txtNamaKategori.requestFocus();
-            } else {
-                showAlert("Kategori gagal ditambahkan atau sudah pernah ada!");
-            }
+            showAlert("Kategori gagal ditambahkan atau sudah ada!");
         }
     }
 
-    @FXML
-    void onUpdateClick(ActionEvent event) {
+    @FXML void onUpdateClick(ActionEvent event) {
         KelolaKategori selected = tableViewKategori.getSelectionModel().getSelectedItem();
-        String newNamaKategori = txtNamaKategori.getText().trim();
-        if (selected == null) {
-            showAlert("Pilih nama kategori yang ingin diperbaharui!");
+        String newNama = txtNamaKategori.getText().trim();
+        if (selected == null || newNama.isEmpty()) {
+            showAlert("Pilih dan isi nama kategori yang ingin diperbarui!");
             return;
         }
-        if (newNamaKategori.isEmpty()) {
-            showAlert("Nama kategori tidak boleh kosong!");
-            return;
-        }
-
-        String oldNamaKategori = selected.getNamaKategori();
-        if(updateKategori(oldNamaKategori,newNamaKategori)) {
-            selected.setNamaKategori(newNamaKategori);
+        String oldNama = selected.getNamaKategori();
+        if (updateKategori(oldNama, newNama)) {
+            selected.setNamaKategori(newNama);
             tableViewKategori.refresh();
             lblTotalKategori.setText("Total: " + dataKategori.size());
         } else {
-            showAlert("Gagal memperbaharui nama kategori!");
+            showAlert("Gagal memperbarui nama kategori!");
         }
     }
 
-    // Fungsi CRUD
     private boolean addKategori(String namaKategori) {
-        String sql = "INSERT INTO kategori(nama_kategori) VALUES (?)";
+        String username = (String) SessionManager.get("user");
+        String sql = "INSERT INTO kategori(nama_kategori, username) VALUES (?, ?)";
         try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
             ps.setString(1, namaKategori);
-            int rows = ps.executeUpdate();
-            return rows > 0;
+            ps.setString(2, username);
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             return false;
         }
     }
 
-    private boolean updateKategori(String oldNamaKategori, String newNamaKategori) {
-        String sql = "UPDATE kategori SET nama_kategori = ? WHERE nama_kategori = ?";
-        try (PreparedStatement ps = getConnection().prepareStatement(sql)){
-            ps.setString(1, oldNamaKategori);
-            ps.setString(2, newNamaKategori);
-            int rows = ps.executeUpdate();
-            return rows > 0;
+    private boolean updateKategori(String oldNama, String newNama) {
+        String username = (String) SessionManager.get("user");
+        String sql = "UPDATE kategori SET nama_kategori = ? WHERE nama_kategori = ? AND username = ?";
+        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+            ps.setString(1, newNama);
+            ps.setString(2, oldNama);
+            ps.setString(3, username);
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             return false;
         }
     }
 
     private boolean deleteKategori(String namaKategori) {
-        String sql = "DELETE FROM kategori WHERE nama_kategori = ?";
-        try(PreparedStatement ps = getConnection().prepareStatement(sql)) {
+        String username = (String) SessionManager.get("user");
+        String sql = "DELETE FROM kategori WHERE nama_kategori = ? AND username = ?";
+        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
             ps.setString(1, namaKategori);
-            int rows = ps.executeUpdate();
-            return rows > 0;
+            ps.setString(2, username);
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             return false;
         }
     }
 
-    private void showAlert(String message) {
+    private void showAlert(String msg) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Peringatan");
         alert.setHeaderText(null);
-        alert.setContentText(message);
+        alert.setContentText(msg);
         alert.showAndWait();
     }
 
-    @FXML
-    public void onHomeClick(ActionEvent actionEvent) {
+    @FXML public void onHomeClick(ActionEvent e) { changeScene("homepage-view.fxml", btnHome); }
+    @FXML public void onTransactionClick(ActionEvent e) { changeScene("transaction-view.fxml", btnTransaction); }
+    @FXML public void onDebtClick(ActionEvent e) { changeScene("UtangPiutang.fxml", btnDebt); }
+    @FXML public void onKategoriClick(ActionEvent e) {}
+    @FXML public void onLogoutClick(ActionEvent e) { changeScene("Login.fxml", btnLogout); }
+
+    private void changeScene(String fxml, Button btn) {
         try {
-            Parent homeRoot = FXMLLoader.load(getClass().getResource("homepage-view.fxml"));
-            Scene scene = btnHome.getScene();
-            scene.setRoot(homeRoot);
+            Parent root = FXMLLoader.load(getClass().getResource(fxml));
+            Scene scene = btn.getScene();
+            scene.setRoot(root);
             Stage stage = (Stage) scene.getWindow();
             stage.sizeToScene();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    @FXML
-    public void onTransactionClick(ActionEvent actionEvent) {
-        try {
-            Parent transactionRoot = FXMLLoader.load(getClass().getResource("transaction-view.fxml"));
-            Scene scene = btnTransaction.getScene();
-            scene.setRoot(transactionRoot);
-            Stage stage = (Stage) scene.getWindow();
-            stage.sizeToScene();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    public void onDebtClick(ActionEvent actionEvent) {
-        try {
-            Parent debtRoot = FXMLLoader.load(getClass().getResource("UtangPiutang.fxml"));
-            Scene scene = btnDebt.getScene();
-            scene.setRoot(debtRoot);
-            Stage stage = (Stage) scene.getWindow();
-            stage.sizeToScene();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    void onKategoriClick(ActionEvent event) {
-        // Sudah berada di halaman ini
-    }
-
-    @FXML
-    public void onLogoutClick(ActionEvent actionEvent) {
-        try {
-            Parent loginRoot = FXMLLoader.load(getClass().getResource("Login.fxml"));
-            Scene scene = btnLogout.getScene();
-            scene.setRoot(loginRoot);
-            Stage stage = (Stage) scene.getWindow();
-            stage.sizeToScene();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
-

@@ -5,15 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="16a8b87b-cfa8-4a44-a9ab-5b61a2c88def" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/util/SessionManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/FinancialApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/FinancialApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/HomepageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/HomepageController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/KelolaKatagoriController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/KelolaKatagoriController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/RegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/RegisterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/config/DBConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/config/DBConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/KelolaKategori.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/KelolaKategori.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/KelolaKategoriController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/KelolaKategoriController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/TransactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/TransactionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage/TransactionDAO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/databaseAplikasiKeuanganRev1.db" beforeDir="false" afterPath="$PROJECT_DIR$/databaseAplikasiKeuanganRev1.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +45,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/GalihPramana/ProjekRPL_AplikasiKeuangan.git&quot;,
-    &quot;accountId&quot;: &quot;adffb4f3-f3d3-4a69-8d76-208c7236cc7b&quot;
+    &quot;accountId&quot;: &quot;e88d95b0-7e2f-4e06-8b71-1fcdcd283dfc&quot;
   }
 }</component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\xampp\php\php.exe" />
@@ -66,7 +63,9 @@
     "Application.HelloApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "71230976__Galih__Perbaikan",
+    "git-widget-placeholder": "#10 on memperbaiki__transaksi",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
     "last_directory_selection": "D:/Kuliah/Sem 4/ProjekRPL_AplikasiKeuangan/Homepage/src/main/java/id/ac/ukdw/www/rplbo/homepage",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -123,7 +122,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="ac410fbf-944e-410b-89dd-df8f3e817f31" name="Changes" comment="" />
+      <changelist id="16a8b87b-cfa8-4a44-a9ab-5b61a2c88def" name="Changes" comment="" />
       <created>1746799745349</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -133,6 +132,8 @@
       <workItem from="1746879072386" duration="95000" />
       <workItem from="1746879183658" duration="1280000" />
       <workItem from="1746880473788" duration="2207000" />
+      <workItem from="1748714382278" duration="3757000" />
+      <workItem from="1748742923158" duration="1709000" />
     </task>
     <servers />
   </component>
