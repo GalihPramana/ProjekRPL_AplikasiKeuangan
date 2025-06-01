@@ -41,7 +41,6 @@ public class TransactionController {
 
     @FXML
     public void initialize() {
-        lblWelcome.setText("Selamat datang, " + SessionManager.get("user") + "!");
 
         ObservableList<String> kategoriOptions = loadKategoriFromDatabase();
         kategoriComboBox.setItems(kategoriOptions);
@@ -171,6 +170,34 @@ public class TransactionController {
             jml = -Math.abs(jml);
         }
 
+        if (tanggal.isAfter(LocalDate.now())) {
+            showAlert(Alert.AlertType.WARNING, "Tanggal Tidak Valid", "Tanggal transaksi tidak boleh melebihi hari ini.");
+            return;
+        }
+        // Cek total pengeluaran bulan yang sama
+        LocalDate tanggalInput = tanggal;
+        int totalPengeluaranBulanItu = transactionList.stream()
+                .filter(t -> {
+                    LocalDate tgl = LocalDate.parse(t.getTanggal(), formatter);
+                    return tgl.getMonth().equals(tanggalInput.getMonth()) &&
+                            tgl.getYear() == tanggalInput.getYear() &&
+                            t.getJumlah() < 0;
+                })
+                .mapToInt(t -> Math.abs(t.getJumlah()))
+                .sum();
+
+        if (!isIncome) {
+            totalPengeluaranBulanItu += Math.abs(jml); // tambahkan transaksi yang akan disimpan
+        }
+
+        if (batasBulanan > 0 && totalPengeluaranBulanItu > batasBulanan) {
+            showAlert(Alert.AlertType.WARNING,
+                    "Pengeluaran Terlampaui!",
+                    "Total pengeluaran untuk bulan " +
+                            tanggalInput.getMonth() + " " + tanggalInput.getYear() +
+                            " melebihi batas Rp " + String.format("%,d", batasBulanan).replace(",", "."));
+        }
+
         String sql = "INSERT INTO transaksi (username, kategori, nominal, tanggal, description) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -182,11 +209,12 @@ public class TransactionController {
             ps.setString(5, desc);
             ps.executeUpdate();
 
+            logAksi(isIncome ? "Pemasukkan" : "Pengeluaran", sumber, jml, desc, tanggal.format(formatter));
+
             loadTransaksiFromDatabase();
             handleClear();
             updateTotalSaldo();
             updateBatasBulanan();
-            cekBatasPengeluaranBulanan();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -194,6 +222,7 @@ public class TransactionController {
 
     private void updateTransaksi() {
         if (selectedTransaction == null) return;
+        String username = (String) SessionManager.get("user");
         String sumber = kategoriComboBox.getValue();
         String jmlText = jumlahField.getText().trim();
         String desc = descriptionField.getText().trim();
@@ -206,7 +235,10 @@ public class TransactionController {
             showAlert(Alert.AlertType.ERROR, "Input Error", "Nominal harus angka.");
             return;
         }
-
+        if (tanggal.isAfter(LocalDate.now())) {
+            showAlert(Alert.AlertType.WARNING, "Tanggal Tidak Valid", "Tanggal transaksi tidak boleh melebihi hari ini.");
+            return;
+        }
         String sql = "UPDATE transaksi SET kategori = ?, nominal = ?, tanggal = ?, description = ? WHERE transaksi_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -218,6 +250,8 @@ public class TransactionController {
             ps.setInt(5, Integer.parseInt(selectedTransaction.getIdTransaksi()));
             ps.executeUpdate();
 
+            logAksi("Update", sumber, jml, desc, tanggal.format(formatter));
+
             loadTransaksiFromDatabase();
             handleClear();
             updateTotalSaldo();
@@ -225,17 +259,55 @@ public class TransactionController {
             e.printStackTrace();
         }
     }
+    private void logAksi(String aksi, String kategori, int nominal, String deskripsi, String tanggalTransaksi) {
+        String username = (String) SessionManager.get("user");
+        String sql = "INSERT INTO log_transaksi (username, aksi, kategori, nominal, deskripsi, tanggal_transaksi, waktu_log) " +
+                "VALUES (?, ?, ?, ?, ?, ?, datetime('now', 'localtime'))";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ps.setString(2, aksi);
+            ps.setString(3, kategori);
+            ps.setInt(4, nominal);
+            ps.setString(5, deskripsi);
+            ps.setString(6, tanggalTransaksi);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void deleteTransaksi() {
         if (selectedTransaction == null) return;
-        String sql = "DELETE FROM transaksi WHERE transaksi_id = ?";
+
+        String sqlDelete = "DELETE FROM transaksi WHERE transaksi_id = ?";
+        String sqlLog = "INSERT INTO log_transaksi (username, aksi, kategori, nominal, deskripsi, tanggal_transaksi, waktu_log) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, Integer.parseInt(selectedTransaction.getIdTransaksi()));
-            ps.executeUpdate();
+             PreparedStatement psLog = conn.prepareStatement(sqlLog);
+             PreparedStatement psDelete = conn.prepareStatement(sqlDelete)) {
+
+            String username = (String) SessionManager.get("user");
+
+            // Simpan ke log sebelum dihapus
+            psLog.setString(1, username);
+            psLog.setString(2, "Hapus"); // aksi
+            psLog.setString(3, selectedTransaction.getSourceName());
+            psLog.setInt(4, selectedTransaction.getJumlah());
+            psLog.setString(5, selectedTransaction.getDescription());
+            psLog.setString(6, selectedTransaction.getTanggal());
+            psLog.setString(7, java.time.LocalDateTime.now().toString());
+            psLog.executeUpdate();
+
+            // Hapus transaksi
+            psDelete.setInt(1, Integer.parseInt(selectedTransaction.getIdTransaksi()));
+            psDelete.executeUpdate();
+
             loadTransaksiFromDatabase();
             handleClear();
             updateTotalSaldo();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -274,21 +346,6 @@ public class TransactionController {
         }
     }
 
-    private void cekBatasPengeluaranBulanan() {
-        LocalDate now = LocalDate.now();
-        int totalPengeluaran = transactionList.stream()
-                .filter(t -> {
-                    LocalDate tgl = LocalDate.parse(t.getTanggal(), formatter);
-                    return tgl.getMonth().equals(now.getMonth()) && tgl.getYear() == now.getYear() && t.getJumlah() < 0;
-                })
-                .mapToInt(Transaction::getJumlah)
-                .sum();
-
-        if (Math.abs(totalPengeluaran) >= batasBulanan && batasBulanan > 0) {
-            showAlert(Alert.AlertType.WARNING, "Peringatan Pengeluaran!",
-                    "Pengeluaran bulan ini telah melebihi batas Rp " + String.format("%,d", batasBulanan).replace(",", "."));
-        }
-    }
 
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
