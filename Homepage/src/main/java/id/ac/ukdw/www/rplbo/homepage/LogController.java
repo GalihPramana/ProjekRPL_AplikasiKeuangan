@@ -1,15 +1,15 @@
 package id.ac.ukdw.www.rplbo.homepage;
 
 import id.ac.ukdw.www.rplbo.homepage.config.DBConnection;
+import id.ac.ukdw.www.rplbo.homepage.util.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -18,34 +18,23 @@ import java.sql.*;
 
 public class LogController {
 
-    @FXML
-    private Button btnTransaction;
+    @FXML private Button btnTransaction;
+    @FXML private TableView<LogTransaksi> logTable;
+    @FXML private TableColumn<LogTransaksi, Integer> colId;
+    @FXML private TableColumn<LogTransaksi, String> colUsername;
+    @FXML private TableColumn<LogTransaksi, String> colAksi;
+    @FXML private TableColumn<LogTransaksi, String> colKategori;
+    @FXML private TableColumn<LogTransaksi, Integer> colNominal;
+    @FXML private TableColumn<LogTransaksi, String> colDeskripsi;
+    @FXML private TableColumn<LogTransaksi, String> colTanggalTransaksi;
+    @FXML private TableColumn<LogTransaksi, String> colWaktuLog;
 
-    @FXML
-    private TableView<LogTransaksi> logTable;
-
-    @FXML
-    private TableColumn<LogTransaksi, Integer> colId;
-    @FXML
-    private TableColumn<LogTransaksi, String> colUsername;
-    @FXML
-    private TableColumn<LogTransaksi, String> colAksi;
-    @FXML
-    private TableColumn<LogTransaksi, String> colKategori;
-    @FXML
-    private TableColumn<LogTransaksi, Integer> colNominal;
-    @FXML
-    private TableColumn<LogTransaksi, String> colDeskripsi;
-    @FXML
-    private TableColumn<LogTransaksi, String> colTanggalTransaksi;
-    @FXML
-    private TableColumn<LogTransaksi, String> colWaktuLog;
-
-    private ObservableList<LogTransaksi> logList = FXCollections.observableArrayList();
+    private final ObservableList<LogTransaksi> logList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        colId.setCellValueFactory(new PropertyValueFactory<>("logId"));
+        // Bind kolom dengan atribut
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
         colAksi.setCellValueFactory(new PropertyValueFactory<>("aksi"));
         colKategori.setCellValueFactory(new PropertyValueFactory<>("kategori"));
@@ -54,20 +43,22 @@ public class LogController {
         colTanggalTransaksi.setCellValueFactory(new PropertyValueFactory<>("tanggalTransaksi"));
         colWaktuLog.setCellValueFactory(new PropertyValueFactory<>("waktuLog"));
 
+        // Load data log berdasarkan user
         loadLogData();
     }
 
     private void loadLogData() {
-        logList.clear();
-        String sql = "SELECT * FROM log_transaksi ORDER BY waktu_log DESC";
+        String username = (String) SessionManager.get("user");
+        String sql = "SELECT * FROM log_transaksi WHERE username = ? ORDER BY waktu_log DESC";
 
         try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 logList.add(new LogTransaksi(
-                        rs.getInt("log_id"),
+                        rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("aksi"),
                         rs.getString("kategori"),
@@ -86,7 +77,7 @@ public class LogController {
     }
 
     @FXML
-    void onTransactionClick() {
+    void onTransactionClick(ActionEvent event) {
         try {
             Parent kategoriRoot = FXMLLoader.load(getClass().getResource("transaction-view.fxml"));
             Scene scene = btnTransaction.getScene();
