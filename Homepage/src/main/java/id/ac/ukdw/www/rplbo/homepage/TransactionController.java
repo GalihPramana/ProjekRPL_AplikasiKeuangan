@@ -1,6 +1,6 @@
 package id.ac.ukdw.www.rplbo.homepage;
 
-import id.ac.ukdw.www.rplbo.homepage.TransactionDAO;
+import id.ac.ukdw.www.rplbo.homepage.config.DBConnection;
 import id.ac.ukdw.www.rplbo.homepage.util.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -40,10 +41,9 @@ public class TransactionController {
 
     @FXML
     public void initialize() {
-        String username = (String) SessionManager.get("user");
-        lblWelcome.setText(username != null ? "Selamat datang, " + username + "!" : "Selamat datang!");
+        lblWelcome.setText("Selamat datang, " + SessionManager.get("user") + "!");
 
-        ObservableList<String> kategoriOptions = FXCollections.observableArrayList("Makan", "Transportasi", "Gaji", "Belanja", "Lainnya");
+        ObservableList<String> kategoriOptions = loadKategoriFromDatabase();
         kategoriComboBox.setItems(kategoriOptions);
 
         ObservableList<String> filterKategoriOptions = FXCollections.observableArrayList("Semua");
@@ -77,23 +77,11 @@ public class TransactionController {
             toggleUpdateButtonState(newSel != null);
         });
 
-        transactionList.setAll(TransactionDAO.getInstance().getAllByUsername(username));
+        loadTransaksiFromDatabase();
         toggleUpdateButtonState(false);
         updateTotalSaldo();
         lblDate.setText(LocalDate.now().format(displayDateFormatter));
     }
-
-    @FXML void onClearClick(ActionEvent event) { handleClear(); }
-    @FXML void onDeleteClick(ActionEvent event) { handleDelete(); }
-    @FXML void onPemasukkanClick(ActionEvent event) { handlePemasukan(true); }
-    @FXML void onPengeluaranClick(ActionEvent event) { handlePemasukan(false); }
-    @FXML void onUpdateClick(ActionEvent event) { handleUpdate(); }
-    @FXML void onDebtClick(ActionEvent event) { changeScene("UtangPiutang.fxml", btnDebt); }
-    @FXML void onHomeClick(ActionEvent event) { changeScene("homepage-view.fxml", btnHome); }
-    @FXML void onKategoriClick(ActionEvent event) { changeScene("kategori-view.fxml", btnKategori); }
-    @FXML void onLogoutClick(ActionEvent event) { changeScene("Login.fxml", btnLogout); }
-    @FXML void onTransactionClick(ActionEvent event) {}
-    @FXML void onlogClick(ActionEvent actionEvent) { changeScene("Log.fxml", logButton); }
 
     @FXML
     void handleFilterKategori(ActionEvent event) {
@@ -106,7 +94,60 @@ public class TransactionController {
         updateTotalSaldo();
     }
 
-    private void handlePemasukan(boolean isIncome) {
+    private ObservableList<String> loadKategoriFromDatabase() {
+        ObservableList<String> kategoriList = FXCollections.observableArrayList();
+        String username = (String) SessionManager.get("user");
+        String sql = "SELECT nama_kategori FROM kategori WHERE username = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                kategoriList.add(rs.getString("nama_kategori"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return kategoriList;
+    }
+
+    private void loadTransaksiFromDatabase() {
+        transactionList.clear();
+        String username = (String) SessionManager.get("user");
+        String sql = "SELECT * FROM transaksi WHERE username = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                transactionList.add(new Transaction(
+                        String.valueOf(rs.getInt("transaksi_id")),
+                        rs.getString("kategori"),
+                        rs.getInt("nominal"),
+                        rs.getString("description"),
+                        rs.getString("tanggal")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML void onClearClick(ActionEvent event) { handleClear(); }
+    @FXML void onDeleteClick(ActionEvent event) { deleteTransaksi(); }
+    @FXML void onPemasukkanClick(ActionEvent event) { insertTransaksi(true); }
+    @FXML void onPengeluaranClick(ActionEvent event) { insertTransaksi(false); }
+    @FXML void onUpdateClick(ActionEvent event) { updateTransaksi(); }
+    @FXML void onDebtClick(ActionEvent event) { changeScene("UtangPiutang.fxml", btnDebt); }
+    @FXML void onHomeClick(ActionEvent event) { changeScene("homepage-view.fxml", btnHome); }
+    @FXML void onKategoriClick(ActionEvent event) { changeScene("kategori-view.fxml", btnKategori); }
+    @FXML void onLogoutClick(ActionEvent event) { changeScene("Login.fxml", btnLogout); }
+    @FXML void onTransactionClick(ActionEvent event) {}
+    @FXML void onlogClick(ActionEvent event) { changeScene("Log.fxml", logButton); }
+
+    private void insertTransaksi(boolean isIncome) {
         String username = (String) SessionManager.get("user");
         String sumber = kategoriComboBox.getValue();
         String jmlText = jumlahField.getText().trim();
@@ -126,76 +167,77 @@ public class TransactionController {
             return;
         }
 
-        if (jml <= 0) {
-            showAlert(Alert.AlertType.ERROR, "Input Error", "Nominal harus lebih besar dari 0.");
-            return;
-        }
-
         if (!isIncome) {
             jml = -Math.abs(jml);
         }
 
-        Transaction newTransaction = new Transaction("0", sumber, jml, desc, tanggal.format(formatter));
-        TransactionDAO.getInstance().insert(newTransaction, username);
-        transactionList.setAll(TransactionDAO.getInstance().getAllByUsername(username));
+        String sql = "INSERT INTO transaksi (username, kategori, nominal, tanggal, description) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        handleClear();
-        updateTotalSaldo();
-        updateBatasBulanan();
-        cekBatasPengeluaranBulanan();
+            ps.setString(1, username);
+            ps.setString(2, sumber);
+            ps.setInt(3, jml);
+            ps.setString(4, tanggal.format(formatter));
+            ps.setString(5, desc);
+            ps.executeUpdate();
+
+            loadTransaksiFromDatabase();
+            handleClear();
+            updateTotalSaldo();
+            updateBatasBulanan();
+            cekBatasPengeluaranBulanan();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void handleUpdate() {
-        if (selectedTransaction == null) {
-            showAlert(Alert.AlertType.WARNING, "Update Error", "Pilih transaksi yang ingin diubah.");
-            return;
-        }
-
+    private void updateTransaksi() {
+        if (selectedTransaction == null) return;
         String sumber = kategoriComboBox.getValue();
         String jmlText = jumlahField.getText().trim();
         String desc = descriptionField.getText().trim();
         LocalDate tanggal = tanggalPicker.getValue();
 
-        if (sumber == null || jmlText.isEmpty() || tanggal == null) {
-            showAlert(Alert.AlertType.ERROR, "Input Error", "Kategori, Nominal, dan Tanggal harus diisi.");
-            return;
-        }
-
         int jml;
         try {
             jml = Integer.parseInt(jmlText);
-        } catch (NumberFormatException ex) {
-            showAlert(Alert.AlertType.ERROR, "Input Error", "Nominal harus berupa angka.");
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Input Error", "Nominal harus angka.");
             return;
         }
 
-        if (jml == 0) {
-            showAlert(Alert.AlertType.ERROR, "Input Error", "Nominal tidak boleh 0.");
-            return;
-        }
+        String sql = "UPDATE transaksi SET kategori = ?, nominal = ?, tanggal = ?, description = ? WHERE transaksi_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        selectedTransaction.setSourceName(sumber);
-        selectedTransaction.setJumlah(jml);
-        selectedTransaction.setDescription(desc);
-        selectedTransaction.setTanggal(tanggal.format(formatter));
+            ps.setString(1, sumber);
+            ps.setInt(2, jml);
+            ps.setString(3, tanggal.format(formatter));
+            ps.setString(4, desc);
+            ps.setInt(5, Integer.parseInt(selectedTransaction.getIdTransaksi()));
+            ps.executeUpdate();
 
-        TransactionDAO.getInstance().update(selectedTransaction);
-        transactionList.setAll(TransactionDAO.getInstance().getAllByUsername((String) SessionManager.get("user")));
-
-        handleClear();
-        updateTotalSaldo();
-        updateBatasBulanan();
-        cekBatasPengeluaranBulanan();
-    }
-
-    private void handleDelete() {
-        if (selectedTransaction != null) {
-            TransactionDAO.getInstance().delete(selectedTransaction.getIdTransaksi());
-            transactionList.setAll(TransactionDAO.getInstance().getAllByUsername((String) SessionManager.get("user")));
+            loadTransaksiFromDatabase();
             handleClear();
             updateTotalSaldo();
-        } else {
-            showAlert(Alert.AlertType.WARNING, "Delete Error", "Pilih transaksi yang ingin dihapus.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteTransaksi() {
+        if (selectedTransaction == null) return;
+        String sql = "DELETE FROM transaksi WHERE transaksi_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, Integer.parseInt(selectedTransaction.getIdTransaksi()));
+            ps.executeUpdate();
+            loadTransaksiFromDatabase();
+            handleClear();
+            updateTotalSaldo();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -243,8 +285,7 @@ public class TransactionController {
                 .sum();
 
         if (Math.abs(totalPengeluaran) >= batasBulanan && batasBulanan > 0) {
-            showAlert(Alert.AlertType.WARNING,
-                    "Peringatan Pengeluaran!",
+            showAlert(Alert.AlertType.WARNING, "Peringatan Pengeluaran!",
                     "Pengeluaran bulan ini telah melebihi batas Rp " + String.format("%,d", batasBulanan).replace(",", "."));
         }
     }
