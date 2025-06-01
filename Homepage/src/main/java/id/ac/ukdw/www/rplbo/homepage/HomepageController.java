@@ -26,83 +26,74 @@ import java.util.stream.Collectors;
 
 public class HomepageController implements Initializable {
 
-    // ===================== FXML INJECTIONS =====================
+    // Button untuk pindah halaman
     @FXML private Button btnDebt;
     @FXML private Button btnHome;
     @FXML private Button btnKategori;
     @FXML private Button btnLogout;
     @FXML private Button btnTransaction;
 
-    @FXML private Label lblBalance;
-    @FXML private Label lblDate;
-    @FXML private Label lblTotalDebt;
-    @FXML private Label lblTotalReceivables;
-    @FXML private Label lblWelcome;
+    // Label untuk mengganti text
+    @FXML private Label lblBalance;  // Menampilkan saldo total
+    @FXML private Label lblDate; // Menampilkan tangggal
+    @FXML private Label lblTotalDebt; // Menampilkan total hutang
+    @FXML private Label lblTotalReceivables; // Menampilkan total piutang
+    @FXML private Label lblWelcome; // Untuk menyapa user
 
-    @FXML private PieChart pieCashflowThisMonth;
-    @FXML private PieChart pieIncomeThisMonth;
-    @FXML private PieChart pieOutcomeThisMonth;
+    @FXML private PieChart pieCashflowThisMonth; // Pie chart arus kas
+    @FXML private PieChart pieIncomeThisMonth; // Pie chart pemasukan
+    @FXML private PieChart pieOutcomeThisMonth; // Pie chart pengeluaran
 
-    // Karena FXML mendefinisikan lineBalanceReport dengan <CategoryAxis> dan <NumberAxis>,
-    // di controller kita gunakan tipe generiknya:
+    // Linechart untuk laporan saldo mingguan (X,Y)
     @FXML private LineChart<String, Number> lineBalanceReport;
 
-    // Formatter global:
-    // – displayDateFormatter: untuk menampilkan “8 Mei 2025” di header
+
+    // Menampilkan tanggal di header sesuai format
     private final DateTimeFormatter displayDateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy");
-    // – dbFormatter: diasumsikan tanggal di DB disimpan dalam format “dd/MM/yyyy”
+
     private final DateTimeFormatter dbFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    // ===================== DATA MODEL DI CONTROLLER =====================
-    /** List yang menampung semua data transaksi milik user saat ini */
+
+    // List untuk menampung semua data transaksi user
     private final List<TransactionRecord> allTransactions = new ArrayList<>();
 
-    /** List yang menampung semua data utang/piutang milik user saat ini */
+    // List data utang piutang user
     private final List<DebtRecord> allDebts = new ArrayList<>();
 
-    // =======================================================================================
-    // initialize(): dijalankan sekali ketika FXML pertama kali di‐load
-    // =======================================================================================
+    // Initialize awal
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // 1) Tampilkan greeting dengan nama user (jika ada) + tanggal hari ini
+        // Menampilkan tulisan "Selamat datang user"
         String username = (String) SessionManager.get("user");
         if (username != null && !username.isEmpty()) {
             lblWelcome.setText("Selamat datang, " + username + "!");
         } else {
             lblWelcome.setText("Selamat datang!");
         }
+        // Mengeset tanggal sesuai tanggal hari ini
         lblDate.setText(LocalDate.now().format(displayDateFormatter));
 
-        // 2) Tarik (pull) seluruh data terbaru dari database
+        // Mengambil seluruh data terbaru dari database ke allTransactions dan allDebts
         loadAllDataFromDatabase();
 
-        // 3) Update seluruh dashboard (PieChart + Label + LineChart)
+        // Mengupdate / refresh seluruh dashboard (PieChart + Label + LineChart)
         updateDashboard();
     }
 
-    // =======================================================================================
-    // ================== PRIVATE METHOD: Load data dari SQLite ke in‐memory =================
-    // =======================================================================================
-
-    /**
-     * loadAllDataFromDatabase():
-     * – Mengosongkan allTransactions dan allDebts,
-     * – Membaca semua baris dari tabel `transaksi` yang sesuai dengan username aktif,
-     *   lalu menyimpannya ke allTransactions,
-     * – Membaca semua baris dari tabel `utang_piutang` yang sesuai dengan username aktif,
-     *   lalu menyimpannya ke allDebts.
-     */
+    // Mengambil data dari Sqlite
     private void loadAllDataFromDatabase() {
+        // Mengosongkan list allTransactions dan allDebts untuk menghilangkan data lama
         allTransactions.clear();
         allDebts.clear();
 
+        // Mengambil username dari session manager
         String username = (String) SessionManager.get("user");
         if (username == null || username.isEmpty()) {
-            return; // tidak ada user, maka tidak tarik data
+            // Mengecek jika belum login maka data tidak di load
+            return;
         }
 
-        // ---- 1) Ambil data transaksi ----
+        // Mengambil data dari tabel transaksi sesuai username
         String sqlTrans = """
             SELECT kategori, nominal, tanggal, description
             FROM transaksi
@@ -117,7 +108,7 @@ public class HomepageController implements Initializable {
             while (rs.next()) {
                 String kategori = rs.getString("kategori");
                 int nominal = rs.getInt("nominal");
-                String tanggal = rs.getString("tanggal"); // diasumsikan "dd/MM/yyyy"
+                String tanggal = rs.getString("tanggal");
                 String description = rs.getString("description");
                 allTransactions.add(new TransactionRecord(kategori, nominal, tanggal, description));
             }
@@ -125,7 +116,7 @@ public class HomepageController implements Initializable {
             e.printStackTrace();
         }
 
-        // ---- 2) Ambil data utang/piutang ----
+        // Mengambil data dari tabel utang_piutang
         String sqlDebt = """
             SELECT nominal, status, tanggal, kepada
             FROM utang_piutang
@@ -139,8 +130,8 @@ public class HomepageController implements Initializable {
             ResultSet rs2 = ps2.executeQuery();
             while (rs2.next()) {
                 int nominal = rs2.getInt("nominal");
-                String status = rs2.getString("status");     // misalnya "lunas" / "belum lunas"
-                String tanggal = rs2.getString("tanggal");   // diasumsikan "dd/MM/yyyy"
+                String status = rs2.getString("status");     // "lunas" / "belum lunas"
+                String tanggal = rs2.getString("tanggal");   // "dd/MM/yyyy"
                 String kepada = rs2.getString("kepada");
                 allDebts.add(new DebtRecord(nominal, status, tanggal, kepada));
             }
@@ -149,31 +140,20 @@ public class HomepageController implements Initializable {
         }
     }
 
-    // =======================================================================================
-    // ================== PRIVATE METHOD: Update seluruh bagian pada Dashboard =================
-    // =======================================================================================
-    /**
-     * updateDashboard():
-     * 1) Hitung total saldo (allTransactions: nominal >0 dan <0 ikut dijumlahkan)
-     * 2) Isi PieChart pendapatan per kategori (nominal >0)
-     * 3) Isi PieChart pengeluaran per kategori (nominal <0 di‐abs)
-     * 4) Isi PieChart arus kas: total pemasukan vs total pengeluaran
-     * 5) Isi Label total piutang & total hutang dari allDebts
-     * 6) Isi LineChart saldo harian untuk 7 hari terakhir (bukan kumulatif, melainkan total transaksi pada tiap tanggal)
-     */
+    // Update seluruh grafik dan label
     private void updateDashboard() {
-        // ===================== 1) TOTAL SALDO =====================
-        int totalSaldo = allTransactions.stream()
-                .mapToInt(TransactionRecord::getNominal)
+        // Menampilkan total saldo yang dimiliki
+        int totalSaldo = allTransactions.stream() // Mengubah list menjadi stream untuk mendapat fitur (filter,map,dll)
+                .mapToInt(TransactionRecord::getNominal) // Mengambil nominal dari tiap objek di stream lalu diubah menjadi IntStream
                 .sum();
         lblBalance.setText(String.format("Rp %,d", totalSaldo).replace(',', '.'));
 
-        // ===================== 2) PIE CHART PENDAPATAN =====================
+        // Menampilkan pie chart pendapatan
         Map<String, Integer> incMap = allTransactions.stream()
-                .filter(t -> t.getNominal() > 0)
-                .collect(Collectors.groupingBy(
-                        TransactionRecord::getKategori,
-                        Collectors.summingInt(TransactionRecord::getNominal)
+                .filter(t -> t.getNominal() > 0) // Hanya ambil yang nominalnya positif
+                .collect(Collectors.groupingBy( // Mengembalikan map (K,V)
+                        TransactionRecord::getKategori, //Ambil semua nama kategori
+                        Collectors.summingInt(TransactionRecord::getNominal) // Jumlahkan nominal per kategori
                 ));
         pieIncomeThisMonth.getData().setAll(
                 incMap.entrySet().stream()
@@ -184,9 +164,9 @@ public class HomepageController implements Initializable {
         pieIncomeThisMonth.setLegendVisible(true);
         pieIncomeThisMonth.setLegendSide(javafx.geometry.Side.BOTTOM);
 
-        // ===================== 3) PIE CHART PENGELUARAN =====================
+        // Menampilkan pie chart pengeluaran
         Map<String, Integer> outMap = allTransactions.stream()
-                .filter(t -> t.getNominal() < 0)
+                .filter(t -> t.getNominal() < 0)  // Ambil yang nominalnya negatif
                 .collect(Collectors.groupingBy(
                         TransactionRecord::getKategori,
                         Collectors.summingInt(t -> Math.abs(t.getNominal()))
@@ -200,7 +180,7 @@ public class HomepageController implements Initializable {
         pieOutcomeThisMonth.setLegendVisible(true);
         pieOutcomeThisMonth.setLegendSide(javafx.geometry.Side.BOTTOM);
 
-        // ===================== 4) PIE CHART ARUS KAS =====================
+        // Menampilkan pie chart arus kas
         int totalIn  = incMap.values().stream().mapToInt(i -> i).sum();
         int totalOut = outMap.values().stream().mapToInt(i -> i).sum();
         pieCashflowThisMonth.getData().setAll(
@@ -213,21 +193,20 @@ public class HomepageController implements Initializable {
         pieCashflowThisMonth.setLegendVisible(true);
         pieCashflowThisMonth.setLegendSide(javafx.geometry.Side.BOTTOM);
 
-        // ===================== 5) TOTAL HUTANG & PIUTANG =====================
+        // Menampilkan total hutang dan piutang
         int totalPiutang = allDebts.stream()
                 .filter(d -> d.getNominal() > 0)      // piutang dianggap nominal > 0
                 .mapToInt(DebtRecord::getNominal)
                 .sum();
         int totalHutang = allDebts.stream()
-                .filter(d -> d.getNominal() < 0)     // hutang dianggap nominal < 0 (abs)
+                .filter(d -> d.getNominal() < 0)     // karena hutang (-) maka harus di absolutekan
                 .mapToInt(d -> Math.abs(d.getNominal()))
                 .sum();
         lblTotalReceivables.setText(String.format("Rp %,d", totalPiutang).replace(',', '.'));
         lblTotalDebt.setText(String.format("Rp %,d", totalHutang).replace(',', '.'));
 
-        // ===================== 6) LINe CHART SALDO 7 HARI TERAKHIR =====================
-        // Kita ingin menampilkan "nominal per hari" (jumlah transaksi pada hari tsb),
-        // bukan nilai kumulatif. Jika ingin kumulatif, tinggal dijumlah terus ke atas.
+
+       // Line chart saldo 7 hari terakhir
         lineBalanceReport.getData().clear();
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Saldo Harian");
@@ -243,24 +222,22 @@ public class HomepageController implements Initializable {
                     .mapToInt(TransactionRecord::getNominal)
                     .sum();
 
-            // label yang muncul di sumbu X, misalnya "08 May" atau "8 Mei"
+            // label yang muncul di sumbu X, misalnya "8 Mei"
             String labelX = date.format(DateTimeFormatter.ofPattern("d MMM"));
-
+            // Tambahkan titik di chart
             series.getData().add(new XYChart.Data<>(labelX, sumOfThatDay));
         }
         lineBalanceReport.getData().add(series);
-        lineBalanceReport.setLegendVisible(false); // kita tidak perlu legend di sini
-        lineBalanceReport.setCreateSymbols(true);  // tampilkan titik per data, bisa di‐off jika tidak diinginkan
+        lineBalanceReport.setLegendVisible(false);
+        lineBalanceReport.setCreateSymbols(true);  // tampilkan titik per data
     }
 
-    // =======================================================================================
-    // ================== KELAS PENDUKUNG (Model) ============================================
-    // =======================================================================================
 
-    /**
-     * TransactionRecord merepresentasikan satu baris pada tabel "transaksi" (tanpa pk/id).
-     * Kolom yang dipakai: kategori, nominal, tanggal, description.
-     */
+
+
+     //TransactionRecord merepresentasikan satu baris pada tabel "transaksi"
+     // Kolom: kategori, nominal, tanggal, description.
+
     public static class TransactionRecord {
         private final String kategori;
         private final int nominal;
@@ -279,10 +256,10 @@ public class HomepageController implements Initializable {
         public String getDescription() { return description; }
     }
 
-    /**
-     * DebtRecord merepresentasikan satu baris pada tabel "utang_piutang".
-     * Kolom yang dipakai: nominal (positif=piutang, negatif=hutang), status, tanggal, kepada.
-     */
+
+     // DebtRecord merepresentasikan satu baris pada tabel "utang_piutang".
+     // Kolom: nominal (positif=piutang, negatif=hutang), status, tanggal, kepada.
+
     public static class DebtRecord {
         private final int nominal;
         private final String status;
