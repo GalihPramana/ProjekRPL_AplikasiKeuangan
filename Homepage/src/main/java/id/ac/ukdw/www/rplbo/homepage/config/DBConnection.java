@@ -3,6 +3,7 @@ package id.ac.ukdw.www.rplbo.homepage.config;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DBConnection {
     private static final String DB_URL = "jdbc:sqlite:databaseAplikasiKeuanganRev1.db";
@@ -18,7 +19,13 @@ public class DBConnection {
                 // Memastikan driver tersedia
                 Class.forName("org.sqlite.JDBC");
                 connection = DriverManager.getConnection(DB_URL);
-                System.out.println("Koneksi berhasil.");
+
+                // Setelah koneksi terbentuk, aktifkan foreign_keys:
+                try (Statement stmt = connection.createStatement()) {
+                    stmt.execute("PRAGMA foreign_keys = ON;");
+                    System.out.println("Koneksi berhasil, foreign_keys=ON.");
+                }
+                System.out.println("Koneksi berhasil, foreign_keys=ON.");
             }
         } catch (ClassNotFoundException e) {
             System.out.println("Driver tidak ditemukan.");
