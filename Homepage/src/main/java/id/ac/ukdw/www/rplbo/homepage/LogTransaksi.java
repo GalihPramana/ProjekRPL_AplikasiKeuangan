@@ -1,7 +1,7 @@
 package id.ac.ukdw.www.rplbo.homepage;
 
 public class LogTransaksi {
-    private int logId;
+    private int id;
     private String username;
     private String aksi;
     private String kategori;
@@ -10,9 +10,8 @@ public class LogTransaksi {
     private String tanggalTransaksi;
     private String waktuLog;
 
-    public LogTransaksi(int logId, String username, String aksi, String kategori, int nominal,
-                        String deskripsi, String tanggalTransaksi, String waktuLog) {
-        this.logId = logId;
+    public LogTransaksi(int id, String username, String aksi, String kategori, int nominal, String deskripsi, String tanggalTransaksi, String waktuLog) {
+        this.id = id;
         this.username = username;
         this.aksi = aksi;
         this.kategori = kategori;
@@ -23,7 +22,7 @@ public class LogTransaksi {
     }
 
     // Getters
-    public int getLogId() { return logId; }
+    public int getId() { return id; }
     public String getUsername() { return username; }
     public String getAksi() { return aksi; }
     public String getKategori() { return kategori; }
