@@ -7,110 +7,228 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="576.0" prefWidth="1024.0" style="-fx-background-color: #e7e9ee;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="id.ac.ukdw.www.rplbo.homepage.UtangPiutangController">
 
-    <center>
-        <AnchorPane>
-            <Label layoutX="477.0" layoutY="20.0" text="Form Utang/Piutang">
-                <font>
-                    <Font size="20.0" />
-                </font>
-            </Label>
-
-
-            <Label layoutX="107.0" layoutY="70.0" text="Kepada Siapa:" />
-            <TextField fx:id="tfKepadaSiapa" layoutX="189.0" layoutY="65.0" prefWidth="200.0" />
-
-            <Label layoutX="406.0" layoutY="69.0" text="Tanggal:" />
-            <DatePicker fx:id="dpTanggal" layoutX="459.0" layoutY="66.0" prefWidth="150.0" />
-
-            <Label layoutX="627.0" layoutY="68.0" text="Jumlah:" />
-            <TextField fx:id="tfJumlahUtang" layoutX="674.0" layoutY="66.0" prefWidth="150.0" />
-
-            <Button layoutX="107.0" layoutY="120.0" onAction="#handleTambahHutang" style="-fx-background-color: #ff4d4d; -fx-text-fill: white;" text="🔴 Hutang" />
-            <Button layoutX="197.0" layoutY="120.0" onAction="#handleTambahPiutang" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="🟢 Piutang" />
-
-            <Button layoutX="297.0" layoutY="120.0" onAction="#handleHapus" text="Hapus" />
-            <TextField fx:id="tfFilter" layoutX="377.0" layoutY="120.0" promptText="Cari..." />
-            <Button layoutX="557.0" layoutY="120.0" onAction="#handleFilter" text="Cari" />
-
-            <TableView fx:id="table" layoutX="107.0" layoutY="170.0" prefHeight="350.0" prefWidth="900.0">
-                <columns>
-                    <TableColumn fx:id="colKepadaSiapa" prefWidth="200.0" text="Kepada" />
-                    <TableColumn fx:id="colTanggal" prefWidth="200.0" text="Tanggal" />
-                    <TableColumn fx:id="colJumlahUtang" prefWidth="200.0" text="Jumlah" />
-                    <TableColumn fx:id="colStatus" prefWidth="200.0" text="Status" />
-                </columns>
-            </TableView>
-            <ChoiceBox fx:id="cbStatus" layoutX="857.0" layoutY="64.0" prefHeight="26.0" prefWidth="84.0" />
-        </AnchorPane>
-    </center>
-   <left>
-      <AnchorPane prefHeight="576.0" prefWidth="42.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
-         <children>
-            <VBox alignment="TOP_CENTER" prefHeight="576.0" prefWidth="90.0" spacing="10.0">
+<AnchorPane prefHeight="576.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="id.ac.ukdw.www.rplbo.homepage.UtangPiutangController">
+   <children>
+      <BorderPane prefHeight="576.0" prefWidth="1024.0" style="-fx-background-color: #e7e9ee;">
+      
+          <center>
+              <AnchorPane>
+               <GridPane layoutX="41.0" layoutY="113.0" prefHeight="434.0" prefWidth="860.0" style="-fx-background-color: #ffffff; -fx-border-radius: 25px 25px 25px 25px; -fx-background-radius: 25px 25px 25px 25px;">
+                  <columnConstraints>
+                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="229.59996337890624" minWidth="10.0" prefWidth="225.59996337890624" />
+                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="227.19998168945312" minWidth="0.0" prefWidth="196.00003662109378" />
+                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="256.99997558593753" minWidth="10.0" prefWidth="192.5999755859375" />
+                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.60002441406243" minWidth="10.0" prefWidth="167.00002441406252" />
+                  </columnConstraints>
+                  <rowConstraints>
+                     <RowConstraints maxHeight="54.200018310546874" minHeight="10.0" prefHeight="54.200018310546874" vgrow="SOMETIMES" />
+                     <RowConstraints maxHeight="75.99999389648438" minHeight="10.0" prefHeight="51.19998168945314" vgrow="SOMETIMES" />
+                     <RowConstraints maxHeight="291.20000610351565" minHeight="10.0" prefHeight="255.20000610351562" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                  <children>
+                        <Button onAction="#handleFilter" prefHeight="26.0" prefWidth="182.0" text="Cari" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                        <graphic>
+                           <FontAwesomeIconView glyphName="SEARCH" />
+                        </graphic>
+                     </Button>
+            
+                        <TableView fx:id="table" prefHeight="289.0" prefWidth="762.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
+                            <columns>
+                                <TableColumn fx:id="colKepadaSiapa" prefWidth="200.0" text="Kepada" />
+                                <TableColumn fx:id="colTanggal" prefWidth="200.0" text="Tanggal" />
+                                <TableColumn fx:id="colJumlahUtang" prefWidth="200.0" text="Jumlah" />
+                                <TableColumn fx:id="colStatus" prefWidth="200.0" text="Status" />
+                            </columns>
+                        </TableView>
+                     <HBox alignment="CENTER_LEFT" prefHeight="54.0" prefWidth="295.0" spacing="10.0" GridPane.columnSpan="3" GridPane.rowIndex="1">
+                        <children>
+                  
+                              <Button onAction="#handleTambahHutang" prefWidth="80.0" style="-fx-background-color: #ff4d4d; -fx-text-fill: white;" text="Hutang" />
+                              <Button onAction="#handleTambahPiutang" prefWidth="80.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Piutang" />
+                           <Button onAction="#handleTambahPiutang" prefWidth="80.0" style="-fx-background-color: black; -fx-text-fill: white;" text="Update">
+                              <graphic>
+                                 <FontAwesomeIconView fill="WHITE" glyphName="PENCIL" />
+                              </graphic>
+                           </Button>
+                  
+                              <Button onAction="#handleHapus" prefWidth="80.0" text="Hapus">
+                              <graphic>
+                                 <FontAwesomeIconView glyphName="TRASH" />
+                              </graphic>
+                           </Button>
+                              <TextField fx:id="tfFilter" prefHeight="26.0" prefWidth="247.0" promptText="Cari..." />
+                        </children>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" prefHeight="54.0" prefWidth="214.0">
+                        <children>
+                  
+                  
+                              <Label text="Kepada Siapa:">
+                              <HBox.margin>
+                                 <Insets right="10.0" />
+                              </HBox.margin>
+                           </Label>
+                              <TextField fx:id="tfKepadaSiapa" prefHeight="26.0" prefWidth="120.0">
+                              <HBox.margin>
+                                 <Insets right="20.0" />
+                              </HBox.margin>
+                           </TextField>
+                        </children>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+                        <children>
+                  
+                              <Label text="Tanggal:">
+                              <HBox.margin>
+                                 <Insets right="10.0" />
+                              </HBox.margin>
+                           </Label>
+                              <DatePicker fx:id="dpTanggal" prefHeight="26.0" prefWidth="120.0">
+                              <HBox.margin>
+                                 <Insets right="20.0" />
+                              </HBox.margin>
+                           </DatePicker>
+                        </children>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
+                        <children>
+                  
+                              <Label prefHeight="18.0" prefWidth="43.0" text="Jumlah:">
+                              <HBox.margin>
+                                 <Insets right="10.0" />
+                              </HBox.margin>
+                           </Label>
+                              <TextField fx:id="tfJumlahUtang" prefHeight="26.0" prefWidth="120.0">
+                              <HBox.margin>
+                                 <Insets right="20.0" />
+                              </HBox.margin>
+                           </TextField>
+                        </children>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3">
+                        <children>
+                           <Label text="Status:">
+                              <HBox.margin>
+                                 <Insets right="10.0" />
+                              </HBox.margin>
+                           </Label>
+                              <ChoiceBox fx:id="cbStatus" prefHeight="26.0" prefWidth="120.0" />
+                        </children>
+                     </HBox>
+                  </children>
+                  <padding>
+                     <Insets bottom="40.0" left="40.0" right="40.0" top="30.0" />
+                  </padding>
+               </GridPane>
+               <HBox alignment="CENTER_LEFT" layoutX="41.0" prefHeight="86.0" prefWidth="860.0" style="-fx-background-color: #ffffff; -fx-border-radius: 0 0 25px 25px; -fx-background-radius: 0 0  25px 25px;">
+                  <children>
+                     <Label text="Utang">
+                        <font>
+                           <Font name="System Bold" size="22.0" />
+                        </font>
+                        <HBox.margin>
+                           <Insets right="5.0" />
+                        </HBox.margin>
+                     </Label>
+                     <Separator orientation="VERTICAL">
+                        <HBox.margin>
+                           <Insets right="5.0" />
+                        </HBox.margin>
+                     </Separator>
+                     <Label fx:id="lblWelcome" text="Selamat Datang di Halaman Utang Piutang!">
+                        <font>
+                           <Font name="System Bold" size="22.0" />
+                        </font>
+                     </Label>
+                     <Label fx:id="lblDate" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="1.7976931348623157E308" text="8 May 2025" textFill="#848484" HBox.hgrow="ALWAYS">
+                        <font>
+                           <Font size="18.0" />
+                        </font>
+                     </Label>
+                  </children>
+                  <opaqueInsets>
+                     <Insets />
+                  </opaqueInsets>
+                  <padding>
+                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  </padding>
+               </HBox>
+              </AnchorPane>
+          </center>
+         <left>
+            <AnchorPane prefHeight="576.0" prefWidth="42.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="btnHome" contentDisplay="TOP" onAction="#onHomeClick" style="-fx-background-color: transparent;" text="Home" textFill="WHITE">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="25" />
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnTransaction" contentDisplay="TOP" onAction="#onTransactionClick" style="-fx-background-color: transparent;" text="Transaction" textFill="WHITE">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="EXCHANGE" size="25" />
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnDebt" contentDisplay="TOP" onAction="#onDebtClick" style="-fx-background-color: transparent;" text="Debt" textFill="WHITE">
-                     <graphic>
-                        <MaterialDesignIconView fill="WHITE" glyphName="SCALE_BALANCE" size="25" />
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnKategori" contentDisplay="TOP" onAction="#onKategoriClick" style="-fx-background-color: transparent;" text="Kategori" textFill="WHITE">
-                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="LIST_ALT" size="25" />
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="10.0" />
-                     </font>
-                  </Button>
-                  <VBox alignment="BOTTOM_CENTER" prefHeight="344.0" prefWidth="100.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="576.0" prefWidth="90.0" spacing="10.0">
                      <children>
-                        <Button fx:id="btnLogout" contentDisplay="TOP" onAction="#onLogoutClick" style="-fx-background-color: transparent;" text="Logout" textFill="WHITE">
+                        <Button fx:id="btnHome" contentDisplay="TOP" onAction="#onHomeClick" style="-fx-background-color: transparent;" text="Home" textFill="WHITE">
                            <graphic>
-                              <MaterialDesignIconView fill="WHITE" glyphName="EXIT_TO_APP" size="25" />
+                              <FontAwesomeIconView fill="WHITE" glyphName="HOME" size="25" />
                            </graphic>
                            <font>
                               <Font name="System Bold" size="10.0" />
                            </font>
                         </Button>
+                        <Button fx:id="btnTransaction" contentDisplay="TOP" onAction="#onTransactionClick" style="-fx-background-color: transparent;" text="Transaction" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="EXCHANGE" size="25" />
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnDebt" contentDisplay="TOP" onAction="#onDebtClick" style="-fx-background-color: transparent;" text="Debt" textFill="WHITE">
+                           <graphic>
+                              <MaterialDesignIconView fill="WHITE" glyphName="SCALE_BALANCE" size="25" />
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btnKategori" contentDisplay="TOP" onAction="#onKategoriClick" style="-fx-background-color: transparent;" text="Kategori" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="LIST_ALT" size="25" />
+                           </graphic>
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Button>
+                        <VBox alignment="BOTTOM_CENTER" prefHeight="344.0" prefWidth="100.0">
+                           <children>
+                              <Button fx:id="btnLogout" contentDisplay="TOP" onAction="#onLogoutClick" style="-fx-background-color: transparent;" text="Logout" textFill="WHITE">
+                                 <graphic>
+                                    <MaterialDesignIconView fill="WHITE" glyphName="EXIT_TO_APP" size="25" />
+                                 </graphic>
+                                 <font>
+                                    <Font name="System Bold" size="10.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </VBox>
                      </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="25.0" top="30.0" />
+                     </padding>
                   </VBox>
                </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <padding>
-                  <Insets bottom="25.0" top="30.0" />
-               </padding>
-            </VBox>
-         </children>
-      </AnchorPane>
-   </left>
-</BorderPane>
+            </AnchorPane>
+         </left>
+      </BorderPane>
+   </children>
+</AnchorPane>

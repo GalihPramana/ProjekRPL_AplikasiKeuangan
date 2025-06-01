@@ -28,9 +28,9 @@
                <children>
                   <GridPane hgap="10" layoutX="39.0" layoutY="104.0" prefHeight="434.0" prefWidth="860.0" style="-fx-background-color: #ffffff; -fx-border-radius: 25px 25px 25px 25px; -fx-background-radius: 25px 25px 25px 25px;" vgap="10">
                      <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="442.3999816894531" minWidth="10.0" prefWidth="265.6000244140625" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="349.8000122070312" minWidth="10.0" prefWidth="312.19997558593747" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="442.3999816894531" minWidth="10.0" prefWidth="305.8000244140625" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="349.8000122070312" minWidth="10.0" prefWidth="242.5999755859375" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="251.5999755859375" minWidth="10.0" prefWidth="202.0" />
                      </columnConstraints>
                      <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -92,9 +92,9 @@
                            <FontAwesomeIconView glyphName="TRASH" size="14" />
                         </graphic>
                      </Button>
-                     <HBox spacing="10.0" alignment="CENTER_RIGHT" GridPane.columnIndex="2" GridPane.rowIndex="5">
-                        <Button fx:id="clearButton" onAction="#onClearClick" text="Clear" prefHeight="26.0" prefWidth="100.0" />
-                        <Button fx:id="logButton" onAction="#onlogClick" text="Log" prefHeight="26.0" prefWidth="100.0" />
+                     <HBox alignment="CENTER_RIGHT" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                        <Button fx:id="clearButton" onAction="#onClearClick" prefHeight="26.0" prefWidth="100.0" text="Clear" />
+                        <Button fx:id="logButton" onAction="#onlogClick" prefHeight="26.0" prefWidth="100.0" text="Log" />
                      </HBox>
 
                      <TableView fx:id="tableView" prefHeight="214.0" prefWidth="571.0" GridPane.columnSpan="3" GridPane.rowIndex="6">
